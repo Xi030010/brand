@@ -1,0 +1,39 @@
+{
+  "name": "nuct",
+  "version": "1.0.0",
+  "description": "Nuxt.js project",
+  "author": "cuiboyang <cuiboyang1997@gmail.com>",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt --host 0.0.0.0",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "precommit": "npm run lint"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.6.0",
+    "@nuxtjs/proxy": "^1.3.3",
+    "axios": "^0.19.0",
+    "element-ui": "^2.11.1",
+    "js-cookie": "^2.2.1",
+    "nuxt": "^2.0.0",
+    "swiper": "^4.5.0",
+    "vue-cookies": "^1.5.13",
+    "vue-quill-editor": "^3.0.6",
+    "vuex": "^3.1.1",
+    "vuex-persistedstate": "^2.7.0",
+    "wangeditor": "^3.1.1"
+  },
+  "devDependencies": {
+    "axios": "^0.19.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^4.19.1",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^2.1.1",
+    "eslint-plugin-vue": "^4.0.0",
+    "less": "^3.9.0",
+    "less-loader": "^4.1.0"
+  }
+}

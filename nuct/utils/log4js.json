@@ -1,0 +1,110 @@
+{
+    "appenders": {
+        "console": {
+            "type": "console"
+        },
+        "trace": {
+            "type": "dateFile",
+            "filename": "./logs/access-",
+            "pattern": ".yyyy-MM-dd.log",
+            "alwaysIncludePattern": true,
+            "maxLogSize ": 31457280
+        },
+        "http": {
+            "type": "logLevelFilter",
+            "appender": "trace",
+            "level": "trace",
+            "maxLevel": "trace"
+        },
+        "info": {
+            "type": "dateFile",
+            "filename": "./logs/info-",
+            "encoding": "utf-8",
+            "pattern": ".yyyy-MM-dd.log",
+            "maxLogSize": 10000000,
+            "alwaysIncludePattern": true,
+            "layout": {
+                "type": "pattern",
+                "pattern": "[%d{ISO8601}][%5p  %z  %c] %m"
+            },
+            "compress": true
+        },
+        "maxInfo": {
+            "type": "logLevelFilter",
+            "appender": "info",
+            "level": "debug",
+            "maxLevel": "error"
+        },
+        "error": {
+            "type": "dateFile",
+            "filename": "./logs/error-",
+            "pattern": ".yyyy-MM-dd.log",
+            "maxLogSize": 10000000,
+            "encoding": "utf-8",
+            "alwaysIncludePattern": true,
+            "layout": {
+                "type": "pattern",
+                "pattern": "[%d{ISO8601}][%5p  %z  %c] %m"
+            },
+            "compress": true
+        },
+        
+        "req" : {
+          "type": "dateFile",
+          "filename": "./logs/req-",
+          "pattern": ".yyyy-MM-dd.log",
+            "maxLogSize": 10000000,
+            "encoding": "utf-8",
+            "alwaysIncludePattern": true,
+            "layout": {
+                "type": "pattern",
+                "pattern": "[%d{ISO8601}][%5p  %z  %c] %m"
+            },
+            "compress": true
+        },
+
+        "res" : {
+          "type": "dateFile",
+          "filename": "./logs/res-",
+          "pattern": ".yyyy-MM-dd.log",
+            "maxLogSize": 10000000,
+            "encoding": "utf-8",
+            "alwaysIncludePattern": true,
+            "layout": {
+                "type": "pattern",
+                "pattern": "[%d{ISO8601}][%5p  %z  %c] %m"
+            },
+            "compress": true
+        },
+
+        "application" : {
+            "type": "dateFile",
+            "filename": "./logs/application-",
+            "pattern": ".yyyy-MM-dd.log",
+            "maxLogSize": 10000000,
+            "encoding": "utf-8",
+            "alwaysIncludePattern": true,
+            "layout": {
+                "type": "pattern",
+                "pattern": "[%d{ISO8601}][%5p  %z  %c] %m"
+            }
+        },
+        
+        "minError": {
+            "type": "logLevelFilter",
+            "appender": "error",
+            "level": "error"
+        }
+    },
+    "categories": {
+        "default": {
+            "appenders": [
+                "http",
+                "maxInfo",
+                "minError",
+                "application"
+            ],
+            "level": "all"
+        }
+    }
+}
