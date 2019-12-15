@@ -25,7 +25,11 @@
                筛选条件：
             </p>
             <div v-for = "(item, i) in factor" :key="i">
-              <a class="conditionP" @click="condition(item.id)">{{ item.name }}</a>
+              <a
+                class="conditionP"
+                @click="condition(item.id)">
+                {{ item.name }}
+            	</a>
             </div>
         </div>
         <hr>

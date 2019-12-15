@@ -11,19 +11,19 @@
             <p class="arrow">︾</p>
         </div>
         <div class="brandBanner">
-            <div>
+            <div class="tag">
                 <img src="../static/img/741571927530_.pic.jpg" alt="" style="width: 100%; height: 100%;">
                 <p style="text-align: center; margin-top: 30px; font-weight: 700;">品牌测算软件</p>
             </div>
-            <div @click="jumpUrl('/brandSearch')">
+            <div @click="jumpUrl('/brandSearch')" class="tag">
                 <img src="../static/img/751571927530_.pic.jpg" alt="" style="width: 100%; height: 100%;">
                 <p style="text-align: center; margin-top: 30px; font-weight: 700;">品牌数据查询</p>
             </div>
-            <div @click="jumpUrl('/brandDoc')">
+            <div @click="jumpUrl('/brandDoc')" class="tag">
                 <img src="../static/img/761571927530_.pic.jpg" alt="" style="width: 100%; height: 100%;">
                 <p style="text-align: center; margin-top: 30px; font-weight: 700;">品牌图书馆</p>
             </div>
-            <div @click="jumpUrl('/brandConnect')">
+            <div @click="jumpUrl('/brandConnect')" class="tag">
                 <img src="../static/img/771571927530_.pic.jpg" alt="" style="width: 100%; height: 100%;">
                 <p style="text-align: center; margin-top: 30px; font-weight: 700;">品牌学术论坛</p>
             </div>
@@ -190,4 +190,8 @@ export default {
 //     width: 150px;
 //     border: 1px solid black;
 // }
+
+	.tag {
+		cursor: pointer;
+	}
 </style>

@@ -33,7 +33,7 @@ module.exports = {
         { src: '~/plugins/element-ui', ssr: true },
         { src: '~/plugins/axios', ssr: false },
         { src: '~/plugins/nuxt-quill-plugin.js', ssr: false },
-        { src: '~/plugins/convertTime.js', ssr: false},
+        { src: '~/plugins/convertTime.js', ssr: true},
 	  ],
 
 	  babel: {
