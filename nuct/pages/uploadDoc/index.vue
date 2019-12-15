@@ -49,7 +49,7 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="资源积分">
-                    <el-input-number v-model="form.point" :min="1"></el-input-number>
+                    <el-input-number v-model="form.point" :min="0"></el-input-number>
                 </el-form-item>
                 <el-form-item label="资源标签">
                     <!-- <el-tag
@@ -165,7 +165,8 @@ export default {
           url: 'dbblog/portal/operation/categories',
           method: 'get',
           params: {
-              token: Cookies.get('token'),
+						token: Cookies.get('token'),
+						type: 3
           }
       }).then(res => {
         // console.log(res.data.categoryList);
@@ -178,7 +179,7 @@ export default {
           url: 'http://47.104.148.196:8081/dbblog/portal/operation/tags/3',
           method: 'get',
           params: {
-            token: Cookies.get('token'),
+						token: Cookies.get('token'),
           }
       }).then(res => {
           this.hotTag = res.data.tagList;
@@ -246,14 +247,18 @@ export default {
               data: {
                 'title': this.form.name,
                 'description': this.form.describe,
-                'categoryId': this.form.type,
+                'categoryId': 3,
                 'resourceId': this.sourceID,
                 'recommend': true,
                 'createUserId': 7,
                 'tagList': this.form.label
               }
             }).then(res => {
-              console.log(res.data);
+							console.log(res.data);
+							this.$message({
+								message: '上传成功',
+								type: 'success'
+							});
             })
         })
         return true

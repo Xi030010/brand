@@ -7,9 +7,37 @@
           <el-breadcrumb-item>已下载</el-breadcrumb-item>
           <el-breadcrumb-item>上传资源</el-breadcrumb-item>
       </el-breadcrumb> -->
-      <el-tabs v-model="activeName1" class="left">
-        <el-tab-pane label="我的资源" name="first">
-          <el-tabs v-model="activeName2">
+      <el-tabs v-model="activeName1" class="left" @tab-click="handleClick1">
+				<el-tab-pane label="下载首页" name="first">
+					<el-tabs v-model="activeName2">
+						<el-breadcrumb separator="/" style="margin-bottom: 20px;">
+							<el-breadcrumb-item>下载</el-breadcrumb-item>
+							<el-breadcrumb-item>测试分类</el-breadcrumb-item>
+							<el-breadcrumb-item>刷机教程.doc</el-breadcrumb-item>
+						</el-breadcrumb>
+						<div v-for="(item, i) in showList" :key="i">
+								<a class="questionTitle">{{ item.title }}</a>
+								<p class="questionInf">{{ item.description }}</p>
+								<p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ $convertTime(item.createTime) }}</span></p>
+								<span style="margin-right: 150px;">所需积分：5</span>
+								<el-button @click="downLoad">立即下载</el-button>
+								<hr>
+						</div>
+						<div class="moreDownload">
+								<div>
+										<div style="width: 500px">
+												<a class="questionTitle">刷机教程.doc——三星GT-I9070线刷教程</a>
+												<p class="questionInf">想要刷机但是没有尝试过刷机的三星小伙伴们可以参考一下本教程。</p>
+												<p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>2019-07-15</span></p>
+										</div>
+										<el-link :underline="false" class="moreDownBtn" @click="downLoad">立即下载</el-link>
+										<hr style="border: 1px dotted #ccc;">
+								</div>
+						</div>
+					</el-tabs>
+				</el-tab-pane>
+        <el-tab-pane label="我的资源" name="second">
+          <el-tabs v-model="activeName2" @tab-click="handleClick2">
               <el-tab-pane label="上传明细" name="first">
                   <div v-for="(item, i) in showList" :key="i">
                       <div style="width: 500px">
@@ -18,7 +46,7 @@
                           <el-button class="questionButton" size="mini" v-for="(tagItem, j) in item.tagList" :key="j">
                             {{ tagItem.name }}
                           </el-button>
-                          <p class="questionTime">上传时间：<span>{{ item.createTime }}</span>所需积分：<span>5</span></p>
+                          <p class="questionTime">上传时间：<span>{{ $convertTime(item.createTime) }}</span>所需积分：<span>5</span></p>
                       </div>
                       <p class="moreDownBtnUp">已通过</p>
                       <el-link :underline="false" class="moreDownBtn">编辑</el-link>
@@ -33,10 +61,9 @@
                         <el-button class="questionButton" size="mini" v-for="(tagItem, j) in item.tagList" :key="j">
                           {{ tagItem.name }}
                         </el-button>
-                        <p class="questionTime">上传时间：<span>{{ item.createTime }}</span>所需积分：<span>5</span></p>
+                        <p class="questionTime">上传时间：<span>{{ $convertTime(item.createTime) }}</span>所需积分：<span>5</span></p>
                     </div>
-                    <p class="moreDownBtnUp">已通过</p>
-                    <el-link :underline="false" class="moreDownBtn">编辑</el-link>
+                    <el-link :underline="false" class="moreDownBtnUp">立即评价</el-link>
                     <hr style="border: 1px dotted #ccc;">
                 </div>
                 <!-- <div>
@@ -68,7 +95,7 @@
                     <div class="selfPic"></div>
                     <div>
                         <p style="color: #3399ff;font-size: 14px;">用户</p>
-                        <p style="color: #666;font-size:14px;">积分：<span style="color: red">10</span></p>
+                        <p style="color: #666;font-size:14px;">积分：<span style="color: red">{{ points }}</span></p>
                     </div>
                 </div>
                 <p>上传了<span>{{ uploadNum }}</span>个资源</p>
@@ -113,6 +140,7 @@ export default {
       activeName2: 'first',
       uploadNum: Cookies.get('uploadNum'),
       downloadNum: Cookies.get('downloadNum'),
+      points: Cookies.get('points'),
       pageSize: null,
       pageNum: null,
       totalPage: [],
@@ -121,51 +149,91 @@ export default {
     };
   },
   mounted () {
-    // 上传资料
-    axios({
-      method: 'get',
-      url: 'dbblog/portal/user/information/informations',
-      params: {
-        token: Cookies.get('token'),
-        userId: 7,
-        type: 1
-      }
-    }).then(res => {
-      console.log(res.data)
-      var list = res.data.page.list;
-      this.pageSize = res.data.page.pageSize;
-      this.pageNum = Math.ceil(list.length / this.pageSize) || 1;
-      for (let i = 0; i < this.pageNum; i++) {
-        this.totalPage[i] = list.slice(this.pageSize * i, this.pageSize * (i + 1))
-      }
-      this.showList = this.totalPage[this.currentPage - 1];
-    })
-    // 下载资料
-    axios({
-      method: 'get',
-      url: 'dbblog/portal/user/information/informations',
-      params: {
-        token: Cookies.get('token'),
-        userId: 7,
-        type: 2
-      }
-    }).then(res => {
-      console.log(res.data)
-      var list = res.data.page.list;
-      this.pageSize = res.data.page.pageSize;
-      this.pageNum = Math.ceil(list.length / this.pageSize) || 1;
-      for (let i = 0; i < this.pageNum; i++) {
-        this.totalPage[i] = list.slice(this.pageSize * i, this.pageSize * (i + 1))
-      }
-      this.showList = this.totalPage[this.currentPage - 1];
-    })
+    this.getDownList()
   },
 
   methods: {
+		getDownList () {
+			// 下载资料
+			axios({
+				method: 'get',
+				url: 'dbblog/portal/user/information/informations',
+				params: {
+					token: Cookies.get('token'),
+					userId: 7,
+					type: 2
+				}
+			}).then(res => {
+				console.log(res.data)
+				var list = res.data.page.list;
+				this.pageSize = res.data.page.pageSize;
+				this.pageNum = Math.ceil(list.length / this.pageSize) || 1;
+				for (let i = 0; i < this.pageNum; i++) {
+					this.totalPage[i] = list.slice(this.pageSize * i, this.pageSize * (i + 1))
+				}
+				this.showList = this.totalPage[this.currentPage - 1];
+			})
+		},
+		getUploadList () {
+			// 上传资料
+			axios({
+			  method: 'get',
+			  url: 'dbblog/portal/user/information/informations',
+			  params: {
+			    token: Cookies.get('token'),
+			    userId: 7,
+			    type: 1
+			  }
+			}).then(res => {
+			  console.log(res.data)
+			  var list = res.data.page.list;
+			  this.pageSize = res.data.page.pageSize;
+			  this.pageNum = Math.ceil(list.length / this.pageSize) || 1;
+			  for (let i = 0; i < this.pageNum; i++) {
+			    this.totalPage[i] = list.slice(this.pageSize * i, this.pageSize * (i + 1))
+			  }
+			  this.showList = this.totalPage[this.currentPage - 1];
+			})
+		},
+		// 下载首页和我的资源tab页切换
+		handleClick1 (tab) {
+			console.log(tab)
+			if (tab.name === 'second') {
+				this.getUploadList()
+			}
+			else if (tab.name === 'first') {
+				this.getDownList()
+			}
+		},
+		// 我的资源tab页下，子tab页切换
+		handleClick2 (tab) {
+			console.log(tab)
+			if (tab.name === 'first') {
+				this.getUploadList()
+			}
+			else if (tab.name === 'second') {
+				this.getDownList()
+			}
+		},
+		downLoad () {
+			this.$confirm('当前积分' + this.points + ', 需扣除积分' + 5 + ', 是否确定下载?', '提示', {
+				confirmButtonText: '确定',
+				cancelButtonText: '取消',
+				type: 'warning'
+			}).then(() => {
+				window.open('http://47.104.148.196:8081/dbblog/portal/file/downloadFile/'
+										+ this.fileName + '?token=' + Cookies.get('token'), '_blank')
+			}).catch(() => {
+				this.$message({
+					type: 'info',
+					message: '已取消下载'
+				});          
+			});
+		},
     consoleCurr (val) {
       //console.log(`${val}`);
       this.currentPage = val;
-      this.showList = this.totalPage[this.currentPage-1];
+      this.showList = this.totalPage[this.currentPage - 1];
       //console.log(this.currentPage);
     }
   }
@@ -317,7 +385,7 @@ hr {
 }
 
 .moreDownload {
-    margin-top: 100px;
+    margin-top: 50px;
     overflow: hidden;
     position: relative;
 }

@@ -9,7 +9,8 @@
     <search></search>
     <div class="brandConnect">
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" style="padding-left: 30px;">
-            <el-menu-item index="1" @click="tabs('questionList')">问题首页</el-menu-item>
+            <!-- <el-menu-item index="1" @click="tabs('questionList')">问题首页</el-menu-item> -->
+            <el-menu-item index="1" @click="jumpUrl('./brandConnect')">问题首页</el-menu-item>
             <el-menu-item index="2">悬赏问题</el-menu-item>
             <el-menu-item index="3">已解决</el-menu-item>
             <el-menu-item index="4">未解决</el-menu-item>
@@ -19,7 +20,7 @@
             <div>
                 <div class="question">
                     <h1>{{ list.title }}</h1>
-                    <div class="questionContent">{{ list.content }}</div>
+                    <div class="questionContent" v-html="list.content"></div>
                     <br>
                     <p class="time">编辑于：<span>{{ list.createTime }}</span></p>
                     <br>
@@ -29,9 +30,11 @@
                             <el-link :underline="false">分享</el-link>
                             <el-link :underline="false">收藏</el-link>
                         </div>
-                        <div style="float: right">
-                            <div class="head"></div>
-                            <div class="name">崔博洋cuiboyang</div>
+                        <div class="user-info">
+                            <div class="head">
+															<img :src="avatar" alt="头像" style="width: 50px;height: 50px;border-radius: 50%;">
+														</div>
+                            <div class="name">{{ username }}</div>
                         </div>
                     </div>
                 </div>
@@ -41,16 +44,18 @@
                     <hr style="border: 0;border-bottom: 1px solid #ccc;">
                     <!--循环此部分-->
                     <div class="question" v-for="(item, i) in list.brdCommentList" :key="i">
-                        <div class="questionContent">{{ item.content }}</div>
+                        <div class="questionContent" v-html="item.content"></div>
                         <br>
                         <div  style="overflow: hidden;position: relative;">
                             <div class="questionNav">
                                 <p class="time">编辑于：<span>{{ item.createTime }}</span></p>
                                 <el-link :underline="false" icon="el-icon-s-comment" @click="response(i)">回复<span>（{{ list.brdCommentList[i].brdReplyList.length }}）</span></el-link>
                             </div>
-                            <div style="float: right">
-                                <div class="head"></div>
-                                <div class="name">崔博洋cuiboyang</div>
+                            <div class="user-info">
+                                <div class="head">
+																	<img :src="avatar" alt="头像" style="width: 50px;height: 50px;border-radius: 50%;">
+																</div>
+                                <div class="name">{{ username }}</div>
                             </div>
                         </div>
                         <div :name="i" ref="card" style="display: none">
@@ -69,8 +74,12 @@
                                     style="position: relative;left: 0;bottom: 0;transform: translateX(0);width: 50%;margin: 0 auto">
                                 </el-pagination>
                             </div>
-                            <div class="right-button">
-                              <el-button @click="reply('comment', list.brdCommentList[i].brdReplyList, list.brdCommentList[i].id)" type="primary">回复评论</el-button>
+                            <div class="right-button" :style="{visibility: isPopWindow ? 'hidden' : 'visible'}">
+                              <el-button
+																@click="reply('comment', list.brdCommentList[i].brdReplyList, list.brdCommentList[i].id)"
+																type="primary">
+																回复评论
+															</el-button>
                             </div>
                         </div>
                         <hr style="border: 0;border-bottom: 1px solid #ccc;">
@@ -78,7 +87,7 @@
                     
                 </div>
 
-                <div class="right-button">
+                <div class="right-button" :style="{visibility: isPopWindow ? 'hidden' : 'visible'}">
                   <el-button @click="reply('topic')" type="primary">回复话题</el-button>
                 </div>
 
@@ -94,7 +103,7 @@
                           @change="onEditorChange($event)"
                           style="height: 300px;">
                       </div>
-                      <div class="right-button">
+                      <div class="right-button" v-if="isPopWindow">
                         <el-button @click="submitReply" type="primary">提交</el-button>
                       </div>
                     </div>
@@ -112,11 +121,11 @@
                     <div class="selfPic"></div>
                     <div>
                         <p style="color: #3399ff;font-size: 18px;">用户</p>
-                        <p style="color: #666;font-size:18px;">积分：<span style="color: red">10</span></p>
+                        <p style="color: #666;font-size:18px;">积分：<span style="color: red">{{ userPoint }}</span></p>
                     </div>
                 </div>
-                <p>提了<span>0</span>个问题，<span>0</span>人进行了回答</p>
-                <p>回答了<span>0</span>个问题</p>
+                <p>提了<span>{{ askNum }}</span>个问题，<span>0</span>人进行了回答</p>
+                <p>回答了<span>{{ answerNum }}</span>个问题</p>
                 <p>有<span>0</span>个同问</p>
             </div>
             <div class="newResponse">
@@ -153,39 +162,45 @@ export default {
 
   data () {
     return {
-        activeIndex: '1',
-        input: '',
-        tabsVisibility: {
-            questionList: '',
-        },
-        editorOption: {
-          // 富文本中的一些属性
-          modules: {
-            toolbar: [
-                [{'size': ['small', false, 'large']}],
-                [{ 'font': [] }],     //字体
-                [{ 'color': [] }, { 'background': [] }],
-                ['bold', 'italic'],
-                [{'list': 'ordered'}, {'list': 'bullet'}],
-                ['link', 'image'],
-                ['blockquote'],
-                [{ 'align': [] }],    //对齐方式
+			userPoint: Cookies.get('points'),
+			askNum: Cookies.get('askNum'),
+			answerNum: Cookies.get('answerNum'),
+			avatar: Cookies.get('avatar'),
+			username: Cookies.get('username'),
+			activeIndex: '1',
+			input: '',
+			tabsVisibility: {
+					questionList: '',
+			},
+			editorOption: {
+				// 富文本中的一些属性
+				modules: {
+					toolbar: [
+							[{'size': ['small', false, 'large']}],
+							[{ 'font': [] }],     //字体
+							[{ 'color': [] }, { 'background': [] }],
+							['bold', 'italic'],
+							[{'list': 'ordered'}, {'list': 'bullet'}],
+							['link', 'image'],
+							['blockquote'],
+							[{ 'align': [] }],    //对齐方式
 
-            ]
-          }
-        },
-        topicId: 1,
-        list: '',
-        topicPoint: '',
-        activeName: '',
-        responsePageSize: 1,
-        responseCurrentPage: 1,
-        inCard: false,
-        content: '',
-        showEditor: false,
-        replyType: null,
-        brdReplyList: null,
-        currentReplyId: null,
+					]
+				}
+			},
+			topicId: 1,
+			list: '',
+			topicPoint: '',
+			activeName: '',
+			responsePageSize: 1,
+			responseCurrentPage: 1,
+			inCard: false,
+			content: '',
+			showEditor: false,
+			replyType: null,
+			brdReplyList: null,
+			currentReplyId: null,
+			isPopWindow: false,
     };
   },
   computed: {
@@ -208,6 +223,9 @@ export default {
   },
 
   methods: {
+    jumpUrl (url) {
+			location.href = url
+		},
     getBrdCommentList () {
       axios({
         url: 'dbblog/portal/topic/topic/' + this.topicId,
@@ -219,7 +237,8 @@ export default {
         console.log(res.data)
         // console.log(res.data.brdTopic.brdCommentList[0].brdReplyList);
         this.list = res.data.brdTopic;
-        this.topicPoint = res.data.brdTopic.brdCommentList.length
+				this.topicPoint = res.data.brdTopic.brdCommentList.length
+				this.list.content += '<style>img {width: 300px;height:300px}</style>'
       })
     },
     tabs(xx) {
@@ -260,7 +279,8 @@ export default {
       this.replyType = type
       // 若回复评论，设置当前reply列表
       this.brdReplyList = brdReplyList
-      this.currentReplyId = id
+			this.currentReplyId = id
+			this.isPopWindow = true
       console.log('currentReplyId is ' + this.currentReplyId)
     },
     submitReply () {
@@ -282,8 +302,11 @@ export default {
         }).then(res => {
           console.log(res.data)
           // 重新获取评论数据
-          this.getBrdCommentList()
-          this.showEditor = false
+					this.getBrdCommentList()
+					// 切换编辑器显示
+					this.showEditor = false
+					// 切换按钮状态
+					this.isPopWindow = false
         })
       }
       // 回复评论
@@ -306,13 +329,16 @@ export default {
           console.log(res.data)
           // 重新获取评论数据
           this.getBrdCommentList()
-          this.showEditor = false
+					this.showEditor = false
+					// 切换按钮状态
+					this.isPopWindow = false
         })
       }
       
     },
     closeEditor () {
-      this.showEditor = false
+			this.showEditor = false
+			this.isPopWindow = false
     }
   }
 }
@@ -544,7 +570,8 @@ hr {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    border: 1px solid black;
+		border: 1px solid black;
+		margin: 0 auto;
 }
 
 .name {
@@ -613,6 +640,12 @@ hr {
       border: 5px solid black;
     }
   }
+}
+
+.user-info {
+	float: right;
+	width: 20%;
+	text-align: center;
 }
 
 </style>

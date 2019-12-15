@@ -8,22 +8,30 @@
     <img src="../../static/img/791571927556_.pic.jpg" alt="">
     <search></search>
     <div class="brandConnect">
+        <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>资料列表</el-breadcrumb-item>
+        </el-breadcrumb>
         <div class="brandCondition">
-            <div style="margin-bottom: 10px;">
+            <!-- <div style="margin-bottom: 10px;">
                 <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>
                 分类：<span>全部</span><span @click="tran">工业品牌</span><span @click="tran">食品品牌</span>
-            </div>
-            <div style="margin-bottom: 10px;">
-                <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>
-                领域：<span @click="tran">全部</span><span @click="tran" v-for="(item, i) in factor" :key="i">{{ item.name }}</span>
-            </div>
+            </div> -->
             <div>
+                <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>
+                分类：
+                <!-- <span @click="tran">全部</span> -->
+                <span @click="tran($event, item.id)" v-for="(item, i) in factor" :key="i">
+                  {{ item.name }}
+                </span>
+            </div>
+            <!-- <div>
                 <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>
                 关键词搜索：
                 <el-input placeholder="请输入内容" v-model="input3" class="input-with-select" style="width: 500px;">
                     <el-button slot="append" icon="el-icon-search"></el-button>
                 </el-input>
-            </div>
+            </div> -->
         </div>
         <hr>
         <div>
@@ -42,7 +50,7 @@
                 <div class="question-item-content">
                   <a class="questionTitle" @click="turnInfor(item.id, item.ossResource.name)">{{ item.title }}</a>
                   <p class="questionInf">{{ item.description }}</p>
-                  <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ item.createTime }}</span>上传者：
+                  <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ $convertTime(item.createTime) }}</span>上传者：
 
                   <span>Mr.Boring</span></p>
                   
@@ -53,7 +61,7 @@
                 background
                 layout="prev, pager, next"
                 :total="total"
-                :page-size="size"
+                :page-size="pageSize"
                 :current-page="currentPage"
                 @current-change="consoleCurr"
                 style="position: relative;transform: translateX(0);left: 0;bottom: 0">
@@ -77,7 +85,11 @@
                         <span>热门标签</span>
                         <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
                     </div>
-                    <div></div>
+                    <div style="text-align: center;">
+                      <el-tag v-for="(item, i) in hotTags" :key="i" class="text item">
+                        {{ item.name }}
+                      </el-tag>
+                    </div>
                 </el-card>
             </div>
         </div>
@@ -108,14 +120,15 @@ export default {
       show: 'none',
       input3: '',
       username: Cookies.get('username'),
-      points: Cookies.get('points'),
-      list: [],    
+      points: Cookies.get('points'),  
       total: 3,
-      size: 6,
+      pageSize: 6,
       currentPage: 1,
       pageNum: 0,  
       totalPage: [],
       showList: [],
+      pageList: [],
+      hotTags: [],
     };
   },
   components: {
@@ -124,27 +137,84 @@ export default {
       navbar,
       search,
   },
-//   mounted() {
-//       console.log(Cookies.get('username'));
-//   },
+  mounted() {
+    this.setShowList(1)
 
+    axios({
+      url: 'dbblog/portal/operation/categories',
+      method: 'get',
+      params: {
+        'token': Cookies.get('token'),
+        'type': 3,
+      }
+    }).then(res => {
+      console.log(res.data)
+      this.factor = res.data.categoryList
+    }).catch(error => {
+      console.log(error)
+    });
+
+    axios({
+      method: 'get',
+      url: 'http://47.104.148.196:8081/dbblog/portal/operation/tags/3',
+      params: {
+        token: Cookies.get('token')
+      }
+    }).then(res => {
+      console.log(res.data)
+      this.hotTags = res.data.tagList
+    })
+  },
+  updated: function () {
+    if(this.brandCondition !== ''){
+      this.show = 'inline-block';
+    }else{
+      this.show = 'none';
+    }
+  },
   methods: {
-    tran (e) {
+    setShowList (currentPage, cateId) {
+      axios({
+        url: 'dbblog/portal/information/informations',
+        method: 'get',
+        params: {
+          token: Cookies.get('token'),
+          limit: 10,
+          page: currentPage,
+          categoryId: cateId,
+        }
+      }).then(res => {
+        console.log(res.data);
+        this.total = res.data.page.totalCount;
+        this.pageSize = res.data.page.pageSize;
+        this.showList = res.data.page.list;
+        this.pageNum = Math.ceil(this.total / this.pageSize) || 1;
+        // for (let i = 0; i < this.pageNum; i++) {
+        //     this.totalPage[i] = this.list.slice(this.pageSize * i, this.pageSize * (i + 1))
+        // }
+        // this.showList = this.totalPage[this.currentPage - 1];
+        this.pageList[currentPage] = this.showList
+      });
+    },
+    tran (e, cateId) {
+      console.log(cateId)
       let s = new Set();
       if(e.target.innerText == '全部') {
-          for(let i = 0; i < this.factor.length; i++){
-              this.brandCondition.push(this.factor[i].name);
-          }
+        for(let i = 0; i < this.factor.length; i++){
+          this.brandCondition.push(this.factor[i].name);
+        }
       }else {
-          this.brandCondition.push(e.target.innerText);
+        this.brandCondition.push(e.target.innerText);
       }
       
       this.brandCondition.forEach(element => s.add(element));
       s = [...s];
       this.brandCondition.splice(0, this.brandCondition.length);
       for(let j = 0; j < s.length; j++){
-          this.brandCondition.push(s[j]);
+        this.brandCondition.push(s[j]);
       }
+
+      this.setShowList(1, cateId)
     },
 
     tagClose (tag) {
@@ -165,57 +235,18 @@ export default {
         }
       })
     },
-    consoleCurr (val) {
+    consoleCurr (currentPage) {
       //console.log(`${val}`);
-      this.currentPage = val;
-      this.showList = this.totalPage[this.currentPage-1];
+      this.currentPage = currentPage;
+      if (!this.pageList[currentPage]) {
+        this.setShowList(currentPage)
+      }
+      else {
+        this.showList = this.pageList[currentPage]
+      }
       //console.log(this.currentPage);
     }
-
   },
-
-  mounted() {
-    axios({
-      url: 'dbblog/portal/information/informations',
-      method: 'get',
-      params: {
-        token: Cookies.get('token')
-      }
-    }).then(res => {
-      console.log(res.data);
-      // this.total = res.data.page.totalCount;
-      this.total = res.data.page.list.length;
-      this.size = res.data.page.pageSize;
-      this.list = res.data.page.list;
-      this.pageNum = Math.ceil(this.total / this.size) || 1;
-      for (let i = 0; i < this.pageNum; i++) {
-          this.totalPage[i] = this.list.slice(this.size * i, this.size * (i + 1))
-      }
-      this.showList = this.totalPage[this.currentPage-1];
-      //console.log(this.list)
-    });
-
-    axios({
-      url: 'dbblog/portal/operation/categories',
-      method: 'get',
-      params: {
-        'token': Cookies.get('token'),
-        // 'type': 3,
-      }
-    }).then(res => {
-      this.factor = res.data.categoryList
-    }).catch(error => {
-
-    });
-  },
-
-  updated: function () {
-    if(this.brandCondition !== ''){
-      this.show = 'inline-block';
-    }else{
-      this.show = 'none';
-    }
-  }
 }
 
 </script>
@@ -232,6 +263,7 @@ export default {
     min-height: 500px;
     padding: 0 40px;
     padding-bottom: 20px;
+    margin-top: 30px;
 }
 
 hr {
@@ -241,8 +273,8 @@ hr {
 .brandCondition {
     background: #fff;
     width: 1000px;
-    min-height: 100px;
-    margin: 20px auto;
+    min-height: 50px;
+    margin: 20px auto 20px;
     padding: 10px;
 }
 
@@ -276,7 +308,7 @@ hr {
 .right {
     float: right;
     width: 280px;
-    height: 800px;
+    min-height: 800px;
     background: #fff;
 }
 

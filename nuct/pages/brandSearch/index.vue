@@ -19,27 +19,31 @@
             <el-breadcrumb-item>品牌列表</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="condition">
-            <p style="margin-left: 15px; margin-bottom: 20px;"><span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>筛选条件：</p>
+            <p style="margin-left: 15px; margin-bottom: 20px;">
+              <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;">
+               </span>
+               筛选条件：
+            </p>
             <div v-for = "(item, i) in factor" :key="i">
-                <a class="conditionP" @click="condition">{{ item.name }}</a>
+              <a class="conditionP" @click="condition(item.id)">{{ item.name }}</a>
             </div>
         </div>
         <hr>
         <div class="brand">
-            <div v-for = "(item, i) in showList" :key="i" @click="turnDetails(1, item.name)"> 
-                    <p class="brandTitle">{{ item.name }}</p>
-                    <p class="brandIntroduction">{{ item.introduction }}</p>
-            </div>
-            <!-- <div v-for = "item in 10"> 
-                <p class="brandTitle"></p>
-                <p class="brandIntroduction"></p>
-            </div> -->
+          <div v-for = "(item, i) in showList" :key="i" @click="turnDetails(1, item.name)" style="cursor: pointer;">
+            <p class="brandTitle">{{ item.name }}</p>
+            <p class="brandIntroduction">{{ item.introduction }}</p>
+          </div>
+          <!-- <div v-for = "item in 10"> 
+              <p class="brandTitle"></p>
+              <p class="brandIntroduction"></p>
+          </div> -->
         </div>
         <el-pagination
         background
         layout="prev, pager, next"
         :total="total"
-        :page-size="size"
+        :page-size="pageSize"
         :current-page="currentPage"
         @current-change="consoleCurr">
         </el-pagination>
@@ -59,19 +63,20 @@ import Cookies from '~/plugins/cookie';
 //axios.defaults.baseURL = "http://47.104.148.196:8081/dbblog";
 
 export default {
-    middleware: 'auth',
+  middleware: 'auth',
   data () {
     return {
         input: '',
-        list: [],
-        totalPage: [],
         factor: ['服装','手机','电脑'],
         loading: true,
         total: 3,
-        size: 6,
+        pageSize: 6,
         currentPage: 1,
         pageNum: 0,
+        list: [],
+        totalPage: [],
         showList: [],
+        pageList: [],
     };
   },
   components: {
@@ -83,39 +88,19 @@ export default {
 
 
   mounted() {
-    axios({
-        url: 'dbblog/portal/brand/brands',
-        method: 'get',
-        params: {
-            'token': Cookies.get('token')
-        }
-    }).then(res => {
-      //console.log(res.data)
-      //this.currentPage = res.data.page.currPage;
-      this.loading = false;
-      this.list = res.data.page.list;
-      this.total = res.data.page.totalCount;
-      this.size = res.data.page.pageSize;
-      this.pageNum = Math.ceil(this.total / this.size) || 1;
-      for (let i = 0; i < this.pageNum; i++) {
-          this.totalPage[i] = this.list.slice(this.size * i, this.size * (i + 1))
-      }
-      this.showList = this.totalPage[this.currentPage-1];
-      //console.log(this.totalPage);
-              axios({
-              url: 'dbblog/portal/operation/categories',
-              method: 'get',
-              params: {
-                  'token': Cookies.get('token'),
-                //   'type': 5,
-              }
-          }).then(res => {
-            console.log(res.data)
-              this.factor = res.data.categoryList
-              
-          }).catch(error => {
+    this.setShowList(null, 1)
 
-          });
+    axios({
+      url: 'dbblog/portal/operation/categories',
+      method: 'get',
+      params: {
+        'token': Cookies.get('token'),
+        'type': 5,
+      }
+    }).then(res => {
+      console.log(res.data)
+      this.factor = res.data.categoryList
+      
     }).catch(error => {
 
     });
@@ -153,6 +138,29 @@ export default {
     // },
 
   methods: {
+    setShowList(cateId, currentPage) {
+      axios({
+        url: 'dbblog/portal/brand/brands',
+        method: 'get',
+        params: {
+          token: Cookies.get('token'),
+          limit: 10,
+          page: currentPage,
+          categoryId: cateId,
+        }
+      }).then(res => {
+        console.log(res.data)
+        //this.currentPage = res.data.page.currPage;
+        this.loading = false;
+        this.total = res.data.page.totalCount;
+        this.pageSize = res.data.page.pageSize;
+        this.showList = res.data.page.list;
+        this.pageNum = Math.ceil(this.total / this.pageSize) || 1;
+        this.pageList[currentPage] = this.showList
+      }).catch(error => {
+
+      });
+    },
     turnDetails (url, name) {
       this.$router.push({
         path: '../brandInformation',
@@ -164,28 +172,20 @@ export default {
       })
     },
     turnOnlySearch () {
-        location.href = "../onlySearch";
+      location.href = "../onlySearch";
     },
-    condition () {
-      axios({
-        url: 'dbblog/portal/brand/brands',
-        method: 'get',
-        params: {
-            'token': Cookies.get('token'),
-            'categoryId': 19
-        }
-      }).then(res => {
-        console.log(res.data)
-        this.loading = false;
-        this.list = res.data.page.list
-      }).catch(error => {
-
-      });
+    condition (id) {
+      this.setShowList(id, 1)
     },
-    consoleCurr (val) {
+    consoleCurr (currentPage) {
       //console.log(`${val}`);
-      this.currentPage = val;
-      this.showList = this.totalPage[this.currentPage-1];
+      this.currentPage = currentPage;
+      if (!this.pageList[currentPage]) {
+        this.setShowList(currentPage)
+      }
+      else {
+        this.showList = this.pageList[currentPage]
+      }
       //console.log(this.currentPage);
     }
   }
@@ -197,7 +197,7 @@ export default {
 .showBrand {
     position: relative;
     //margin-top: 30px;
-    height: 1300px;
+    min-height: 800px;
     padding-top: 30px;
 }
 
@@ -209,8 +209,7 @@ export default {
 .condition {
     height: 100px;
     width: 980px;
-    margin: 0 auto;
-
+    margin: 0 auto 15px;
 }
 
 .brand {

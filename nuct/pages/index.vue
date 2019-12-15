@@ -88,7 +88,16 @@ export default {
         navbar,
         footerBar,
         logo,
-    },
+		},
+		mounted () {
+			if(Cookies.get('token') && !parseInt(Cookies.get('loginMessageNum'))) {
+				this.$message({
+					message: '登陆成功',
+					type: 'success'
+				})
+				Cookies.set('loginMessageNum', 1)
+			}
+		},
     methods: {
         jumpUrl (url) {
             if(Cookies.get('token') == null) {

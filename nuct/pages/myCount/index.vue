@@ -223,7 +223,7 @@ export default {
             'token': Cookies.get('token')
         }
     }).then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         this.search_list = res.data.page.list;
         this.search_total = res.data.page.totalCount;
         this.search_size = res.data.page.pageSize;

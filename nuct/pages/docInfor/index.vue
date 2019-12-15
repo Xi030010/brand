@@ -18,7 +18,7 @@
                 <div>
                     <a class="questionTitle">{{ this.list.title }}</a>
                     <p class="questionInf">{{ this.list.description }}</p>
-                    <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ this.list.createTime }}</span></p>
+                    <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ $convertTime(this.list.createTime) }}</span></p>
                     <span style="margin-right: 150px;">所需积分：5</span>
                     <el-button @click="downLoad">立即下载</el-button>
                     <hr>
@@ -41,11 +41,11 @@
                         <div class="selfPic"></div>
                         <div>
                             <p style="color: #3399ff;font-size: 18px;">用户</p>
-                            <p style="color: #666;font-size:18px;">积分：<span style="color: red">10</span></p>
+                            <p style="color: #666;font-size:18px;">积分：<span style="color: red">{{ points }}</span></p>
                         </div>
                     </div>
-                    <p>上传了<span>0</span>个资源</p>
-                    <p>下载了<span>0</span>个资源</p>
+                    <p>上传了<span>{{ uploadNum }}</span>个资源</p>
+                    <p>下载了<span>{{ downloadNum }}</span>个资源</p>
                 </div>
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clearfix">
@@ -80,6 +80,9 @@ export default {
 
   data () {
     return {
+			uploadNum: Cookies.get('uploadNum'),
+			downloadNum: Cookies.get('downloadNum'),
+			points: Cookies.get('points'),
       brandCondition: [],
       show: 'none',
       input3: '',
@@ -131,8 +134,19 @@ export default {
         //         message: '已取消下载'
         //   });          
         // });
-
-        window.open('http://47.104.148.196:8081/dbblog/portal/file/downloadFile/' + this.fileName + '?token=' + Cookies.get('token'), '_blank')
+        this.$confirm('当前积分' + this.points + ', 需扣除积分' + 5 + ', 是否确定下载?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+					window.open('http://47.104.148.196:8081/dbblog/portal/file/downloadFile/'
+											+ this.fileName + '?token=' + Cookies.get('token'), '_blank')
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消下载'
+          });          
+        });
         // axios({
         //   url: 'http://47.104.148.196:8081/dbblog/portal/file/downloadFile/' + this.fileName,
         //   method: 'get',
@@ -196,7 +210,7 @@ hr {
 .left {
     float: left;
     width: 700px;
-    height: 800px;
+    min-height: 800px;
     background: #fff;
     margin-top: 20px;
 }
@@ -204,7 +218,7 @@ hr {
 .right {
     float: right;
     width: 280px;
-    height: 800px;
+    min-height: 800px;
     background: #fff;
     margin-top: 20px;
 }

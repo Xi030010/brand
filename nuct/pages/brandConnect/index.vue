@@ -18,18 +18,18 @@
         <div class="questionList" :style="{ visibility: tabsVisibility.questionList }">
             <div v-for = "(item, i) in showList" :key = "i">
                 <div class="answerNamber">
-                    <p>5</p>
+                    <p>{{ item.commentNum }}</p>
                     <p>回答</p>
                 </div>
-                <p class="questionTime"><span>{{ item.createTime }}</span>来自 qq_17642463</p>
+                <p class="questionTime"><span>{{ $convertTime(item.createTime) }} 来自 </span>{{ item.createUser }}</p>
                 <a class="questionTitle" @click="$router.push({path: '../brandAnswer', query: {topicId: item.id}})">
                   {{ item.title }}
                 </a>
                 <p class="questionInf">{{ item.description }}</p>
                 <div class="showData">
                     <p>浏览<span>{{ item.readNum }}</span></p>
-                    <p>收藏<span>0</span></p>
-                    <p>同问<span>0</span></p>
+                    <p>收藏<span>{{ item.likeNum }}</span></p>
+                    <!-- <p>同问<span>0</span></p> -->
                 </div>
                 <hr>
             </div>
@@ -38,7 +38,7 @@
             background
             layout="prev, pager, next"
             :total="total"
-            :page-size="size"
+            :page-size="pageSize"
             :current-page="currentPage"
             @current-change="consoleCurr">
         </el-pagination>
@@ -108,13 +108,13 @@ export default {
         tabsVisibility: {
             questionList: '',
         },
-        list: [],
         total: 3,
-        size: 6,
+        pageSize: 6,
         currentPage: 1,
         pageNum: 0,  
         totalPage: [],
         showList: [],
+        pageList: [],
         hotTag: [],
         userPoint: Cookies.get('points'),
         askNum: Cookies.get('askNum'),
@@ -123,24 +123,7 @@ export default {
   },
 
   mounted() {
-    axios({
-        url: 'http://47.104.148.196:8081/dbblog/portal/topic/topics',
-        method: 'get',
-        params: {
-            token: Cookies.get('token')
-        }
-    }).then(res => {
-      console.log(res.data.page);
-      this.list = res.data.page.list;
-      this.total = res.data.page.totalCount;
-      this.size = res.data.page.pageSize;
-      this.pageNum = Math.ceil(this.total / this.size) || 1;
-      for (let i = 0; i < this.pageNum; i++) {
-              this.totalPage[i] = this.list.slice(this.size * i, this.size * (i + 1))
-      }
-      this.showList = this.totalPage[this.currentPage-1];
-
-    })
+    this.setShowList(1)
 
     axios({
         url: 'dbblog/portal/operation/tags/3',
@@ -156,6 +139,24 @@ export default {
   },
 
   methods: {
+    setShowList (currentPage) {
+      axios({
+          url: 'http://47.104.148.196:8081/dbblog/portal/topic/topics',
+          method: 'get',
+          params: {
+              token: Cookies.get('token'),
+              limit: 10,
+              page: currentPage
+          }
+      }).then(res => {
+        console.log(res.data.page);
+        this.total = res.data.page.totalCount;
+        this.pageSize = res.data.page.pageSize;
+        this.showList = res.data.page.list;
+        this.pageNum = Math.ceil(this.total / this.pageSize) || 1;
+        this.pageList[currentPage] = this.showList
+      })
+    },
     tabs(xx) {
         for ( let vib in this.$data.tabsVisibility) {
             this.$data.tabsVisibility[vib] = 'hidden';
@@ -167,11 +168,16 @@ export default {
         location.href = url;
     },
 
-    consoleCurr (val) {
-        //console.log(`${val}`);
-        this.currentPage = val;
-        this.showList = this.totalPage[this.currentPage-1];
-        //console.log(this.currentPage);
+    consoleCurr (currentPage) {
+      //console.log(`${val}`);
+      this.currentPage = currentPage;
+      if (!this.pageList[currentPage]) {
+        this.setShowList(currentPage)
+      }
+      else {
+        this.showList = this.pageList[currentPage]
+      }
+      //console.log(this.currentPage);
     }
   }
 }
@@ -339,7 +345,7 @@ export default {
 
 .showData {
     position: relative;
-    left: 500px;
+    left: 512px;
 }
 
 

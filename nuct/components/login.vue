@@ -3,17 +3,21 @@
     <div>
         <div class="loginDiv">
         <!-- 登录前显示登录注册栏 -->
-                <div class="login"  :class="{loginState: loginState1}">
-                    <a @click="login">{{ loginIn }}</a>
-                    <a>{{ register }}</a>
-                </div>
-        <!-- 登录成功显示的个人栏 -->
-                <div class="user" :class="{loginState: loginState}">
-                    <span @click="turnURL">
-                        <el-avatar :size="size" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" style="cursor: pointer"></el-avatar>
-                    </span>
-                    <el-link :underline="false" style="position: relative;top: -8px;left: 5px; color: #fff;" @click="loginOut">退出</el-link>
-                </div>
+					<div class="login"  :class="{loginState: loginState1}">
+						<a @click="login">{{ loginIn }}</a>
+						<a>{{ register }}</a>
+					</div>
+	<!-- 登录成功显示的个人栏 -->
+					<div class="user" :class="{loginState: loginState}">
+						<span @click="turnURL">
+							<el-avatar
+								:size="size"
+								src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+								style="cursor: pointer">
+							</el-avatar>
+						</span>
+						<el-link :underline="false" style="position: relative;top: -8px;left: 5px; color: #fff;" @click="loginOut">退出</el-link>
+					</div>
         </div>
         <!-- 点击登录弹出的覆盖层登录界面 -->
         <div class="loginInbg" :class="{hide: hideDiv}">
@@ -28,7 +32,12 @@
                 <el-form-item label="密码">
                     <el-input v-model="form.psw" show-password style="width: 250px;"></el-input>
                 </el-form-item>
-                <el-button type="primary" style="margin-left: 160px;background: #ef8b3b; border: 1px solid #ef8b3b;" @click="loginFormIn">登陆</el-button>
+                <el-button
+                    type="primary"
+                    style="margin-left: 160px;background: #ef8b3b; border: 1px solid #ef8b3b;"
+                    @click="loginFormIn">
+                    登陆
+                </el-button>
             </el-form>
         </div>
 
@@ -68,9 +77,22 @@ export default {
       type: String,
       default: '注册'
     }
-  },
+	},
+	mounted () {
+		if(Cookies.get('token')) {
+			this.loginState = false;
+		}
+		else {
+			this.loginState1 = false;
+		}
+	},
   methods: {
       login () {
+				document.addEventListener('keyup', (e) => {
+					if (e.keyCode === 13) {
+						this.loginFormIn()
+					}
+				})
         if(this.hideDiv) {
           this.hideDiv = false;
         }
@@ -106,14 +128,15 @@ export default {
                 "username": this.form.name,
                 "password": this.form.psw,
         }).then(res => {
-          //console.log(res.data.token);
+					//console.log(res.data.token);
+					Cookies.set('loginMessageNum', 0, {expires: this.toNextDay()})
           Cookies.set('name', this.form.name, {expires: this.toNextDay()});
           Cookies.set('token', res.data.token, {expires: this.toNextDay()});
           // Cookies.set('userId', 7, {expires: this.toNextDay()})
           // localStorage.setItem("token", JSON.stringify(res.data.token))
           // console.log(JSON.parse(localStorage.getItem("token")));
           // this.$store.dispatch("setToken", res.data.token)
-          //console.log(Cookies.get('token'));
+					//console.log(Cookies.get('token'));
           axios({
               url: 'dbblog/portal/user/info/7',
               method: 'get',
@@ -139,6 +162,7 @@ export default {
             Cookies.set('downloadNum', res.data.user.downloadNum)
             Cookies.set('askNum', res.data.user.askNum)
             Cookies.set('answerNum', res.data.user.answerNum)
+            Cookies.set('avatar', res.data.user.avatar)
           })
           
           this.$router.push('');
@@ -167,17 +191,6 @@ export default {
       }, 100);
     },
   },
-
-    
-
-  mounted: function () {
-      if(Cookies.get('token')) {
-          this.loginState = false;
-      }
-      else {
-          this.loginState1 = false;
-      }
-  }
 }
 
 </script>

@@ -164,10 +164,7 @@ h6 {
     width:980px;
     min-height: 850px;
     background: #fff;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateY(-50%) translateX(-50%);
+    margin: 50px auto 0;
 }
 
 .hStyle {
