@@ -20,7 +20,7 @@
 export const state = () => ({
     list: '1',
     token: '5ab727d12d127f78de40b20bcfa63a84',
-});
+	});
 
 //实时监听state的变化（最新状态）
 export const getters = {
