@@ -20,7 +20,7 @@
             <div>
                 <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>
                 分类：
-                <!-- <span @click="tran">全部</span> -->
+                <span @click="tran($event, '')">全部</span>
                 <span @click="tran($event, item.id)" v-for="(item, i) in factor" :key="i">
                   {{ item.name }}
                 </span>
@@ -200,6 +200,7 @@ export default {
       console.log(cateId)
       let s = new Set();
       if(e.target.innerText == '全部') {
+        this.brandCondition = []
         for(let i = 0; i < this.factor.length; i++){
           this.brandCondition.push(this.factor[i].name);
         }
@@ -219,6 +220,7 @@ export default {
 
     tagClose (tag) {
       this.brandCondition.splice(this.brandCondition.indexOf(tag), 1);
+      this.setShowList(1, '')
     },
 
     turnUrl () {

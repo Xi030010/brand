@@ -26,8 +26,10 @@
             </p>
             <div v-for = "(item, i) in factor" :key="i">
               <a
+								ref="a"
                 class="conditionP"
-                @click="condition(item.id)">
+                @click="condition($event, item.id)"
+							>
                 {{ item.name }}
             	</a>
             </div>
@@ -104,7 +106,8 @@ export default {
     }).then(res => {
       console.log(res.data)
       this.factor = res.data.categoryList
-      
+			this.factor.unshift({id: '', name: '全部'})
+			this.$refs.a[0].classList.add('active')
     }).catch(error => {
 
     });
@@ -178,8 +181,14 @@ export default {
     turnOnlySearch () {
       location.href = "../onlySearch";
     },
-    condition (id) {
-      this.setShowList(id, 1)
+    condition (e, id) {
+			this.setShowList(id, 1)
+			this.$refs.a.forEach(elem => {
+				if (elem.classList.contains('active')) {
+					elem.classList.remove('active')
+				}
+			})
+			e.target.classList.add('active')
     },
     consoleCurr (currentPage) {
       //console.log(`${val}`);
@@ -283,5 +292,9 @@ export default {
 
 .login {
     bottom: 30px !important;
+}
+
+.active {
+	color: rgb(52, 136, 255);
 }
 </style>

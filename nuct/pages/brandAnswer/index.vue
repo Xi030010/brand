@@ -238,7 +238,8 @@ export default {
         // console.log(res.data.brdTopic.brdCommentList[0].brdReplyList);
         this.list = res.data.brdTopic;
 				this.topicPoint = res.data.brdTopic.brdCommentList.length
-				this.list.content += '<style>img {width: 300px;height:300px}</style>'
+				// 给img添加style
+				this.list.content = this.list.content.replace('<img', '<img style="width: 300px;height:300px"')
       })
     },
     tabs(xx) {
