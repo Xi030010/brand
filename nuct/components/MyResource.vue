@@ -1,59 +1,43 @@
 <template>
-  <div class="brandConnect">
-    <div>
-      <!-- <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>我的资源</el-breadcrumb-item>
-          <el-breadcrumb-item>已下载</el-breadcrumb-item>
-          <el-breadcrumb-item>上传资源</el-breadcrumb-item>
-      </el-breadcrumb> -->
-      <el-tabs v-model="activeName1" class="left" @tab-click="handleClick1">
-				<el-tab-pane label="下载首页" name="first">
-					<el-tabs v-model="activeName2">
-						<el-breadcrumb separator="/" style="margin-bottom: 20px;">
-							<el-breadcrumb-item>下载</el-breadcrumb-item>
-							<el-breadcrumb-item>测试分类</el-breadcrumb-item>
-							<el-breadcrumb-item>刷机教程.doc</el-breadcrumb-item>
-						</el-breadcrumb>
-						<div v-for="(item, i) in showList" :key="i">
-								<a class="questionTitle">{{ item.title }}</a>
-								<p class="questionInf">{{ item.description }}</p>
-								<p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ $convertTime(item.createTime) }}</span></p>
-								<span style="margin-right: 150px;">所需积分：5</span>
-								<el-button @click="downLoad">立即下载</el-button>
-								<hr>
-						</div>
-						<div class="moreDownload">
-								<div>
-										<div style="width: 500px">
-												<a class="questionTitle">刷机教程.doc——三星GT-I9070线刷教程</a>
-												<p class="questionInf">想要刷机但是没有尝试过刷机的三星小伙伴们可以参考一下本教程。</p>
-												<p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>2019-07-15</span></p>
-										</div>
-										<el-link :underline="false" class="moreDownBtn" @click="downLoad">立即下载</el-link>
-										<hr style="border: 1px dotted #ccc;">
-								</div>
-						</div>
-					</el-tabs>
-				</el-tab-pane>
-        <el-tab-pane label="我的资源" name="second">
-          <el-tabs v-model="activeName2" @tab-click="handleClick2">
-              <el-tab-pane label="上传明细" name="first">
-                  <div v-for="(item, i) in showList" :key="i">
-                      <div style="width: 500px">
-                          <a class="questionTitle">{{ item.title }}</a>
-                          <p class="questionInf">{{ item.description }}</p>
-                          <el-button class="questionButton" size="mini" v-for="(tagItem, j) in item.tagList" :key="j">
-                            {{ tagItem.name }}
-                          </el-button>
-                          <p class="questionTime">上传时间：<span>{{ $convertTime(item.createTime) }}</span>所需积分：<span>5</span></p>
-                      </div>
-                      <p class="moreDownBtnUp">已通过</p>
-                      <el-link :underline="false" class="moreDownBtn">编辑</el-link>
-                      <hr style="border: 1px dotted #ccc;">
+  <div>
+    <!-- <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>我的资源</el-breadcrumb-item>
+        <el-breadcrumb-item>已下载</el-breadcrumb-item>
+        <el-breadcrumb-item>上传资源</el-breadcrumb-item>
+    </el-breadcrumb> -->
+    <el-tabs v-model="activeName1" class="left" @tab-click="handleClick1">
+      <el-tab-pane label="下载首页" name="first">
+        <el-tabs v-model="activeName2">
+          <el-breadcrumb separator="/" style="margin-bottom: 20px;">
+            <el-breadcrumb-item>下载</el-breadcrumb-item>
+            <el-breadcrumb-item>测试分类</el-breadcrumb-item>
+            <el-breadcrumb-item>刷机教程.doc</el-breadcrumb-item>
+          </el-breadcrumb>
+          <div class="current-download">
+              <a class="questionTitle">{{ title }}</a>
+              <p class="questionInf">{{ description }}</p>
+              <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ $convertTime(createTime) }}</span></p>
+              <span style="margin-right: 150px;">所需积分：5</span>
+              <el-button @click="downLoad">立即下载</el-button>
+              <hr>
+          </div>
+          <div class="moreDownload">
+              <div>
+                  <div style="width: 500px">
+                      <a class="questionTitle">刷机教程.doc——三星GT-I9070线刷教程</a>
+                      <p class="questionInf">想要刷机但是没有尝试过刷机的三星小伙伴们可以参考一下本教程。</p>
+                      <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>2019-07-15</span></p>
                   </div>
-              </el-tab-pane>
-              <el-tab-pane label="下载明细" name="second">
+                  <el-link :underline="false" class="moreDownBtn" @click="downLoad">立即下载</el-link>
+                  <hr style="border: 1px dotted #ccc;">
+              </div>
+          </div>
+        </el-tabs>
+      </el-tab-pane>
+      <el-tab-pane label="我的资源" name="second">
+        <el-tabs v-model="activeName2" @tab-click="handleClick2">
+            <el-tab-pane label="上传明细" name="first">
                 <div v-for="(item, i) in showList" :key="i">
                     <div style="width: 500px">
                         <a class="questionTitle">{{ item.title }}</a>
@@ -63,54 +47,68 @@
                         </el-button>
                         <p class="questionTime">上传时间：<span>{{ $convertTime(item.createTime) }}</span>所需积分：<span>5</span></p>
                     </div>
-                    <el-link :underline="false" class="moreDownBtnUp">立即评价</el-link>
+                    <p class="moreDownBtnUp">已通过</p>
+                    <el-link :underline="false" class="moreDownBtn">编辑</el-link>
                     <hr style="border: 1px dotted #ccc;">
                 </div>
-                <!-- <div>
-                    <div style="width: 500px">
-                        <a class="questionTitle">刷机教程.doc——三星GT-I9070线刷教程</a>
-                        <p class="questionInf">想要刷机但是没有尝试过刷机的三星小伙伴们可以参考一下本教程。</p>
-                        <p class="questionTime">上传时间：<span>2019-07-15</span>所需积分：<span>5</span></p>
-                    </div>
-                    <el-link :underline="false" class="moreDownBtnDown">立即评价</el-link>
-                    <hr style="border: 1px dotted #ccc;">
-                </div> -->
-              </el-tab-pane>
-          </el-tabs>
-          <el-pagination
-            layout="prev, pager, next"
-            :page-size="pageSize"
-            :page-count="pageNum"
-            :hide-on-single-page="true"
-            @current-change="consoleCurr"
-            style="position: relative;left: 0;bottom: 0;transform: translateX(0);width: 50%;margin: 0 auto">
-          </el-pagination>
-        </el-tab-pane>
-        <!-- <el-tab-pane label="已下载" name="second"></el-tab-pane>
-        <el-tab-pane label="上传资源" name="third"></el-tab-pane> -->
-      </el-tabs>
-      <div class="right">
-            <div class="myAnswer">
-                <div class="userPic">
-                    <div class="selfPic"></div>
-                    <div>
-                        <p style="color: #3399ff;font-size: 14px;">用户</p>
-                        <p style="color: #666;font-size:14px;">积分：<span style="color: red">{{ points }}</span></p>
-                    </div>
-                </div>
-                <p>上传了<span>{{ uploadNum }}</span>个资源</p>
-                <p>下载了<span>{{ downloadNum }}</span>个资源</p>
-            </div>
-            <!-- <el-card class="box-card" shadow="never">
-                <div slot="header" class="clearfix">
-                    <span>他的资源</span>
-                    <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
-                </div>
-                <div></div>
-            </el-card> -->
+            </el-tab-pane>
+            <el-tab-pane label="下载明细" name="second">
+              <div v-for="(item, i) in showList" :key="i">
+                  <div style="width: 500px">
+                      <a class="questionTitle">{{ item.title }}</a>
+                      <p class="questionInf">{{ item.description }}</p>
+                      <el-button class="questionButton" size="mini" v-for="(tagItem, j) in item.tagList" :key="j">
+                        {{ tagItem.name }}
+                      </el-button>
+                      <p class="questionTime">上传时间：<span>{{ $convertTime(item.createTime) }}</span>所需积分：<span>5</span></p>
+                  </div>
+                  <el-link :underline="false" class="moreDownBtnUp">立即评价</el-link>
+                  <hr style="border: 1px dotted #ccc;">
+              </div>
+              <!-- <div>
+                  <div style="width: 500px">
+                      <a class="questionTitle">刷机教程.doc——三星GT-I9070线刷教程</a>
+                      <p class="questionInf">想要刷机但是没有尝试过刷机的三星小伙伴们可以参考一下本教程。</p>
+                      <p class="questionTime">上传时间：<span>2019-07-15</span>所需积分：<span>5</span></p>
+                  </div>
+                  <el-link :underline="false" class="moreDownBtnDown">立即评价</el-link>
+                  <hr style="border: 1px dotted #ccc;">
+              </div> -->
+            </el-tab-pane>
+        </el-tabs>
+        <el-pagination
+          layout="prev, pager, next"
+          :page-size="pageSize"
+          :page-count="pageNum"
+          :hide-on-single-page="true"
+          @current-change="consoleCurr"
+          style="position: relative;left: 0;bottom: 0;transform: translateX(0);width: 50%;margin: 0 auto">
+        </el-pagination>
+      </el-tab-pane>
+      <!-- <el-tab-pane label="已下载" name="second"></el-tab-pane>
+      <el-tab-pane label="上传资源" name="third"></el-tab-pane> -->
+    </el-tabs>
+    <div class="right">
+          <div class="myAnswer">
+              <div class="userPic">
+                  <div class="selfPic"></div>
+                  <div>
+                      <p style="color: #3399ff;font-size: 14px;">用户</p>
+                      <p style="color: #666;font-size:14px;">积分：<span style="color: red">{{ points }}</span></p>
+                  </div>
+              </div>
+              <p>上传了<span>{{ uploadNum }}</span>个资源</p>
+              <p>下载了<span>{{ downloadNum }}</span>个资源</p>
           </div>
-      
-    </div>
+          <!-- <el-card class="box-card" shadow="never">
+              <div slot="header" class="clearfix">
+                  <span>他的资源</span>
+                  <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
+              </div>
+              <div></div>
+          </el-card> -->
+        </div>
+    
   </div>
 </template>
 
@@ -130,7 +128,9 @@ export default {
     footerBar,
     search
   },
-
+  props: {
+    title: String
+  },
   data () {
     return {
       brandCondition: [],
@@ -150,6 +150,7 @@ export default {
   },
   mounted () {
     this.getDownList()
+    console.log(this.title)
   },
 
   methods: {
@@ -243,12 +244,6 @@ export default {
 @import '~assets/less/main.less';
 .container {
     position: relative;
-}
-
-.brandConnect {
-    overflow: auto;
-    // background: #f5f5f5;
-    min-height: 500px;
 }
 
 hr {

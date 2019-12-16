@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import '../theme/index.css'
 
 // 全部引用，此时需要在nuxt.config.js中设置css
 // if (process.BROWSER_BUILD) {
