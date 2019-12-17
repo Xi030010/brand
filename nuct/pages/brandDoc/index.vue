@@ -50,6 +50,9 @@
                 <div class="question-item clearfix">
                   <div class="question-item-left">
                     <div class="left-img"></div>
+                    <div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);">
+                      DOC
+                    </div>
                   </div>
                   <div class="question-item-right">
                     <a class="questionTitle" @click="turnInfor(item.id, item.ossResource && item.ossResource.name, item.title)">{{ item.title }}</a>

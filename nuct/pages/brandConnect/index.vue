@@ -8,20 +8,31 @@
     <img src="../../static/img/791571927556_.pic.jpg" alt="">
     <search></search>
     <div class="brandConnect">
-        <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" style="padding-left: 30px;">
-            <el-menu-item index="1" @click="tabs('questionList')">问题首页</el-menu-item>
+        <el-menu
+            :default-active="activeIndex"
+            class="el-menu-demo"
+            mode="horizontal"
+            style="padding-left: 30px;"
+						@select="selectMenu"
+        >
+            <el-menu-item index="1">问题首页</el-menu-item>
             <el-menu-item index="2">悬赏问题</el-menu-item>
             <el-menu-item index="3">已解决</el-menu-item>
             <el-menu-item index="4">未解决</el-menu-item>
         </el-menu>
         <!-- <el-input class="questionSearch" v-model="input" placeholder="问题搜索"></el-input> -->
-        <div class="questionList" :style="{ visibility: tabsVisibility.questionList }">
+        <div class="questionList">
             <div v-for = "(item, i) in showList" :key = "i">
                 <div class="answerNamber">
                     <p>{{ item.commentNum }}</p>
                     <p>回答</p>
                 </div>
-                <p class="questionTime"><span>{{ $convertTime(item.createTime) }} 来自 </span>{{ item.createUser }}</p>
+                <p class="questionTime">
+									<span>{{ $convertTime(item.createTime) }} 来自 </span>
+									{{ item.createUser }}
+									<span v-if="item.reward" style="margin-left: 20px;font-size: 18px;">悬赏</span>
+									<span v-if="item.reward" style="margin-left: 5px;color: #ef8b3b">{{ item.point }}</span>
+									</p>
                 <a class="questionTitle" @click="$router.push({path: '../brandAnswer', query: {topicId: item.id}})">
                   {{ item.title }}
                 </a>
@@ -33,7 +44,7 @@
                 </div>
                 <div class="showData">
 									<p>浏览<span>{{ item.readNum }}</span></p>
-									<p>收藏<span>{{ item.likeNum }}</span></p>
+									<p class="collect" @click="collect(item.id)">收藏<span>{{ item.likeNum }}</span></p>
 									<!-- <p>同问<span>0</span></p> -->
                 </div>
                 <hr>
@@ -110,9 +121,6 @@ export default {
     return {
         activeIndex: '1',
         input: '',
-        tabsVisibility: {
-            questionList: '',
-        },
         total: 3,
         pageSize: 6,
         currentPage: 1,
@@ -144,14 +152,44 @@ export default {
   },
 
   methods: {
-    setShowList (currentPage) {
+		collect (topicId) {
+			axios({
+				method: 'post',
+				url: 'dbblog/portal/topic/topic/like/1',
+				params: {
+					token: Cookies.get('token'),
+				},
+				// data: {
+				// 	topicId: topicId
+				// }
+			}).then(res => {
+				console.log(res.data)
+			})
+		},
+		selectMenu (index) {
+			if (index == 1) {
+				this.setShowList(1)
+			}
+			else if (index == 2) {
+				this.setShowList(1, 1, '')
+			}
+			else if (index == 3) {
+				this.setShowList(1, '', 1)
+			}
+			else if (index == 4) {
+				this.setShowList(1, '', 0)
+			}
+		},
+    setShowList (currentPage, reward, status) {
       axios({
-          url: 'http://47.104.148.196:8081/dbblog/portal/topic/topics',
+          url: 'dbblog/portal/topic/topics',
           method: 'get',
           params: {
               token: Cookies.get('token'),
               limit: 10,
-              page: currentPage
+							page: currentPage,
+							reward: reward,
+							status: status,
           }
       }).then(res => {
         console.log(res.data.page);
@@ -161,12 +199,6 @@ export default {
         this.pageNum = Math.ceil(this.total / this.pageSize) || 1;
         this.pageList[currentPage] = this.showList
       })
-    },
-    tabs(xx) {
-        for ( let vib in this.$data.tabsVisibility) {
-            this.$data.tabsVisibility[vib] = 'hidden';
-        }
-        this.$data.tabsVisibility[xx] = '';
     },
 
     turnUrl(url) {
@@ -415,5 +447,13 @@ hr {
     left: 30%;
     transform: translateX(-50%);
     bottom: 350px;
+}
+
+.collect {
+	cursor: pointer;
+
+	&:hover {
+		color: #ef8b3b;
+	}
 }
 </style>

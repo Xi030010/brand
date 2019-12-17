@@ -17,7 +17,7 @@
                     <p class="brandTitle">{{ item.name }}</p>
                     <p class="brandIntroduction">{{ item.introduction }}</p>
             </div>
-            <!-- <div v-for = "item in 10"> 
+            <!-- <div v-for = "item in 10">
                 <p class="brandTitle"></p>
                 <p class="brandIntroduction"></p>
             </div> -->
@@ -100,7 +100,7 @@ import search from '~/components/searchInput';
 import axios from 'axios';
 import Cookies from '~/plugins/cookie';
 
-axios.defaults.baseURL = "http://47.104.148.196:8081/dbblog";
+// axios.defaults.baseURL = "http://47.104.148.196:8081/dbblog";
 
 export default {
   middleware: 'auth',
@@ -127,7 +127,8 @@ export default {
         this.mallCode = val.query.mallCode
         this.input5 = val.query.keywords
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   mounted() {
@@ -143,7 +144,7 @@ export default {
     // });
     if( this.mallCode == "品牌") {
       axios({
-        url: 'http://47.104.148.196:8081/dbblog/portal/search/brands/search',
+        url: 'dbblog/portal/search/brands/search',
         methods: 'get',
         params: {
           keywords: this.input5,
@@ -160,7 +161,7 @@ export default {
       })
     }else if (this.mallCode == "资料") {
       axios({
-        url: 'http://172.18.133.7:8080/dbblog/informations/search',
+        url: 'dbblog/informations/search',
         methods: 'get',
         params: {
           keywords: this.input5,
@@ -177,7 +178,7 @@ export default {
       })
     }else if (this.mallCode == "话题") {
       axios({
-        url: 'http://172.18.133.7:8080/dbblog/topics/search',
+        url: 'dbblog/topics/search',
         methods: 'get',
         params: {
           keywords: this.input5,
