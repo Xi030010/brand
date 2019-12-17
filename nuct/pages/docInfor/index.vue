@@ -34,7 +34,15 @@
 													<a class="questionTitle">{{ downLoadFile.title }}</a>
 													<p class="questionInf">{{ downLoadFile.description }}</p>
 												</div>
-												<p class="questionTime">资源大小：<span>{{ downLoadFile.ossResource.size }}KB</span>上传时间：<span>{{ $convertTime(downLoadFile.createTime) }}</span></p>
+												<p class="questionTime">资源大小：
+													<span>
+														{{ downLoadFile.ossResource ? downLoadFile.ossResource.size : 900}}KB
+													</span>
+													上传时间：
+													<span>
+														{{ $convertTime(downLoadFile.createTime) }}
+													</span>
+												</p>
 												<span style="margin-right: 150px;">所需积分：5</span>
 												<el-button @click="downLoad">立即下载</el-button>
 											</div>

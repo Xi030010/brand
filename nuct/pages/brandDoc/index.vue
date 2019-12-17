@@ -46,17 +46,23 @@
             </el-tag>
             </div>
             <div class="left">
-              <div v-for = "(item, i) in showList" :key = "i" class="question-item">
-                <div class="question-item-content">
-                  <a class="questionTitle" @click="turnInfor(item.id, item.ossResource.name, item.title)">{{ item.title }}</a>
-                  <p class="questionInf">{{ item.description }}</p>
-                  <p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>{{ $convertTime(item.createTime) }}</span>上传者：
-
-                  <span>{{ item.createUser }}</span></p>
-                  
+              <div v-for = "(item, i) in showList" :key = "i">
+                <div class="question-item clearfix">
+                  <div class="question-item-left">
+                    <div class="left-img"></div>
+                  </div>
+                  <div class="question-item-right">
+                    <a class="questionTitle" @click="turnInfor(item.id, item.ossResource && item.ossResource.name, item.title)">{{ item.title }}</a>
+                    <p class="questionInf">{{ item.description }}</p>
+                    <p class="questionTime">
+                      资源大小：<span>{{ item.ossResource ? item.ossResource.size : 900 }}KB</span>上传时间：<span>{{ $convertTime(item.createTime) }}</span>
+                      上传者：<span>{{ item.createUser }}</span>
+                    </p>
+                  </div>
                 </div>
                 <hr>
               </div>
+
               <el-pagination
                 background
                 layout="prev, pager, next"
@@ -64,7 +70,7 @@
                 :page-size="pageSize"
                 :current-page="currentPage"
                 @current-change="consoleCurr"
-                style="position: relative;transform: translateX(0);left: 0;bottom: 0">
+                style="position: relative;transform: translateX(0);left: 0;bottom: 0;margin: 20px 0;text-align: center;">
               </el-pagination>
             </div>
             <div class="right">
@@ -269,10 +275,6 @@ export default {
     margin-top: 30px;
 }
 
-hr {
-    margin: 10px auto;
-}
-
 .brandCondition {
     background: #fff;
     width: 1000px;
@@ -287,12 +289,12 @@ hr {
 }
 
 .brandCondition span:hover {
-    color: #409EFF;
+    color: #6b2048;
 }
 
 .showCondition {
     display: inline-block;
-    border: 1px solid #409EFF;
+    border: 1px solid #6b2048;
 }
 
 .left,
@@ -399,7 +401,7 @@ hr {
 }
 
 .questionTime span {
-    margin: 0 30px 0 0;
+    margin: 0 15px 0 0;
 }
 
 .searchBanner {
@@ -419,8 +421,29 @@ hr {
 }
 
 .question-item {
-  .question-item-content {
-    padding: 1rem 1rem 0 1rem;
+
+  .question-item-left {
+    position: relative;
+    float: left;
+    width: 15%;
+    min-height: 130px;
+
+    .left-img {
+      position: absolute;
+      width: 70px;
+      height: 80px;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #6b2048;
+    }
+  }
+
+  .question-item-right {
+    float: right;
+    width: 85%;
+    min-height: 130px;
+    padding: 1rem 1rem 0 0;
   }
 }
 </style>

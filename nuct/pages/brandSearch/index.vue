@@ -269,7 +269,7 @@ export default {
 }
 
 .conditionP:hover {
-    color: #ef8b3b;
+    color: #6b2048;
 }
 
 .navFixed {
@@ -295,6 +295,6 @@ export default {
 }
 
 .active {
-	color: rgb(52, 136, 255);
+	color: #6b2048;
 }
 </style>

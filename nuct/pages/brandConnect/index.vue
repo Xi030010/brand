@@ -26,10 +26,15 @@
                   {{ item.title }}
                 </a>
                 <p class="questionInf">{{ item.description }}</p>
+                <div class="tags">
+									<el-tag v-for="(tag, j) in item.tagList" :key="j">
+										{{ tag.name }}
+									</el-tag>
+                </div>
                 <div class="showData">
-                    <p>浏览<span>{{ item.readNum }}</span></p>
-                    <p>收藏<span>{{ item.likeNum }}</span></p>
-                    <!-- <p>同问<span>0</span></p> -->
+									<p>浏览<span>{{ item.readNum }}</span></p>
+									<p>收藏<span>{{ item.likeNum }}</span></p>
+									<!-- <p>同问<span>0</span></p> -->
                 </div>
                 <hr>
             </div>

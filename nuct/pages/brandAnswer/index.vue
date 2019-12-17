@@ -22,7 +22,7 @@
                     <h1>{{ list.title }}</h1>
                     <div class="questionContent" v-html="list.content"></div>
                     <br>
-                    <p class="time">编辑于：<span>{{ list.createTime }}</span></p>
+                    <p class="time">编辑于：<span>{{ $convertTime(list.createTime) }}</span></p>
                     <br>
                     <p>浏览<span style="margin-right: 10px">{{ list.readNum }}</span>评论<span>{{ topicPoint }}</span></p>
                     <div  style="overflow: hidden;position: relative;">
