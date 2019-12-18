@@ -44,7 +44,7 @@
                 </div>
                 <div class="showData">
 									<p>浏览<span>{{ item.readNum }}</span></p>
-									<p class="collect" @click="collect(item.id)">收藏<span>{{ item.likeNum }}</span></p>
+									<p class="collect" @click="collect(item.id, i)">收藏<span>{{ item.likeNum }}</span></p>
 									<!-- <p>同问<span>0</span></p> -->
                 </div>
                 <hr>
@@ -152,10 +152,10 @@ export default {
   },
 
   methods: {
-		collect (topicId) {
+		collect (topicId, i) {
 			axios({
-				method: 'post',
-				url: 'dbblog/portal/topic/topic/like/1',
+				method: 'put',
+				url: 'dbblog/portal/topic/topic/like/' + topicId,
 				params: {
 					token: Cookies.get('token'),
 				},
@@ -164,6 +164,10 @@ export default {
 				// }
 			}).then(res => {
 				console.log(res.data)
+				if (res.data.code === 200) {
+					this.showList[i].likeNum++
+					this.pageList[this.currentPage] = this.showList
+				}
 			})
 		},
 		selectMenu (index) {
