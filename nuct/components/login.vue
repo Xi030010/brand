@@ -130,25 +130,27 @@ export default {
         }).then(res => {
 					//console.log(res.data.token);
 					Cookies.set('loginMessageNum', 0, {expires: this.toNextDay()})
-          Cookies.set('name', this.form.name, {expires: this.toNextDay()});
+          Cookies.set('username', res.data.nickname, {expires: this.toNextDay()});
           Cookies.set('token', res.data.token, {expires: this.toNextDay()});
+          Cookies.set('points', res.data.points)
           // Cookies.set('userId', 7, {expires: this.toNextDay()})
           // localStorage.setItem("token", JSON.stringify(res.data.token))
           // console.log(JSON.parse(localStorage.getItem("token")));
           // this.$store.dispatch("setToken", res.data.token)
 					//console.log(Cookies.get('token'));
-          axios({
-              url: 'portal/user/info/7',
-              method: 'get',
-              params: {
-                  'token': Cookies.get('token')
-              }
-          }).then(res => {
-              Cookies.set('username', res.data.user.nickname)
-              Cookies.set('points', res.data.user.points)
-          }).catch(error => {
+          // axios({
+          //     url: 'portal/user/info/7',
+          //     method: 'get',
+          //     params: {
+          //         'token': Cookies.get('token')
+          //     }
+          // }).then(res => {
+          //   console.log(res.data)
+          //   Cookies.set('username', res.data.user.nickname)
+          //   Cookies.set('points', res.data.user.points)
+          // }).catch(error => {
 
-          });
+          // });
 
           axios({
             method: 'get',
@@ -167,7 +169,7 @@ export default {
           
           this.$router.push('');
           setTimeout(() => {
-              window.location.href = '';
+            window.location.href = '';
           }, 100)
           }).catch(error => {
               console.log(error);
@@ -182,13 +184,23 @@ export default {
         return new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(0, 0, 0, 0));
       },
       loginOut () {
-      console.log(Cookies.get('token'));
-      Cookies.remove('token')
-      Cookies.remove('username')
-      Cookies.remove('points')
-      setTimeout(() => {
-        window.location.href = '';
-      }, 100);
+        axios({
+          method: 'post',
+          url: 'portal/user/logout',
+          params: {
+            token: Cookies.get('token'),
+          }
+        }).then(res => {
+          var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+          if (keys) {
+            for (var i = keys.length; i--;)
+              document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString()
+          }
+
+          setTimeout(() => {
+            window.location.href = '';
+          }, 100);
+        })
     },
   },
 }
