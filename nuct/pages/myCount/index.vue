@@ -202,7 +202,7 @@ export default {
     });
 //我的积分
     axios({
-        url: 'http://47.104.148.196:8081/dbblog/portal/user/point/points',
+        url: 'dbblog/portal/user/point/points',
         method: 'get',
         params: {
             'token': Cookies.get('token')
@@ -222,7 +222,7 @@ export default {
     });
 
     axios({
-        url: 'http://47.104.148.196:8081/dbblog/portal/user/operation/operations?type=1',
+        url: 'dbblog/portal/user/operation/operations?type=1',
         method: 'get',
         params: {
             'token': Cookies.get('token')

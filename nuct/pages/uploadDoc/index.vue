@@ -176,7 +176,7 @@ export default {
       });
 
       axios({
-          url: 'http://47.104.148.196:8081/dbblog/portal/operation/tags/3',
+          url: 'dbblog/portal/operation/tags/3',
           method: 'get',
           params: {
 						token: Cookies.get('token'),

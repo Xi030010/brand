@@ -169,7 +169,7 @@ export default {
 
     axios({
       method: 'get',
-      url: 'http://47.104.148.196:8081/dbblog/portal/operation/tags/3',
+      url: 'dbblog/portal/operation/tags/3',
       params: {
         token: Cookies.get('token')
       }

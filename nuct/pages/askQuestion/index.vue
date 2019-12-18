@@ -131,7 +131,7 @@ export default {
 
   mounted() {
     axios({
-          url: 'http://47.104.148.196:8081/dbblog/portal/operation/tags/4',
+          url: 'dbblog/portal/operation/tags/4',
           method: 'get',
           params: {
             token: Cookies.get('token'),
