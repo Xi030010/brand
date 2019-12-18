@@ -49,9 +49,13 @@
               <div v-for = "(item, i) in showList" :key = "i">
                 <div class="question-item clearfix">
                   <div class="question-item-left">
-                    <div class="left-img"></div>
-                    <div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);">
-                      DOC
+                    <div class="left-img">
+                      <div class="white-rectangle"></div>
+                      <div class="triangle"></div>
+                      <div class="shelter-edge"></div>
+                      <div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
+                        DOC
+                    </div>
                     </div>
                   </div>
                   <div class="question-item-right">
@@ -81,13 +85,13 @@
                     <div class="userPic">
                         <div class="selfPic"></div>
                         <div>
-                            <p style="color: #3399ff;font-size: 18px;">{{ this.username }}</p>
-                            <p style="color: #666;font-size:18px;">积分：<span style="color: red">{{ this.points }}</span></p>
+                            <p class="purple" style="font-size: 18px;">{{ this.username }}</p>
+                            <p style="color: #666;font-size:18px;">积分：<span class="purple">{{ this.points }}</span></p>
                         </div>
                     </div>
-                    <p>上传了<span>{{ uploadNum }}</span>个资源</p>
-                    <p>下载了<span>{{ downloadNum }}</span>个资源</p>
-                    <el-button type="primary" style="width: 100%;margin-top: 20px;" @click="turnUrl">上传资源</el-button>
+                    <p>上传了<span class="purple">{{ uploadNum }}</span>个资源</p>
+                    <p>下载了<span class="purple">{{ downloadNum }}</span>个资源</p>
+                    <el-button type="primary" style="width: 100%;height: 30px;margin-top: 20px;" @click="turnUrl">上传资源</el-button>
                 </div>
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clearfix">
@@ -95,7 +99,7 @@
                         <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
                     </div>
                     <div style="text-align: center;">
-                      <el-tag v-for="(item, i) in hotTags" :key="i" class="text item">
+                      <el-tag v-for="(item, i) in hotTags" :key="i" class="text item" style="margin: 0 5px;padding: 0 10px;">
                         {{ item.name }}
                       </el-tag>
                     </div>
@@ -262,7 +266,7 @@ export default {
 }
 
 </script>
-<style lang='less'>
+<style lang='less' scoped>
 @import '~assets/less/main.less';
 
 .container {
@@ -439,6 +443,32 @@ export default {
       left: 50%;
       transform: translate(-50%, -50%);
       background-color: #6b2048;
+
+      .white-rectangle {
+        position: absolute;
+        right: 0;
+        top: 0;
+        border: 12px solid white;
+      }
+
+      .triangle {
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-left: 11px solid #6b2048;
+        border-bottom: 11px solid #6b2048;
+        border-top: 11px solid white;
+        border-right: 11px solid white;
+      }
+
+      .shelter-edge {
+        position: absolute;
+        right: -9px;
+        top: 0;
+        border: 12px solid white;
+        border-left-width: 5px;
+        border-right-width: 5px;
+      }
     }
   }
 

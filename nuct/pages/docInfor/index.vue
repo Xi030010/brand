@@ -27,36 +27,57 @@
 											</el-breadcrumb>
 											<hr>
 											<div class="current-download">
-												<div class="question-left">
-													<img src="" alt="">
+												<div class="question-item clearfix">
+													<div class="question-item-left">
+														<div class="left-img">
+															<div class="white-rectangle"></div>
+															<div class="triangle"></div>
+															<div class="shelter-edge"></div>
+															<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
+																DOC
+														</div>
+														</div>
+													</div>
+													<div class="question-item-right" style="margin-bottom: 10px;">
+														<a class="questionTitle">{{ downLoadFile.title }}</a>
+														<p class="questionInf">{{ downLoadFile.description }}</p>
+														<p class="questionTime">资源大小：
+															<span>
+																{{ downLoadFile.ossResource ? downLoadFile.ossResource.size : 900}}KB
+															</span>
+															上传时间：
+															<span>
+																{{ $convertTime(downLoadFile.createTime) }}
+															</span>
+														</p>
+														<span style="margin-left: -85px; margin-right: 150px;">所需积分：5</span>
+														<el-button @click="downLoad" class="moreDownBtn">立即下载</el-button>
+													</div>
 												</div>
-												<div class="question-right">
-													<a class="questionTitle">{{ downLoadFile.title }}</a>
-													<p class="questionInf">{{ downLoadFile.description }}</p>
-												</div>
-												<p class="questionTime">资源大小：
-													<span>
-														{{ downLoadFile.ossResource ? downLoadFile.ossResource.size : 900}}KB
-													</span>
-													上传时间：
-													<span>
-														{{ $convertTime(downLoadFile.createTime) }}
-													</span>
-												</p>
-												<span style="margin-right: 150px;">所需积分：5</span>
-												<el-button @click="downLoad">立即下载</el-button>
 											</div>
 											<hr>
 											<div class="moreDownload">
 													<div class="current-download">
-															<div>
+															<div class="question-item clearfix">
+																<div class="question-item-left">
+																	<div class="left-img">
+																		<div class="white-rectangle"></div>
+																		<div class="triangle"></div>
+																		<div class="shelter-edge"></div>
+																		<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
+																			DOC
+																	</div>
+																	</div>
+																</div>
+																<div class="question-item-right">
 																	<a class="questionTitle">刷机教程.doc——三星GT-I9070线刷教程</a>
 																	<p class="questionInf">想要刷机但是没有尝试过刷机的三星小伙伴们可以参考一下本教程。</p>
 																	<p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>2019-07-15</span></p>
+																	<el-button class="moreDownBtn" @click="downLoad">立即下载</el-button>
+																</div>
 															</div>
-															<el-link :underline="false" class="moreDownBtn" @click="downLoad">立即下载</el-link>
 													</div>
-													<hr style="border: 1px dotted #ccc;">
+													<hr style="border: 1px dotted #ccc;margin-top: 0;">
 											</div>
 										</el-tabs>
 									</el-tab-pane>
@@ -64,22 +85,47 @@
 										<el-tabs v-model="activeName2" @tab-click="handleClick2">
 												<el-tab-pane label="上传明细" name="first">
 														<div v-for="(item, i) in showList" :key="i" class="current-download">
-																<div style="width: 500px">
+																<div class="question-item clearfix">
+																	<div class="question-item-left">
+																		<div class="left-img">
+																			<div class="white-rectangle"></div>
+																			<div class="triangle"></div>
+																			<div class="shelter-edge"></div>
+																			<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
+																				DOC
+																		</div>
+																		</div>
+																	</div>
+																	<div class="question-item-right">
 																		<a class="questionTitle">{{ item.title }}</a>
 																		<p class="questionInf">{{ item.description }}</p>
 																		<el-button class="questionButton" size="mini" v-for="(tagItem, j) in item.tagList" :key="j">
 																			{{ tagItem.name }}
 																		</el-button>
 																		<p class="questionTime">上传时间：<span>{{ $convertTime(item.createTime) }}</span>所需积分：<span>5</span></p>
+																	</div>
 																</div>
-																<p class="moreDownBtnUp">已通过</p>
-																<el-link :underline="false" class="moreDownBtn">编辑</el-link>
+																<div class="moreDownBtn">
+																	<p class="moreDownBtnUp">已通过</p>
+																	<el-link :underline="false">编辑</el-link>
+																</div>
 														</div>
 														<hr style="border: 1px dotted #ccc;">
 												</el-tab-pane>
 												<el-tab-pane label="下载明细" name="second">
 													<div v-for="(item, i) in showList" :key="i">
-															<div style="width: 500px">
+														<div class="question-item clearfix">
+															<div class="question-item-left">
+																<div class="left-img">
+																	<div class="white-rectangle"></div>
+																	<div class="triangle"></div>
+																	<div class="shelter-edge"></div>
+																	<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
+																		DOC
+																</div>
+																</div>
+															</div>
+															<div class="question-item-right">
 																	<a class="questionTitle">{{ item.title }}</a>
 																	<p class="questionInf">{{ item.description }}</p>
 																	<el-button class="questionButton" size="mini" v-for="(tagItem, j) in item.tagList" :key="j">
@@ -88,7 +134,8 @@
 																	<p class="questionTime">上传时间：<span>{{ $convertTime(item.createTime) }}</span>所需积分：<span>5</span></p>
 															</div>
 															<el-link :underline="false" class="moreDownBtnUp">立即评价</el-link>
-															<hr style="border: 1px dotted #ccc;">
+														</div>
+														<hr style="border: 1px dotted #ccc;">
 													</div>
 												</el-tab-pane>
 										</el-tabs>
@@ -111,12 +158,12 @@
                     <div class="userPic">
                         <div class="selfPic"></div>
                         <div>
-                            <p style="color: #3399ff;font-size: 18px;">用户</p>
-                            <p style="color: #666;font-size:18px;">积分：<span style="color: red">{{ points }}</span></p>
+                            <p class="purple" style="font-size: 18px;">{{ username }}</p>
+                            <p style="color: #666;font-size:18px;">积分：<span class="purple">{{ points }}</span></p>
                         </div>
                     </div>
-                    <p>上传了<span>{{ uploadNum }}</span>个资源</p>
-                    <p>下载了<span>{{ downloadNum }}</span>个资源</p>
+                    <p>上传了<span class="purple">{{ uploadNum }}</span>个资源</p>
+                    <p>下载了<span class="purple">{{ downloadNum }}</span>个资源</p>
                 </div>
                 <el-card class="box-card" shadow="never">
                     <div slot="header" class="clearfix">
@@ -155,6 +202,7 @@ export default {
 			uploadNum: Cookies.get('uploadNum'),
 			downloadNum: Cookies.get('downloadNum'),
 			points: Cookies.get('points'),
+			username: Cookies.get('username'),
       brandCondition: [],
       show: 'none',
       input3: '',
@@ -280,8 +328,14 @@ export default {
 }
 </script>
 
-<style lang='less'>
+<style lang='less' scoped>
 @import '~assets/less/main.less';
+
+button {
+	width: 100px;
+	height: 30px;
+}
+
 .container {
     position: relative;
 }
@@ -333,8 +387,6 @@ hr {
 	width: 700px;
 	min-height: 800px;
 	margin-top: 20px;
-	padding: 0 20px;
-	// background: grey;
 	
 	.container {
 		width: 700px;
@@ -438,7 +490,7 @@ hr {
 }
 
 .current-download {
-	padding: 0 20px;
+	padding: 0 10px;
 }
 
 .moreDownload {
@@ -450,7 +502,7 @@ hr {
 .moreDownBtn {
     position: absolute;
     top: 50%;
-    right: 100px;
+    right: 25px;
     transform: translateY(-50%);
 }
 
@@ -461,5 +513,64 @@ hr {
 
 .login {
     bottom: 30px !important;
+}
+
+.question-item {
+
+  .question-item-left {
+    position: relative;
+    float: left;
+    width: 15%;
+    min-height: 130px;
+
+    .left-img {
+      position: absolute;
+      width: 70px;
+      height: 80px;
+      top: 45%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #6b2048;
+
+      .white-rectangle {
+        position: absolute;
+        right: 0;
+        top: 0;
+        border: 12px solid white;
+      }
+
+      .triangle {
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-left: 11px solid #6b2048;
+        border-bottom: 11px solid #6b2048;
+        border-top: 11px solid white;
+        border-right: 11px solid white;
+      }
+
+      .shelter-edge {
+        position: absolute;
+        right: -9px;
+        top: 0;
+        border: 12px solid white;
+        border-left-width: 5px;
+        border-right-width: 5px;
+      }
+    }
+  }
+
+  .question-item-right {
+		position: relative;
+    float: right;
+    width: 85%;
+    min-height: 130px;
+    padding: 1rem 1rem 0 0;
+	}
+}
+
+.moreDownBtnUp {
+	margin-bottom: 10px;
+	color: #6b2048;
 }
 </style>

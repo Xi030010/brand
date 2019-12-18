@@ -10,10 +10,10 @@
     <div class="brandConnect">
         <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" style="padding-left: 30px;">
             <!-- <el-menu-item index="1" @click="tabs('questionList')">问题首页</el-menu-item> -->
-            <el-menu-item index="1" @click="jumpUrl('./brandConnect')">问题首页</el-menu-item>
-            <el-menu-item index="2">悬赏问题</el-menu-item>
-            <el-menu-item index="3">已解决</el-menu-item>
-            <el-menu-item index="4">未解决</el-menu-item>
+            <el-menu-item index="1" @click="$router.push({path: './brandConnect', query: {index: 1}})">问题首页</el-menu-item>
+            <el-menu-item index="2" @click="$router.push({path: './brandConnect', query: {index: 2}})">悬赏问题</el-menu-item>
+            <el-menu-item index="3" @click="$router.push({path: './brandConnect', query: {index: 3}})">已解决</el-menu-item>
+            <el-menu-item index="4" @click="$router.push({path: './brandConnect', query: {index: 4}})">未解决</el-menu-item>
         </el-menu>
         <!-- <el-input class="questionSearch" v-model="input" placeholder="问题搜索"></!-->
         <div class="questionList" :style="{ visibility: tabsVisibility.questionList }">
@@ -48,7 +48,7 @@
                         <br>
                         <div  style="overflow: hidden;position: relative;">
                             <div class="questionNav">
-                                <p class="time">编辑于：<span>{{ item.createTime }}</span></p>
+                                <p class="time">编辑于：<span>{{ $convertTime(item.createTime) }}</span></p>
                                 <el-link :underline="false" icon="el-icon-s-comment" @click="response(i)">回复<span>（{{ list.brdCommentList[i].brdReplyList.length }}）</span></el-link>
                             </div>
                             <div class="user-info">
@@ -120,13 +120,13 @@
                 <div class="userPic">
                     <div class="selfPic"></div>
                     <div>
-                        <p style="color: #3399ff;font-size: 18px;">用户</p>
-                        <p style="color: #666;font-size:18px;">积分：<span style="color: red">{{ userPoint }}</span></p>
+                        <p class="purple" style="font-size: 18px;">{{ username }}</p>
+                        <p style="font-size:18px;">积分：<span class="purple">{{ userPoint }}</span></p>
                     </div>
                 </div>
-                <p>提了<span>{{ askNum }}</span>个问题，<span>0</span>人进行了回答</p>
-                <p>回答了<span>{{ answerNum }}</span>个问题</p>
-                <p>有<span>0</span>个同问</p>
+                <p>提了<span class="purple">{{ askNum }}</span>个问题，<span class="purple">0</span>人进行了回答</p>
+                <p>回答了<span class="purple">{{ answerNum }}</span>个问题</p>
+                <p>有<span class="purple">0</span>个同问</p>
             </div>
             <div class="newResponse">
                 <p class="newResponseTitle">相似问题</p>
@@ -215,6 +215,9 @@ export default {
       responseRightIndex () {
           return this.responseCurrentPage * this.responsePageSize
       }
+  },
+  created () {
+    this.activeIndex = this.$route.query.index
   },
 
   mounted() {
@@ -456,7 +459,7 @@ export default {
 .hotNoteMore {
     display: inline-block;
     margin-left: 165px;
-    color: #3399ff;
+    color: #6b2048;
 }
 
 .userPic {

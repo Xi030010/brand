@@ -150,7 +150,7 @@ h6 {
     margin: 20px 0;
     font-weight: 500;
     font-size: 20px;
-    color: #409EFF;
+    color: #6b2048;
 }
 
 .showBrand {
@@ -171,7 +171,7 @@ h6 {
     display: inline-block;
     width: 10px;
     height: 20px;
-    background: #409EFF;
+    background: #6b2048;
     position: relative;
     top: 50%;
     transform: translateY(10%);

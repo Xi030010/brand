@@ -33,7 +33,7 @@
 									<span v-if="item.reward" style="margin-left: 20px;font-size: 18px;">悬赏</span>
 									<span v-if="item.reward" style="margin-left: 5px;color: #ef8b3b">{{ item.point }}</span>
 									</p>
-                <a class="questionTitle" @click="$router.push({path: '../brandAnswer', query: {topicId: item.id}})">
+                <a class="questionTitle" @click="$router.push({path: '../brandAnswer', query: {topicId: item.id, index: activeIndex}})">
                   {{ item.title }}
                 </a>
                 <p class="questionInf">{{ item.description }}</p>
@@ -66,13 +66,13 @@
                 <div class="userPic">
                     <div class="selfPic"></div>
                     <div>
-                        <p style="color: #3399ff;font-size: 18px;">用户</p>
-                        <p style="color: #666;font-size:18px;">积分：<span style="color: red">{{ userPoint }}</span></p>
+                        <p class="purple" style="font-size: 18px;">{{ username }}</p>
+                        <p style="font-size:18px;">积分：<span class="purple">{{ userPoint }}</span></p>
                     </div>
                 </div>
-                <p>提了<span>{{ askNum }}</span>个问题，<span>0</span>人进行了回答</p>
-                <p>回答了<span>{{ answerNum }}</span>个问题</p>
-                <p>有<span>0</span>个同问</p>
+                <p>提了<span class="purple">{{ askNum }}</span>个问题，<span class="purple">0</span>人进行了回答</p>
+                <p>回答了<span class="purple">{{ answerNum }}</span>个问题</p>
+                <p>有<span class="purple">0</span>个同问</p>
             </div>
             <div class="hotNote">
                 <p class="hotNoteTitle">热门标签</p>
@@ -131,12 +131,13 @@ export default {
         hotTag: [],
         userPoint: Cookies.get('points'),
         askNum: Cookies.get('askNum'),
-        answerNum: Cookies.get('answerNum')
+				answerNum: Cookies.get('answerNum'),
+				username: Cookies.get('username'),
     };
   },
 
   mounted() {
-    this.setShowList(1)
+    this.selectMenu(this.$route.query.index)
 
     axios({
         url: 'dbblog/portal/operation/tags/3',
@@ -171,7 +172,8 @@ export default {
 			})
 		},
 		selectMenu (index) {
-			if (index == 1) {
+			this.activeIndex = index ? String(index) : '1'
+			if (!index || index == 1) {
 				this.setShowList(1)
 			}
 			else if (index == 2) {
@@ -227,7 +229,7 @@ export default {
 <style lang='less'>
 @import '~assets/less/main.less';
 .container {
-    position: relative;
+	position: relative;
 }
 
 .brandConnect {
@@ -336,7 +338,7 @@ export default {
 .hotNoteMore {
     display: inline-block;
     margin-left: 165px;
-    color: #3399ff;
+    color: #6b2048;
 }
 
 .userPic {

@@ -7,7 +7,7 @@
     </div>
     <img src="../../static/img/791571927556_.pic.jpg" alt="">
     <search></search>
-    <el-tabs type="border-card"  :tab-position="tabPosition" style="height: 580px; width: 750px; margin: 20px auto;border-radius: 55px;">
+    <el-tabs @tab-click="handleClick" type="border-card"  :tab-position="tabPosition" style="height: 580px; width: 750px; margin: 20px auto;border-radius: 55px;">
       <el-tab-pane label="个人资料">
           <h1 class="selfInfTitle">个人资料</h1>
           <hr>
@@ -71,7 +71,7 @@
           </el-pagination>
       </el-tab-pane>
       <el-tab-pane label="我的资源">
-        <MyResource></MyResource>
+        <!-- <MyResource></MyResource> -->
       </el-tab-pane>
     </el-tabs>
     <footerBar  style="width: 1080px;position: absolute; bottom: 0;"></footerBar>
@@ -134,6 +134,11 @@ export default {
   },
 
   methods: {
+		handleClick (tab, e) {
+			if (tab.label === '我的资源') {
+				this.$router.push({path: './docInfor', query: {mallCode: 1}})
+			}
+		},
     myCount_consoleCurr (val) {
         //console.log(`${val}`);
         this.myCount_currentPage = val;
