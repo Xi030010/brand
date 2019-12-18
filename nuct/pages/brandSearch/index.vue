@@ -97,7 +97,7 @@ export default {
     this.setShowList(null, 1)
 
     axios({
-      url: 'dbblog/portal/operation/categories',
+      url: 'portal/operation/categories',
       method: 'get',
       params: {
         'token': Cookies.get('token'),
@@ -122,7 +122,7 @@ export default {
 //     async asyncData() {
 //         //axios.defaults.headers.get['Content-Type'] = 'application/json; charset=utf-8;';
 //     await axios({
-//         url: 'http://47.104.148.196:8081/dbblog/portal/brand/brands',
+//         url: 'http://47.104.148.196:8081/portal/brand/brands',
 //         method: 'get',
 //         params: {
 //             'token': 'f7de26bf1b125a5bc2877b76d364bae9'
@@ -147,7 +147,7 @@ export default {
   methods: {
     setShowList(cateId, currentPage) {
       axios({
-        url: 'dbblog/portal/brand/brands',
+        url: 'portal/brand/brands',
         method: 'get',
         params: {
           token: Cookies.get('token'),

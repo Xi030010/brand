@@ -226,7 +226,7 @@ export default {
 		// this.fileName = this.$route.query.fileName
 		// this.title = this.$route.query.title
 		axios({
-			url: 'dbblog/portal/information/information/' + this.$route.query.mallCode,
+			url: 'portal/information/information/' + this.$route.query.mallCode,
 			method: 'get',
 			params: {
 					token: Cookies.get('token')
@@ -245,7 +245,7 @@ export default {
 			// 下载资料
 			axios({
 				method: 'get',
-				url: 'dbblog/portal/user/information/informations',
+				url: 'portal/user/information/informations',
 				params: {
 					token: Cookies.get('token'),
 					userId: 7,
@@ -266,7 +266,7 @@ export default {
 			// 上传资料
 			axios({
 			  method: 'get',
-			  url: 'dbblog/portal/user/information/informations',
+			  url: 'portal/user/information/informations',
 			  params: {
 			    token: Cookies.get('token'),
 			    userId: 7,
@@ -309,7 +309,7 @@ export default {
 				cancelButtonText: '取消',
 				type: 'warning'
 			}).then(() => {
-				window.open('http://47.104.148.196:8081/dbblog/portal/file/downloadFile/'
+				window.open('http://47.104.148.196:8081/portal/file/downloadFile/'
 										+ this.fileName + '?token=' + Cookies.get('token'), '_blank')
 			}).catch(() => {
 				this.$message({

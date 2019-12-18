@@ -124,7 +124,7 @@ export default {
         console.log(this.form.psw);
         console.log(typeof this.form.name);
         console.log(typeof this.form.psw);
-        axios.post('/dbblog/portal/user/login',{
+        axios.post('/portal/user/login',{
                 "username": this.form.name,
                 "password": this.form.psw,
         }).then(res => {
@@ -138,7 +138,7 @@ export default {
           // this.$store.dispatch("setToken", res.data.token)
 					//console.log(Cookies.get('token'));
           axios({
-              url: 'dbblog/portal/user/info/7',
+              url: 'portal/user/info/7',
               method: 'get',
               params: {
                   'token': Cookies.get('token')
@@ -152,7 +152,7 @@ export default {
 
           axios({
             method: 'get',
-            url: 'dbblog/portal/user/optNum/' + 7,
+            url: 'portal/user/optNum/' + 7,
             params: {
               token: Cookies.get('token')
             }

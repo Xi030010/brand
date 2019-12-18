@@ -154,7 +154,7 @@ export default {
     this.setShowList(1)
 
     axios({
-      url: 'dbblog/portal/operation/categories',
+      url: 'portal/operation/categories',
       method: 'get',
       params: {
         'token': Cookies.get('token'),
@@ -169,7 +169,7 @@ export default {
 
     axios({
       method: 'get',
-      url: 'dbblog/portal/operation/tags/3',
+      url: 'portal/operation/tags/3',
       params: {
         token: Cookies.get('token')
       }
@@ -188,7 +188,7 @@ export default {
   methods: {
     setShowList (currentPage, cateId) {
       axios({
-        url: 'dbblog/portal/information/informations',
+        url: 'portal/information/informations',
         method: 'get',
         params: {
           token: Cookies.get('token'),

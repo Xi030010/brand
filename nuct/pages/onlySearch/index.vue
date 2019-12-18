@@ -144,7 +144,7 @@ export default {
     // });
     if( this.mallCode == "品牌") {
       axios({
-        url: 'dbblog/portal/search/brands/search',
+        url: 'portal/search/brands/search',
         methods: 'get',
         params: {
           keywords: this.input5,
@@ -161,7 +161,7 @@ export default {
       })
     }else if (this.mallCode == "资料") {
       axios({
-        url: 'dbblog/informations/search',
+        url: 'informations/search',
         methods: 'get',
         params: {
           keywords: this.input5,
@@ -178,7 +178,7 @@ export default {
       })
     }else if (this.mallCode == "话题") {
       axios({
-        url: 'dbblog/topics/search',
+        url: 'topics/search',
         methods: 'get',
         params: {
           keywords: this.input5,

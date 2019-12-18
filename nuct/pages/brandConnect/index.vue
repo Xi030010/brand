@@ -140,7 +140,7 @@ export default {
     this.selectMenu(this.$route.query.index)
 
     axios({
-        url: 'dbblog/portal/operation/tags/3',
+        url: 'portal/operation/tags/3',
         method: 'get',
         params: {
           token: Cookies.get('token'),
@@ -156,7 +156,7 @@ export default {
 		collect (topicId, i) {
 			axios({
 				method: 'put',
-				url: 'dbblog/portal/topic/topic/like/' + topicId,
+				url: 'portal/topic/topic/like/' + topicId,
 				params: {
 					token: Cookies.get('token'),
 				},
@@ -188,7 +188,7 @@ export default {
 		},
     setShowList (currentPage, reward, status) {
       axios({
-          url: 'dbblog/portal/topic/topics',
+          url: 'portal/topic/topics',
           method: 'get',
           params: {
               token: Cookies.get('token'),

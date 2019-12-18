@@ -231,7 +231,7 @@ export default {
 		},
     getBrdCommentList () {
       axios({
-        url: 'dbblog/portal/topic/topic/' + this.topicId,
+        url: 'portal/topic/topic/' + this.topicId,
         method: 'get',
         params: {
           token: Cookies.get('token')
@@ -292,7 +292,7 @@ export default {
       if (this.replyType === 'topic') {
         axios({
           method: 'post',
-          url: 'dbblog/portal/comment/save',
+          url: 'portal/comment/save',
           params: {
             token: Cookies.get('token'),
           },
@@ -317,7 +317,7 @@ export default {
       else {
         axios({
           method: 'post',
-          url: 'dbblog/portal/reply/save',
+          url: 'portal/reply/save',
           params: {
             token: Cookies.get('token')
           },

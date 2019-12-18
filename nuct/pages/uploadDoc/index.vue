@@ -162,7 +162,7 @@ export default {
 
   mounted() {
       axios({
-          url: 'dbblog/portal/operation/categories',
+          url: 'portal/operation/categories',
           method: 'get',
           params: {
 						token: Cookies.get('token'),
@@ -176,7 +176,7 @@ export default {
       });
 
       axios({
-          url: 'dbblog/portal/operation/tags/3',
+          url: 'portal/operation/tags/3',
           method: 'get',
           params: {
 						token: Cookies.get('token'),
@@ -211,7 +211,7 @@ export default {
         //   console.log(this.form.type);
         
         
-    //     axios.post('dbblog/portal/information/save',{
+    //     axios.post('portal/information/save',{
     //         token: Cookies.get('token'),
     //         'title': this.form.name,
     //         'description': this.form.describe,
@@ -235,11 +235,11 @@ export default {
         params.append('file', file);
         params.append('token',Cookies.get('token'));
         //console.log(params.get('file'))
-        axios.post('dbblog/portal/file/uploadFile',params).then(res => {
+        axios.post('portal/file/uploadFile',params).then(res => {
             console.log(res.data);
             this.sourceID = res.data.id;
             axios({
-              url: 'dbblog/portal/information/save',
+              url: 'portal/information/save',
               method: 'post',
               params:{
                 token: Cookies.get('token'),

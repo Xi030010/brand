@@ -121,7 +121,7 @@ export default {
       let arr2 = [];
       let arr3 = [];
       axios({
-        url: 'dbblog/portal/brand/brand/'+this.$route.query.mallCode,
+        url: 'portal/brand/brand/'+this.$route.query.mallCode,
         method: 'get',
         params: {
             'token': Cookies.get('token')

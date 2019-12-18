@@ -131,7 +131,7 @@ export default {
 
   mounted() {
     axios({
-          url: 'dbblog/portal/operation/tags/4',
+          url: 'portal/operation/tags/4',
           method: 'get',
           params: {
             token: Cookies.get('token'),
@@ -218,7 +218,7 @@ export default {
 
     formSubmit() {
           axios({
-              url: 'dbblog/portal/topic/save',
+              url: 'portal/topic/save',
               method: 'post',
               params:{
                   token: Cookies.get('token'),

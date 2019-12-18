@@ -163,7 +163,7 @@ export default {
 
   mounted() {
     axios({
-        url: 'dbblog/portal/user/info/7',
+        url: 'portal/user/info/7',
         method: 'get',
         params: {
             'token': Cookies.get('token')
@@ -182,7 +182,7 @@ export default {
     });
 
     axios({
-        url: 'dbblog/portal/user/operation/operations?type=2',
+        url: 'portal/user/operation/operations?type=2',
         method: 'get',
         params: {
             'token': Cookies.get('token')
@@ -202,7 +202,7 @@ export default {
     });
 //我的积分
     axios({
-        url: 'dbblog/portal/user/point/points',
+        url: 'portal/user/point/points',
         method: 'get',
         params: {
             'token': Cookies.get('token')
@@ -222,7 +222,7 @@ export default {
     });
 
     axios({
-        url: 'dbblog/portal/user/operation/operations?type=1',
+        url: 'portal/user/operation/operations?type=1',
         method: 'get',
         params: {
             'token': Cookies.get('token')
