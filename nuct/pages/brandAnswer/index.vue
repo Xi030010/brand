@@ -34,7 +34,7 @@
                             <div class="head">
 															<img :src="avatar" alt="头像" style="width: 50px;height: 50px;border-radius: 50%;">
 														</div>
-                            <div class="name">{{ username }}</div>
+                            <div class="name">{{ nickname }}</div>
                         </div>
                     </div>
                 </div>
@@ -55,7 +55,7 @@
                                 <div class="head">
 																	<img :src="avatar" alt="头像" style="width: 50px;height: 50px;border-radius: 50%;">
 																</div>
-                                <div class="name">{{ username }}</div>
+                                <div class="name">{{ nickname }}</div>
                             </div>
                         </div>
                         <div :name="i" ref="card" style="display: none">
@@ -120,7 +120,7 @@
                 <div class="userPic">
                     <div class="selfPic"></div>
                     <div>
-                        <p class="purple" style="font-size: 18px;">{{ username }}</p>
+                        <p class="purple" style="font-size: 18px;">{{ nickname }}</p>
                         <p style="font-size:18px;">积分：<span class="purple">{{ userPoint }}</span></p>
                     </div>
                 </div>
@@ -166,7 +166,7 @@ export default {
 			askNum: Cookies.get('askNum'),
 			answerNum: Cookies.get('answerNum'),
 			avatar: Cookies.get('avatar'),
-			username: Cookies.get('username'),
+			nickname: Cookies.get('nickname'),
 			activeIndex: '1',
 			input: '',
 			tabsVisibility: {

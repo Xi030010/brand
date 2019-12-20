@@ -66,7 +66,7 @@
                 <div class="userPic">
                     <div class="selfPic"></div>
                     <div>
-                        <p class="purple" style="font-size: 18px;">{{ username }}</p>
+                        <p class="purple" style="font-size: 18px;">{{ nickname }}</p>
                         <p style="font-size:18px;">积分：<span class="purple">{{ userPoint }}</span></p>
                     </div>
                 </div>
@@ -132,7 +132,7 @@ export default {
         userPoint: Cookies.get('points'),
         askNum: Cookies.get('askNum'),
 				answerNum: Cookies.get('answerNum'),
-				username: Cookies.get('username'),
+				nickname: Cookies.get('nickname'),
     };
   },
 

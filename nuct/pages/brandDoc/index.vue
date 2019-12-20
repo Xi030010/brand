@@ -54,13 +54,13 @@
                       <div class="triangle"></div>
                       <div class="shelter-edge"></div>
                       <div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
-                        DOC
+                        {{ item.ossResource ? item.ossResource.type.replace('image/', '') : 'DOC' }}
                     </div>
                     </div>
                   </div>
                   <div class="question-item-right">
                     <a class="questionTitle" @click="turnInfor(item.id, item.ossResource && item.ossResource.name, item.title)">{{ item.title }}</a>
-                    <p class="questionInf">{{ item.description }}</p>
+                    <p class="questionInf">{{ item.description || '' }}</p>
                     <p class="questionTime">
                       资源大小：<span>{{ item.ossResource ? item.ossResource.size : 900 }}KB</span>上传时间：<span>{{ $convertTime(item.createTime) }}</span>
                       上传者：<span>{{ item.createUser }}</span>
@@ -85,7 +85,7 @@
                     <div class="userPic">
                         <div class="selfPic"></div>
                         <div>
-                            <p class="purple" style="font-size: 18px;">{{ this.username }}</p>
+                            <p class="purple" style="font-size: 18px;">{{ this.nickname }}</p>
                             <p style="color: #666;font-size:18px;">积分：<span class="purple">{{ this.points }}</span></p>
                         </div>
                     </div>
@@ -132,7 +132,7 @@ export default {
       brandCondition: [],
       show: 'none',
       input3: '',
-      username: Cookies.get('username'),
+      nickname: Cookies.get('nickname'),
       points: Cookies.get('points'),  
       total: 3,
       pageSize: 6,
@@ -246,6 +246,7 @@ export default {
         //name: 'mallList',
         query: {
           mallCode: id,
+          index: 1
           // fileName: fileName,
           // title: title,
         }
@@ -399,12 +400,13 @@ export default {
 
 .questionInf {
     width: 80%;
+    min-height: 20px;
     color: #6a6f6f;
     margin-top: 10px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .questionTime span {
@@ -433,7 +435,7 @@ export default {
     position: relative;
     float: left;
     width: 15%;
-    min-height: 130px;
+    min-height: 120px;
 
     .left-img {
       position: absolute;
@@ -475,7 +477,7 @@ export default {
   .question-item-right {
     float: right;
     width: 85%;
-    min-height: 130px;
+    min-height: 120px;
     padding: 1rem 1rem 0 0;
   }
 }

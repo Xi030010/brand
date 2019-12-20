@@ -17,11 +17,11 @@
                   <a>修改头像</a>
               </div>
               <div class="selfInfFlex2">
-                  <p>ID：</p>
+                  <p>ID：<span>{{ this.userId }}</span></p>
                   <p style="margin-bottom: 50px">关注：<span>4</span>&nbsp;&nbsp;&nbsp;&nbsp;积分：<span>222</span></p>
                   <a>充值</a>
-                  <p>昵称：<span>{{ this.name }}</span></p>
-                  <p>实名：<span>{{ this.nickname }}</span></p>
+                  <p>昵称：<span>{{ this.nickname }}</span></p>
+                  <p>实名：<span>{{ this.username }}</span></p>
                   <p>手机号：<span>{{ this.phone }}</span></p>
                   <p>邮箱：<span>{{ this.email }}</span></p>
                   <p>积分：<span>{{ this.points }}</span></p>
@@ -30,7 +30,9 @@
       </el-tab-pane>
       <el-tab-pane label="我的计算">
           <ul class="myCount_ul">
-              <li v-for="(item,i) in myCount_showList" :key="i">{{ item.brandName }} <span style="float: right">{{ item.createTime }}</span></li>       
+              <li v-for="(item,i) in myCount_showList" :key="i">
+								{{ item.brandName }} <span style="float: right">{{ $convertTime(item.createTime) }}</span>
+							</li>       
           </ul>
           <el-pagination
           small
@@ -44,7 +46,7 @@
       </el-tab-pane>
       <el-tab-pane label="我的查询">
           <ul class="search_ul">
-              <li v-for="(item,i) in search_showList" :key="i">{{ item.brandName }} <span style="float: right">{{ item.createTime }}</span></li>       
+              <li v-for="(item,i) in search_showList" :key="i">{{ item.brandName }} <span style="float: right">{{ $convertTime(item.createTime) }}</span></li>       
           </ul>
           <el-pagination
           small
@@ -58,7 +60,9 @@
       </el-tab-pane>
       <el-tab-pane label="我的积分">
           <ul class="point_ul">
-              <li v-for="(item,i) in point_showList" :key="i">{{ item.remark }} {{ item.points }} <span style="float: right">{{ item.createTime }}</span></li>       
+              <li v-for="(item,i) in point_showList" :key="i">
+								{{ item.remark }} {{ item.points }} <span style="float: right">{{ $convertTime(item.createTime) }}</span>
+							</li>       
           </ul>
           <el-pagination
           small
@@ -91,15 +95,16 @@ export default {
   middleware: 'auth',
   data () {
     return {
-      tabPosition: 'left',
-      name: '0',
-      nickname: '',
-      phone: '',
-      email: '',
-      // avatar: '../../_nuxt/static/img/selfInfText.jpg',
-      avatar: 'img/selfInfText.jpg',
-      points: '',
+			userId: Cookies.get('userId'),
+      nickname: Cookies.get('nickname'),
+			username: Cookies.get('username'),
+			phone: Cookies.get('phone'),
+			email: Cookies.get('email'),
+			avatar: Cookies.get('avatar'),
+			points: Cookies.get('points'),
+      // avatar: 'img/selfInfText.jpg',
 
+			tabPosition: 'left',
       myCount_list: [],
       myCount_totalPage: [],
       myCount_total: 3,
@@ -133,54 +138,7 @@ export default {
     MyResource,
   },
 
-  methods: {
-		handleClick (tab, e) {
-			if (tab.label === '我的资源') {
-				this.$router.push({path: './docInfor', query: {mallCode: 1}})
-			}
-		},
-    myCount_consoleCurr (val) {
-        //console.log(`${val}`);
-        this.myCount_currentPage = val;
-        this.myCount_showList = this.myCount_totalPage[this.myCount_currentPage-1];
-        //console.log(this.currentPage);
-    },
-
-      point_consoleCurr (val) {
-        //console.log(`${val}`);
-        this.point_currentPage = val;
-        this.point_showList = this.point_totalPage[this.point_currentPage-1];
-        //console.log(this.currentPage);
-    },
-
-      search_consoleCurr (val) {
-        //console.log(`${val}`);
-        this.search_currentPage = val;
-        this.search_showList = this.search_totalPage[this.search_currentPage-1];
-        //console.log(this.currentPage);
-    }
-  },
-
   mounted() {
-    axios({
-        url: 'portal/user/info/7',
-        method: 'get',
-        params: {
-            'token': Cookies.get('token')
-        }
-    }).then(res => {
-        this.name = res.data.user.username;
-        this.nickname = res.data.user.nickname;
-        this.phone = res.data.user.phone;
-        this.email = res.data.user.email;
-        this.avatar = res.data.user.avatar;
-        this.points = res.data.user.points;
-        // Cookies.set('username', res.data.user.nickname);
-        // Cookies.set('points', res.data.user.points);
-    }).catch(error => {
-
-    });
-
     axios({
         url: 'portal/user/operation/operations?type=2',
         method: 'get',
@@ -240,7 +198,35 @@ export default {
     }).catch(error => {
 
     });
-  }
+	},
+	
+	methods: {
+		handleClick (tab, e) {
+			if (tab.label === '我的资源') {
+				this.$router.push({path: './docInfor', query: {mallCode: 1, index: 2}})
+			}
+		},
+    myCount_consoleCurr (val) {
+        //console.log(`${val}`);
+        this.myCount_currentPage = val;
+        this.myCount_showList = this.myCount_totalPage[this.myCount_currentPage-1];
+        //console.log(this.currentPage);
+    },
+
+		point_consoleCurr (val) {
+			//console.log(`${val}`);
+			this.point_currentPage = val;
+			this.point_showList = this.point_totalPage[this.point_currentPage-1];
+			//console.log(this.currentPage);
+    },
+
+		search_consoleCurr (val) {
+			//console.log(`${val}`);
+			this.search_currentPage = val;
+			this.search_showList = this.search_totalPage[this.search_currentPage-1];
+			//console.log(this.currentPage);
+    }
+  },
 }
 
 </script>

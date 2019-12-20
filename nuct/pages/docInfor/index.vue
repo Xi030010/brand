@@ -12,7 +12,8 @@
             <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
                 <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
                 <el-breadcrumb-item :to="{ path: '/brandDoc' }">品牌资料</el-breadcrumb-item>
-                <el-breadcrumb-item>{{ downLoadFile.title }}</el-breadcrumb-item>
+                <!-- <el-breadcrumb-item>{{ downLoadFile.title }}</el-breadcrumb-item> -->
+								<el-breadcrumb-item>{{ activeName1 == 'first' ? '下载首页' : '我的资源' }}</el-breadcrumb-item>
             </el-breadcrumb>
 
             <div class="left">
@@ -22,7 +23,7 @@
 										<el-tabs v-model="activeName2">
 											<el-breadcrumb separator="/" style="margin-bottom: 20px;">
 												<el-breadcrumb-item>下载</el-breadcrumb-item>
-												<el-breadcrumb-item>测试分类</el-breadcrumb-item>
+												<!-- <el-breadcrumb-item>测试分类</el-breadcrumb-item> -->
 												<el-breadcrumb-item>{{ downLoadFile.title }}</el-breadcrumb-item>
 											</el-breadcrumb>
 											<hr>
@@ -34,13 +35,13 @@
 															<div class="triangle"></div>
 															<div class="shelter-edge"></div>
 															<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
-																DOC
+																{{ downLoadFile.ossResource ? downLoadFile.ossResource.type.replace('image/', '') : 'DOC' }}
 														</div>
 														</div>
 													</div>
 													<div class="question-item-right" style="margin-bottom: 10px;">
 														<a class="questionTitle">{{ downLoadFile.title }}</a>
-														<p class="questionInf">{{ downLoadFile.description }}</p>
+														<p class="questionInf">{{ downLoadFile.description || '' }}</p>
 														<p class="questionTime">资源大小：
 															<span>
 																{{ downLoadFile.ossResource ? downLoadFile.ossResource.size : 900}}KB
@@ -50,34 +51,34 @@
 																{{ $convertTime(downLoadFile.createTime) }}
 															</span>
 														</p>
-														<span style="margin-left: -85px; margin-right: 150px;">所需积分：5</span>
+														<span style="margin-left: -85px; margin-right: 150px;">所需积分：{{ downLoadFile.point }}</span>
 														<el-button @click="downLoad" class="moreDownBtn">立即下载</el-button>
 													</div>
 												</div>
 											</div>
 											<hr>
-											<div class="moreDownload">
-													<div class="current-download">
-															<div class="question-item clearfix">
-																<div class="question-item-left">
-																	<div class="left-img">
-																		<div class="white-rectangle"></div>
-																		<div class="triangle"></div>
-																		<div class="shelter-edge"></div>
-																		<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
-																			DOC
-																	</div>
-																	</div>
-																</div>
-																<div class="question-item-right">
-																	<a class="questionTitle">刷机教程.doc——三星GT-I9070线刷教程</a>
-																	<p class="questionInf">想要刷机但是没有尝试过刷机的三星小伙伴们可以参考一下本教程。</p>
-																	<p class="questionTime">资源大小：<span>900KB</span>上传时间：<span>2019-07-15</span></p>
-																	<el-button class="moreDownBtn" @click="downLoad">立即下载</el-button>
-																</div>
+											<div class="moreDownload" v-if="showList.length">
+												<div v-for="(item, i) in showList" :key="i" class="current-download">
+													<div class="question-item clearfix">
+														<div class="question-item-left">
+															<div class="left-img">
+																<div class="white-rectangle"></div>
+																<div class="triangle"></div>
+																<div class="shelter-edge"></div>
+																<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
+																	{{ item.ossResource ? item.ossResource.type.replace('image/', '') : 'DOC' }}
 															</div>
+															</div>
+														</div>
+														<div class="question-item-right">
+															<a class="questionTitle">{{ item.title }}</a>
+															<p class="questionInf">{{ item.description || '' }}</p>
+															<p class="questionTime">资源大小：<span>{{ item.ossResource ? item.ossResource.size : 900 }}KB</span>上传时间：<span>{{ $convertTime(item.createTime) }}</span></p>
+															<el-button class="moreDownBtn" @click="downLoad">立即下载</el-button>
+														</div>
 													</div>
 													<hr style="border: 1px dotted #ccc;margin-top: 0;">
+												</div>
 											</div>
 										</el-tabs>
 									</el-tab-pane>
@@ -92,13 +93,13 @@
 																			<div class="triangle"></div>
 																			<div class="shelter-edge"></div>
 																			<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
-																				DOC
+																				{{ item.ossResource ? item.ossResource.type.replace('image/', '') : 'DOC' }}
 																		</div>
 																		</div>
 																	</div>
 																	<div class="question-item-right">
 																		<a class="questionTitle">{{ item.title }}</a>
-																		<p class="questionInf">{{ item.description }}</p>
+																		<p class="questionInf">{{ item.description || '' }}</p>
 																		<el-button class="questionButton" size="mini" v-for="(tagItem, j) in item.tagList" :key="j">
 																			{{ tagItem.name }}
 																		</el-button>
@@ -121,13 +122,13 @@
 																	<div class="triangle"></div>
 																	<div class="shelter-edge"></div>
 																	<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
-																		DOC
+																		{{ item.ossResource ? item.ossResource.type.replace('image/', '') : 'DOC' }}
 																</div>
 																</div>
 															</div>
 															<div class="question-item-right">
 																	<a class="questionTitle">{{ item.title }}</a>
-																	<p class="questionInf">{{ item.description }}</p>
+																	<p class="questionInf">{{ item.description || '' }}</p>
 																	<el-button class="questionButton" size="mini" v-for="(tagItem, j) in item.tagList" :key="j">
 																		{{ tagItem.name }}
 																	</el-button>
@@ -139,18 +140,18 @@
 													</div>
 												</el-tab-pane>
 										</el-tabs>
-										<el-pagination
-											layout="prev, pager, next"
-											:page-size="pageSize"
-											:page-count="pageNum"
-											:hide-on-single-page="true"
-											@current-change="consoleCurr"
-											style="position: relative;left: 0;bottom: 0;transform: translateX(0);width: 50%;margin: 0 auto">
-										</el-pagination>
 									</el-tab-pane>
 									<!-- <el-tab-pane label="已下载" name="second"></el-tab-pane>
 									<el-tab-pane label="上传资源" name="third"></el-tab-pane> -->
 								</el-tabs>
+								<el-pagination
+									layout="prev, pager, next"
+									:page-size="pageSize"
+									:page-count="pageNum"
+									:hide-on-single-page="true"
+									@current-change="consoleCurr"
+									style="position: relative;left: 0;bottom: 0;transform: translateX(0);width: 50%;margin: 0 auto 10px;text-align: center;">
+								</el-pagination>
 							</div>
             </div>
             <div class="right">
@@ -158,7 +159,7 @@
                     <div class="userPic">
                         <div class="selfPic"></div>
                         <div>
-                            <p class="purple" style="font-size: 18px;">{{ username }}</p>
+                            <p class="purple" style="font-size: 18px;">{{ nickname }}</p>
                             <p style="color: #666;font-size:18px;">积分：<span class="purple">{{ points }}</span></p>
                         </div>
                     </div>
@@ -202,7 +203,7 @@ export default {
 			uploadNum: Cookies.get('uploadNum'),
 			downloadNum: Cookies.get('downloadNum'),
 			points: Cookies.get('points'),
-			username: Cookies.get('username'),
+			nickname: Cookies.get('nickname'),
       brandCondition: [],
       show: 'none',
       input3: '',
@@ -214,9 +215,8 @@ export default {
       activeName2: 'first',
 			pageSize: null,
       pageNum: null,
-      totalPage: [],
       currentPage: 1,
-			showList: null,
+			showList: [],
 			downLoadFile: {},
     };
   },
@@ -225,6 +225,7 @@ export default {
 		//console.log(this.$route.query.mallCode)
 		// this.fileName = this.$route.query.fileName
 		// this.title = this.$route.query.title
+		this.activeName1 = this.$route.query.index == 1 ? 'first' : 'second'
 		axios({
 			url: 'portal/information/information/' + this.$route.query.mallCode,
 			method: 'get',
@@ -232,55 +233,70 @@ export default {
 					token: Cookies.get('token')
 			}
 		}).then(res => {
-			console.log(res.data.brdInformation);
-			this.downLoadFile = res.data.brdInformation;
-			this.title = res.data.brdInformation.title;
-		});
+			console.log(res.data.brdInformation)
+			this.downLoadFile = res.data.brdInformation
+			this.title = res.data.brdInformation.title
+		})
 
-		this.getDownList()
+		if (this.activeName1 == 'first') this.getRecommendList(1)
+		else this.getUploadList(1)
   },
 
   methods: {
-		getDownList () {
+		getRecommendList (currentPage) {
+			// 获取推荐资源
+			axios({
+				method: 'get',
+				url: 'portal/information/informations',
+				params: {
+					token: Cookies.get('token'),
+					recommend: 1,
+					page: currentPage,
+				}
+			}).then(res => {
+				console.log(res.data)
+				this.showList = res.data.page.list;
+				this.pageSize = res.data.page.pageSize
+				this.pageNum = res.data.page.totalPage
+				// for (let i = 0; i < this.pageNum; i++) {
+				// 	this.totalPage[i] = list.slice(this.pageSize * i, this.pageSize * (i + 1))
+				// }
+			})
+		},
+		getDownList (currentPage) {
 			// 下载资料
 			axios({
 				method: 'get',
 				url: 'portal/user/information/informations',
 				params: {
 					token: Cookies.get('token'),
-					userId: 7,
-					type: 2
+					userId: Cookies.get('userId'),
+					type: 2,
+					page: currentPage
 				}
 			}).then(res => {
 				console.log(res.data)
-				var list = res.data.page.list;
+				this.showList = res.data.page.list;
 				this.pageSize = res.data.page.pageSize;
-				this.pageNum = Math.ceil(list.length / this.pageSize) || 1;
-				for (let i = 0; i < this.pageNum; i++) {
-					this.totalPage[i] = list.slice(this.pageSize * i, this.pageSize * (i + 1))
-				}
-				this.showList = this.totalPage[this.currentPage - 1];
+				this.pageNum = res.data.page.totalPage;
 			})
 		},
-		getUploadList () {
+		getUploadList (currentPage) {
 			// 上传资料
 			axios({
 			  method: 'get',
 			  url: 'portal/user/information/informations',
 			  params: {
 			    token: Cookies.get('token'),
-			    userId: 7,
-			    type: 1
+			    userId: Cookies.get('userId'),
+					type: 1,
+					page: currentPage
 			  }
 			}).then(res => {
 			  console.log(res.data)
-			  var list = res.data.page.list;
-			  this.pageSize = res.data.page.pageSize;
-			  this.pageNum = Math.ceil(list.length / this.pageSize) || 1;
-			  for (let i = 0; i < this.pageNum; i++) {
-			    this.totalPage[i] = list.slice(this.pageSize * i, this.pageSize * (i + 1))
-			  }
-			  this.showList = this.totalPage[this.currentPage - 1];
+			  this.showList = res.data.page.list
+			  this.pageSize = res.data.page.pageSize
+			  this.pageNum = res.data.page.totalPage
 			})
 		},
 		// 下载首页和我的资源tab页切换
@@ -304,25 +320,43 @@ export default {
 			}
 		},
 		downLoad () {
-			this.$confirm('当前积分' + this.points + ', 需扣除积分' + 5 + ', 是否确定下载?', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消',
-				type: 'warning'
-			}).then(() => {
-				window.open('http://47.104.148.196:8081/portal/file/downloadFile/'
-										+ this.fileName + '?token=' + Cookies.get('token'), '_blank')
-			}).catch(() => {
-				this.$message({
-					type: 'info',
-					message: '已取消下载'
-				});          
-			});
+			this.points = 1
+			if (this.points > this.downLoadFile.point) {
+				this.$confirm('当前积分' + this.points + ', 需扣除积分' + this.downLoadFile.point + ', 是否确定下载?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					window.open('http://47.104.148.196:8081/portal/file/downloadFile/'
+											+ this.fileName + '?token=' + Cookies.get('token'), '_blank')
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消下载'
+					})
+				})
+			}
+			else {
+				this.$alert('对不起，您的积分不足！', '提示', {
+					confirmButtonText: '确定',
+					type: 'warning'
+        })
+			}
 		},
-    consoleCurr (val) {
-      //console.log(`${val}`);
-      this.currentPage = val;
-      this.showList = this.totalPage[this.currentPage - 1];
-      //console.log(this.currentPage);
+    consoleCurr (currentPage) {
+			//console.log(`${val}`)
+			this.currentPage = currentPage;
+			if (this.activeName1 == 'first') {
+				this.getRecommendList(currentPage)
+			}
+			else {
+				if (this.activeName2 == 'first') {
+					this.getUploadList(currentPage)
+				}
+				else {
+					this.getDownList(currentPage)
+				}
+			}
     }
 	}
 }
@@ -477,9 +511,10 @@ hr {
 }
 
 .questionInf {
-    width: 80%;
+		width: 80%;
+		min-height: 20px;
     color: #6a6f6f;
-    margin: 10px 0;
+    margin: 10px 0 10px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -490,7 +525,7 @@ hr {
 }
 
 .current-download {
-	padding: 0 10px;
+	// padding: 0 10px;
 }
 
 .moreDownload {
@@ -521,7 +556,7 @@ hr {
     position: relative;
     float: left;
     width: 15%;
-    min-height: 130px;
+    min-height: 120px;
 
     .left-img {
       position: absolute;
@@ -564,7 +599,7 @@ hr {
 		position: relative;
     float: right;
     width: 85%;
-    min-height: 130px;
+    min-height: 120px;
     padding: 1rem 1rem 0 0;
 	}
 }

@@ -49,7 +49,15 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="资源积分">
-                    <el-input-number v-model="form.point" :min="0"></el-input-number>
+                    <!-- <el-input-number v-model="form.point" :min="0"></el-input-number> -->
+										<el-select v-model="form.point" placeholder="请选择">
+											<el-option
+												v-for="item in pointOptions"
+												:key="item.value"
+												:label="item.label"
+												:value="item.value">
+											</el-option>
+										</el-select>
                 </el-form-item>
                 <el-form-item label="资源标签">
                     <!-- <el-tag
@@ -130,27 +138,33 @@ import Cookies from '~/plugins/cookie';
 
 // axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 export default {
-      middleware: 'auth',
+	middleware: 'auth',
   data () {
     return {
-        checked: false,
-        isAbled: true,
-        dialogVisible: false,
-        form: {
-            name: '',
-            type: '',
-            point: '',
-            describe: '',
-            label: [],
-        },
-        options: [],
-        labelValue: '',
-        hotTag: [],
-        sourceID: '',
-        uploadData: {
-            'token': Cookies.get('token')
-        },
-        //fileList: [],
+			pointOptions: [
+				{
+					value: '0',
+					label: '不需积分'
+				}
+			],
+			checked: false,
+			isAbled: true,
+			dialogVisible: false,
+			form: {
+				name: '',
+				type: '',
+				point: '',
+				describe: '',
+				label: [],
+			},
+			options: [],
+			labelValue: '',
+			hotTag: [],
+			sourceID: '',
+			uploadData: {
+				'token': Cookies.get('token')
+			},
+			//fileList: [],
     };
   },
   components: {
@@ -161,30 +175,36 @@ export default {
   },
 
   mounted() {
-      axios({
-          url: 'portal/operation/categories',
-          method: 'get',
-          params: {
-						token: Cookies.get('token'),
-						type: 3
-          }
-      }).then(res => {
-        // console.log(res.data.categoryList);
-        this.options = res.data.categoryList;
-        //console.log(this.options);
+		for (var i = 1; i <= 50; i++) {
+			this.pointOptions.push({
+				value: i,
+				option: i
+			})
+		}
+		
+		axios({
+				url: 'portal/operation/categories',
+				method: 'get',
+				params: {
+					token: Cookies.get('token'),
+					type: 3
+				}
+		}).then(res => {
+			// console.log(res.data.categoryList);
+			this.options = res.data.categoryList;
+			//console.log(this.options);
+		});
 
-      });
-
-      axios({
-          url: 'portal/operation/tags/3',
-          method: 'get',
-          params: {
-						token: Cookies.get('token'),
-          }
-      }).then(res => {
-          this.hotTag = res.data.tagList;
-          //console.log(this.hotTag);
-      })
+		axios({
+			url: 'portal/operation/tags/3',
+			method: 'get',
+			params: {
+				token: Cookies.get('token'),
+			}
+		}).then(res => {
+			this.hotTag = res.data.tagList;
+			//console.log(this.hotTag);
+		})
   },
 
   methods: {
@@ -207,7 +227,7 @@ export default {
           console.log(err);
       },
       formSubmit() {
-        this.$refs.upload.submit();
+				this.$refs.upload.submit()
         //   console.log(this.form.type);
         
         
@@ -251,14 +271,18 @@ export default {
                 'resourceId': this.sourceID,
                 'recommend': true,
                 'createUserId': 7,
-                'tagList': this.form.label
+								'tagList': this.form.label,
+								'point': this.form.point
               }
             }).then(res => {
 							console.log(res.data);
 							this.$message({
 								message: '上传成功',
 								type: 'success'
-							});
+							})
+							setTimeout(() => {
+								this.$router.push('./brandDoc')
+							}, 300)
             })
         })
         return true

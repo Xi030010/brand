@@ -41,6 +41,7 @@
             </el-form>
         </div>
 
+        <!-- 点击注册弹出的覆盖层注册界面 -->
 
     </div>
 </template>
@@ -128,11 +129,11 @@ export default {
                 "username": this.form.name,
                 "password": this.form.psw,
         }).then(res => {
-					//console.log(res.data.token);
-					Cookies.set('loginMessageNum', 0, {expires: this.toNextDay()})
-          Cookies.set('username', res.data.nickname, {expires: this.toNextDay()});
+					console.log(res.data);
+          Cookies.set('loginMessageNum', 0, {expires: this.toNextDay()})
+          Cookies.set('userId', res.data.userId, {expires: this.toNextDay()})
           Cookies.set('token', res.data.token, {expires: this.toNextDay()});
-          Cookies.set('points', res.data.points)
+          
           // Cookies.set('userId', 7, {expires: this.toNextDay()})
           // localStorage.setItem("token", JSON.stringify(res.data.token))
           // console.log(JSON.parse(localStorage.getItem("token")));
@@ -154,34 +155,33 @@ export default {
 
           axios({
             method: 'get',
-            url: 'portal/user/optNum/' + 7,
+            url: 'portal/user/optNum/' + Cookies.get('userId'),
             params: {
               token: Cookies.get('token')
             }
           }).then(res => {
             console.log(res.data)
-            Cookies.set('uploadNum', res.data.user.uploadNum)
-            Cookies.set('downloadNum', res.data.user.downloadNum)
-            Cookies.set('askNum', res.data.user.askNum)
-            Cookies.set('answerNum', res.data.user.answerNum)
-            Cookies.set('avatar', res.data.user.avatar)
+            Cookies.set('nickname', res.data.user.nickname, {expires: this.toNextDay()});
+            Cookies.set('points', res.data.user.points, {expires: this.toNextDay()})
+            Cookies.set('uploadNum', res.data.user.uploadNum, {expires: this.toNextDay()})
+            Cookies.set('downloadNum', res.data.user.downloadNum, {expires: this.toNextDay()})
+            Cookies.set('askNum', res.data.user.askNum, {expires: this.toNextDay()})
+            Cookies.set('answerNum', res.data.user.answerNum, {expires: this.toNextDay()})
+            Cookies.set('avatar', res.data.user.avatar, {expires: this.toNextDay()})
+            Cookies.set('phone', res.data.user.phone, {expires: this.toNextDay()})
+			      Cookies.set('email', res.data.user.email, {expires: this.toNextDay()})
           })
-          
-          this.$router.push('');
+
           setTimeout(() => {
             window.location.href = '';
           }, 100)
           }).catch(error => {
               console.log(error);
-          });
-
-
-          
-          //console.log(Cookies.get('token'));
+          })
       },
 
       toNextDay() {
-        return new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(0, 0, 0, 0));
+        return new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(0, 0, 0, 0))
       },
       loginOut () {
         axios({
@@ -266,7 +266,7 @@ a {
 
 .loginForm {
     width: 400px;
-    height: 295px;
+    height: 270px;
     border: 1px solid #000;
     background: #fff;
     position: absolute;
