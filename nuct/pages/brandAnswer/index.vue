@@ -22,7 +22,7 @@
                     <h1>{{ list.title }}</h1>
                     <div class="questionContent" v-html="list.content"></div>
                     <br>
-                    <p class="time">编辑于：<span>{{ $convertTime(list.createTime) }}</span></p>
+                    <p class="time">编辑于：<span>{{ list.createTime ? $convertTime(list.createTime) : '' }}</span></p>
                     <br>
                     <p>浏览<span style="margin-right: 10px">{{ list.readNum }}</span>评论<span>{{ topicPoint }}</span></p>
                     <div  style="overflow: hidden;position: relative;">
@@ -48,8 +48,9 @@
                         <br>
                         <div  style="overflow: hidden;position: relative;">
                             <div class="questionNav">
-                                <p class="time">编辑于：<span>{{ $convertTime(item.createTime) }}</span></p>
+                                <p class="time">编辑于：<span>{{ item.createTime ? $convertTime(item.createTime) : '' }}</span></p>
                                 <el-link :underline="false" icon="el-icon-s-comment" @click="response(i)">回复<span>（{{ list.brdCommentList[i].brdReplyList.length }}）</span></el-link>
+                                <el-link v-if="list.createUserId == userId" :underline="false">采纳答案</el-link>
                             </div>
                             <div class="user-info">
                                 <div class="head">
@@ -162,6 +163,7 @@ export default {
 
   data () {
     return {
+      userId: Cookies.get('userId'),
 			userPoint: Cookies.get('points'),
 			askNum: Cookies.get('askNum'),
 			answerNum: Cookies.get('answerNum'),
