@@ -98,8 +98,8 @@
                         <span>热门标签</span>
                         <el-button style="float: right; padding: 3px 0" type="text">更多</el-button>
                     </div>
-                    <div style="text-align: center;">
-                      <el-tag v-for="(item, i) in hotTags" :key="i" class="text item" style="margin: 0 5px;padding: 0 10px;">
+                    <div class="hotTag">
+                      <el-tag v-for="(item, i) in hotTags" :key="i">
                         {{ item.name }}
                       </el-tag>
                     </div>
@@ -479,6 +479,15 @@ export default {
     width: 85%;
     min-height: 120px;
     padding: 1rem 1rem 0 0;
+  }
+}
+
+.hotTag {
+  text-align: center;
+
+  & > span {
+    margin: 10px 5px;
+    padding: 0 5px;
   }
 }
 </style>

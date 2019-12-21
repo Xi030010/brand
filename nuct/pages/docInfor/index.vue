@@ -145,6 +145,7 @@
 									<el-tab-pane label="上传资源" name="third"></el-tab-pane> -->
 								</el-tabs>
 								<el-pagination
+									background
 									layout="prev, pager, next"
 									:page-size="pageSize"
 									:page-count="pageNum"

@@ -462,4 +462,13 @@ hr {
 		color: #ef8b3b;
 	}
 }
+
+.hotNote {
+	text-align: center;
+
+	& > span {
+		margin: 10px 5px;
+		font-size: 15px;
+	}
+}
 </style>
