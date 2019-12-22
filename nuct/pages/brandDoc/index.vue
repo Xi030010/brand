@@ -246,8 +246,8 @@ export default {
         //name: 'mallList',
         query: {
           mallCode: id,
-          index: 1
-          // fileName: fileName,
+          index: 1,
+          fileName: fileName,
           // title: title,
         }
       })

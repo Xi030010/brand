@@ -5,7 +5,7 @@
         <!-- 登录前显示登录注册栏 -->
 					<div class="login"  :class="{loginState: loginState1}">
 						<a @click="login">{{ loginIn }}</a>
-						<a>{{ register }}</a>
+						<a @click="registerReg">{{ register }}</a>
 					</div>
 	<!-- 登录成功显示的个人栏 -->
 					<div class="user" :class="{loginState: loginState}">
@@ -42,7 +42,26 @@
         </div>
 
         <!-- 点击注册弹出的覆盖层注册界面 -->
-
+				<div class="loginInbg" :class="{hide: hideRegDiv}">
+					<el-form ref="form" status-icon :label-position="labelPosition" :model="form" label-width="80px" class="loginForm">
+							<div class="loginFormTitle">
+									<span>注册</span>
+									<i class="el-icon-close iconClose" @click="closeRegForm"></i>
+							</div>
+							<el-form-item label="用户名">
+									<el-input v-model="form.name" clearable style="width: 250px;"></el-input>
+							</el-form-item>
+							<el-form-item label="密码">
+									<el-input v-model="form.psw" show-password style="width: 250px;"></el-input>
+							</el-form-item>
+							<el-button
+									type="primary"
+									style="margin-left: 160px;background: #ef8b3b; border: 1px solid #ef8b3b;"
+									@click="loginFormIn">
+									登陆
+							</el-button>
+					</el-form>
+			</div>
     </div>
 </template>
 
@@ -57,7 +76,8 @@ export default {
   data () {
     return {
       token: '',
-      hideDiv: true,
+			hideDiv: true,
+			hideRegDiv: true,
       loginState: true,
       loginState1: true,
       labelPosition: 'right',
@@ -88,6 +108,16 @@ export default {
 		}
 	},
   methods: {
+		registerReg () {
+			if(this.hideRegDiv) {
+				this.hideRegDiv = false;
+			}
+		},
+		closeRegForm () {
+			if(this.hideRegDiv == false) {
+				this.hideRegDiv = true;
+			}
+		},
       login () {
 				document.addEventListener('keyup', (e) => {
 					if (e.keyCode === 13) {

@@ -155,7 +155,7 @@ export default {
   methods: {
 		collect (topicId, i) {
 			axios({
-				method: 'put',
+				method: 'post',
 				url: 'portal/topic/topic/like/' + topicId,
 				params: {
 					token: Cookies.get('token'),

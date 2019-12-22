@@ -210,6 +210,7 @@ export default {
       input3: '',
       score: '3',
       selfScore: '41',
+			mallCode: null,
       fileName: null,
 			title: null,
 			activeName1: 'first',
@@ -224,7 +225,8 @@ export default {
 
   beforeMount () {
 		//console.log(this.$route.query.mallCode)
-		// this.fileName = this.$route.query.fileName
+		this.fileName = this.$route.query.fileName
+		this.mallCode = this.$route.query.mallCode
 		// this.title = this.$route.query.title
 		this.activeName1 = this.$route.query.index == 1 ? 'first' : 'second'
 		axios({
@@ -328,7 +330,7 @@ export default {
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					window.open('http://47.104.148.196:8081/portal/file/downloadFile/'
+					window.open(axios.defaults.baseURL + 'portal/file/downloadFile/' + this.mallCode + '/'
 											+ this.fileName + '?token=' + Cookies.get('token'), '_blank')
 				}).catch(() => {
 					this.$message({
