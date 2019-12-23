@@ -306,20 +306,21 @@ export default {
 		handleClick1 (tab) {
 			console.log(tab)
 			if (tab.name === 'second') {
-				this.getUploadList()
+				this.getUploadList(1)
+				this.getDownList(1)
 			}
 			else if (tab.name === 'first') {
-				this.getDownList()
+				this.getRecommendList(1)
 			}
 		},
 		// 我的资源tab页下，子tab页切换
 		handleClick2 (tab) {
 			console.log(tab)
 			if (tab.name === 'first') {
-				this.getUploadList()
+				this.getUploadList(1)
 			}
 			else if (tab.name === 'second') {
-				this.getDownList()
+				this.getDownList(2)
 			}
 		},
 		downLoad () {

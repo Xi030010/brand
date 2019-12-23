@@ -43,22 +43,31 @@
 
         <!-- 点击注册弹出的覆盖层注册界面 -->
 				<div class="loginInbg" :class="{hide: hideRegDiv}">
-					<el-form ref="form" status-icon :label-position="labelPosition" :model="form" label-width="80px" class="loginForm">
+					<el-form ref="regForm" status-icon :label-position="labelPosition" :model="regForm" label-width="80px" class="loginForm">
 							<div class="loginFormTitle">
 									<span>注册</span>
 									<i class="el-icon-close iconClose" @click="closeRegForm"></i>
 							</div>
-							<el-form-item label="用户名">
-									<el-input v-model="form.name" clearable style="width: 250px;"></el-input>
+							<el-form-item label="邮箱">
+									<el-input v-model="regForm.email" clearable style="width: 250px;"></el-input>
+							</el-form-item>
+              <el-form-item label="昵称">
+									<el-input v-model="regForm.nickname" clearable style="width: 250px;"></el-input>
 							</el-form-item>
 							<el-form-item label="密码">
-									<el-input v-model="form.psw" show-password style="width: 250px;"></el-input>
+									<el-input v-model="regForm.password" show-password style="width: 250px;"></el-input>
+							</el-form-item>
+              <el-form-item label="电话">
+									<el-input v-model="regForm.phone" clearable style="width: 250px;"></el-input>
+							</el-form-item>
+              <el-form-item label="用户名">
+									<el-input v-model="regForm.username" clearable style="width: 250px;"></el-input>
 							</el-form-item>
 							<el-button
 									type="primary"
 									style="margin-left: 160px;background: #ef8b3b; border: 1px solid #ef8b3b;"
-									@click="loginFormIn">
-									登陆
+									@click="regFormIn">
+									注册
 							</el-button>
 					</el-form>
 			</div>
@@ -86,7 +95,13 @@ export default {
         psw: '',
       },
       size: 'small',
-        
+      regForm: {
+        email: '',
+        nickname: '',
+        password: '',
+        phone: '',
+        username: '',
+      },
     }
   },
   props: {
@@ -104,10 +119,42 @@ export default {
 			this.loginState = false;
 		}
 		else {
-			this.loginState1 = false;
+      this.loginState1 = false;
 		}
 	},
   methods: {
+    regFormIn () {
+      // 校验
+      var checkSuccess = true
+      for (var key in this.regForm) {
+        if (!this.regForm[key]) {
+          this.$message({
+            message: key + '不能为空',
+            type: 'warning'
+          })
+          checkSuccess = false
+          break
+        }
+      }
+
+      // 注册api
+      checkSuccess && axios({
+        method: 'post',
+        url: 'portal/user/register',
+        data: {
+          email: this.regForm.email,
+          nickname: this.regForm.nickname,
+          password: this.regForm.password,
+          phone: this.regForm.phone,
+          username: this.regForm.username,
+        },
+      }).then(res => {
+        this.$message({
+          message: '注册成功',
+          type: 'success'
+        })
+      })
+    },
 		registerReg () {
 			if(this.hideRegDiv) {
 				this.hideRegDiv = false;
@@ -191,7 +238,8 @@ export default {
             }
           }).then(res => {
             console.log(res.data)
-            Cookies.set('nickname', res.data.user.nickname, {expires: this.toNextDay()});
+            Cookies.set('nickname', res.data.user.nickname, {expires: this.toNextDay()})
+            Cookies.set('username', res.data.user.username, {expires: this.toNextDay()})
             Cookies.set('points', res.data.user.points, {expires: this.toNextDay()})
             Cookies.set('uploadNum', res.data.user.uploadNum, {expires: this.toNextDay()})
             Cookies.set('downloadNum', res.data.user.downloadNum, {expires: this.toNextDay()})
@@ -295,14 +343,15 @@ a {
 }
 
 .loginForm {
-    width: 400px;
-    height: 270px;
-    border: 1px solid #000;
-    background: #fff;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
+    width: 400px;
+    // height: 270px;
+    border: 1px solid #000;
+    padding-bottom: 20px;
+    background: #fff;
 }
 
 .loginFormTitle {

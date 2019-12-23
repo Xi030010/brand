@@ -59,19 +59,57 @@
           </el-pagination>
       </el-tab-pane>
       <el-tab-pane label="我的积分">
-          <ul class="point_ul">
+          <!-- <ul class="point_ul">
               <li v-for="(item,i) in point_showList" :key="i">
 								{{ item.remark }} {{ item.points }} <span style="float: right">{{ $convertTime(item.createTime) }}</span>
 							</li>       
-          </ul>
+          </ul> -->
+					<div class="point-head">
+						<span class="point-head-title">我的积分</span>
+						<span style="font-size: 13px;">当前积分</span>
+						<span class="point-head-point">{{ points }}</span>
+						<el-button class="point-head-recharge" size="mini">积分充值</el-button>
+					</div>
+					<hr style="margin-bottom: 20px;">
+					<el-tabs type="border-card" class="point-tabs">
+						<el-tab-pane label="积分明细">
+							<el-table
+								:data="showList"
+								style="width: 100%">
+								<el-table-column
+									prop="point"
+									label="分数"
+									width="80">
+								</el-table-column>
+								<el-table-column
+									prop="time"
+									label="时间"
+									width="150">
+								</el-table-column>
+								<el-table-column
+									prop="resource"
+									label="资源"
+								>
+								</el-table-column>
+								<el-table-column
+									prop="type"
+									label=""
+									width="120"
+								>
+								</el-table-column>
+							</el-table>
+						</el-tab-pane>
+						<el-tab-pane label="充值记录">充值记录</el-tab-pane>
+					</el-tabs>
           <el-pagination
           small
+					background
           layout="prev, pager, next"
           class="point_pagination"
-          :total="point_total"
-          :page-size="point_size"
-          :current-page="point_currentPage"
-          @current-change="point_consoleCurr">
+          :total="total"
+          :page-size="pageSize"
+          :current-page="currentPage"
+          @current-change="consoleCurr">
           </el-pagination>
       </el-tab-pane>
       <el-tab-pane label="我的资源">
@@ -95,6 +133,12 @@ export default {
   middleware: 'auth',
   data () {
     return {
+			total: 3,
+      pageSize: 6,
+      currentPage: 1,
+      pageNum: 0,
+      showList: [],
+      pageList: [],
 			userId: Cookies.get('userId'),
       nickname: Cookies.get('nickname'),
 			username: Cookies.get('username'),
@@ -158,26 +202,8 @@ export default {
     }).catch(error => {
 
     });
-//我的积分
-    axios({
-        url: 'portal/user/point/points',
-        method: 'get',
-        params: {
-            'token': Cookies.get('token')
-        }
-    }).then(res => {
-        //console.log(res.data);
-        this.point_list = res.data.page.list;
-        this.point_total = res.data.page.totalCount;
-        this.point_size = res.data.page.pageSize;
-        this.point_pageNum = Math.ceil(this.point_total / this.point_size) || 1;
-        for (let i = 0; i < this.point_pageNum; i++) {
-            this.point_totalPage[i] = this.point_list.slice(this.point_size * i, this.point_size * (i + 1))
-        }
-        this.point_showList = this.point_totalPage[this.point_currentPage-1];
-    }).catch(error => {
-
-    });
+		//我的积分
+    this.setShowList(1)
 
     axios({
         url: 'portal/user/operation/operations?type=1',
@@ -201,6 +227,57 @@ export default {
 	},
 	
 	methods: {
+		setShowList (currentPage) {
+			axios({
+        url: 'portal/user/point/points',
+        method: 'get',
+        params: {
+					token: Cookies.get('token'),
+					page: currentPage
+        }
+			}).then(res => {
+					console.log(res.data);
+					// this.point_list = res.data.page.list;
+					// this.point_total = res.data.page.totalCount;
+					// this.point_size = res.data.page.pageSize;
+					// this.point_pageNum = Math.ceil(this.point_total / this.point_size) || 1;
+					// for (let i = 0; i < this.point_pageNum; i++) {
+					//     this.point_totalPage[i] = this.point_list.slice(this.point_size * i, this.point_size * (i + 1))
+					// }
+					// this.point_showList = this.point_totalPage[this.point_currentPage-1];
+					for (var i = 0; i < res.data.page.list.length; i++) {
+						var curItem = res.data.page.list[i]
+						var temp = {}
+						if (curItem.type == 1) {
+							temp.type = '+ 积分充值'
+						}
+						else if (curItem.type == 2) {
+							temp.type = '- 使用资源'
+						}
+						temp.point = curItem.points
+						temp.time = this.$convertTime(curItem.createTime)
+						temp.resource = ''
+						this.showList.push(temp)
+					}
+					this.total = res.data.page.totalCount
+					this.pageSize = res.data.page.pageSize
+					this.pageNum = Math.ceil(this.total / this.pageSize) || 1
+					this.pageList[currentPage] = this.showList
+			}).catch(error => {
+				console.log(error)
+			});
+		},
+		consoleCurr (currentPage) {
+      //console.log(`${val}`);
+      this.currentPage = currentPage;
+      if (!this.pageList[currentPage]) {
+        this.setShowList(currentPage)
+      }
+      else {
+        this.showList = this.pageList[currentPage]
+      }
+      //console.log(this.currentPage);
+    },
 		handleClick (tab, e) {
 			if (tab.label === '我的资源') {
 				this.$router.push({path: './docInfor', query: {mallCode: 1, index: 2}})
@@ -354,5 +431,27 @@ export default {
     bottom: 0px;
     left: 50%;
     transform: translateX(-50%);
+}
+
+.point-head {
+	// margin-bottom: 20px;
+
+	.point-head-title {
+		font-size: 20px;
+		font-weight: bold;
+		margin-right: 10px;
+	}
+
+	.point-head-point {
+		color: red;
+	}
+
+	.point-head-recharge {
+		margin-left: 320px;
+	}
+}
+
+.point-tabs {
+	margin-bottom: 30px;
 }
 </style>
