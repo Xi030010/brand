@@ -24,10 +24,10 @@
 											<el-breadcrumb separator="/" style="margin-bottom: 20px;">
 												<el-breadcrumb-item>下载</el-breadcrumb-item>
 												<!-- <el-breadcrumb-item>测试分类</el-breadcrumb-item> -->
-												<el-breadcrumb-item>{{ downLoadFile.title }}</el-breadcrumb-item>
+												<el-breadcrumb-item v-if="!noId">{{ downLoadFile.title }}</el-breadcrumb-item>
 											</el-breadcrumb>
 											<hr>
-											<div class="current-download">
+											<div v-if="!noId" class="current-download">
 												<div class="question-item clearfix">
 													<div class="question-item-left">
 														<div class="left-img">
@@ -56,8 +56,8 @@
 													</div>
 												</div>
 											</div>
-											<hr>
-											<div class="moreDownload" v-if="showList.length">
+											<hr v-if="!noId">
+											<div class="moreDownload" v-if="showList.length" :style="{marginTop: noId ? '0' : '70px'}">
 												<div v-for="(item, i) in showList" :key="i" class="current-download">
 													<div class="question-item clearfix">
 														<div class="question-item-left">
@@ -201,6 +201,7 @@ export default {
 
   data () {
     return {
+			noId: false,
 			uploadNum: Cookies.get('uploadNum'),
 			downloadNum: Cookies.get('downloadNum'),
 			points: Cookies.get('points'),
@@ -225,7 +226,8 @@ export default {
 
   beforeMount () {
 		//console.log(this.$route.query.mallCode)
-		this.fileName = this.$route.query.fileName
+		if (!this.$route.query.fileName) this.noId = true
+		else this.fileName = this.$route.query.fileName
 		this.mallCode = this.$route.query.mallCode
 		// this.title = this.$route.query.title
 		this.activeName1 = this.$route.query.index == 1 ? 'first' : 'second'
@@ -533,7 +535,7 @@ hr {
 }
 
 .moreDownload {
-    margin-top: 70px;
+    // margin-top: 70px;
     overflow: hidden;
     position: relative;
 }

@@ -95,6 +95,7 @@
 									prop="type"
 									label=""
 									width="120"
+									align="right"
 								>
 								</el-table-column>
 							</el-table>
@@ -236,7 +237,7 @@ export default {
 					page: currentPage
         }
 			}).then(res => {
-					console.log(res.data);
+					console.log(res.data)
 					// this.point_list = res.data.page.list;
 					// this.point_total = res.data.page.totalCount;
 					// this.point_size = res.data.page.pageSize;
@@ -249,14 +250,23 @@ export default {
 						var curItem = res.data.page.list[i]
 						var temp = {}
 						if (curItem.type == 1) {
-							temp.type = '+ 积分充值'
+							temp.type = '+ '
 						}
 						else if (curItem.type == 2) {
-							temp.type = '- 使用资源'
+							temp.type = '- '
+						}
+						if (curItem.businessType == 1) {
+							temp.type += '下载获取'
+						}
+						else if (curItem.businessType == 2) {
+							temp.type += '下载扣减'
+						}
+						else if (curItem.businessType == 3) {
+							temp.type += '充值'
 						}
 						temp.point = curItem.points
 						temp.time = this.$convertTime(curItem.createTime)
-						temp.resource = ''
+						temp.resource = curItem.remark
 						this.showList.push(temp)
 					}
 					this.total = res.data.page.totalCount
@@ -280,6 +290,7 @@ export default {
     },
 		handleClick (tab, e) {
 			if (tab.label === '我的资源') {
+				axios()
 				this.$router.push({path: './docInfor', query: {mallCode: 1, index: 2}})
 			}
 		},
