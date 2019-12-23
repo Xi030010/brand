@@ -1,14 +1,14 @@
 <!--  -->
 <template>
   <div>
-        <el-input class="inputStyle input-with-select" placeholder="请输入内容" v-model="input5">
-              <el-select v-model="select" slot="prepend" style="width: 80px;">
-                <el-option label="品牌" value="品牌"></el-option>
-                <el-option label="资料" value="资料"></el-option>
-                <el-option label="话题" value="话题"></el-option>
-              </el-select>
-            <el-button slot="append" icon="el-icon-search" style="width: 60px" @click="getBrandList"></el-button>
-        </el-input>
+		<el-input class="inputStyle input-with-select" placeholder="请输入内容" v-model="input5">
+			<el-select v-model="select" slot="prepend" style="width: 80px;">
+				<el-option label="品牌" value="品牌"></el-option>
+				<el-option label="资料" value="资料"></el-option>
+				<el-option label="话题" value="话题"></el-option>
+			</el-select>
+			<el-button slot="append" icon="el-icon-search" style="width: 60px" @click="getBrandList"></el-button>
+		</el-input>
   </div>
 </template>
 
@@ -16,7 +16,13 @@
 import axios from 'axios';
 import Cookies from '~/plugins/cookie';
 export default {
-  name: 'search',
+	name: 'search',
+	props: {
+		keywords: {
+			type: String,
+			default: '',
+		}
+	},
   data () {
     return {
         input5: '',
@@ -70,7 +76,11 @@ export default {
             }
         ]
     };
-  },
+	},
+	
+	created () {
+		this.input5 = this.keywords
+	},
 
   methods: {
     getBrandList() {

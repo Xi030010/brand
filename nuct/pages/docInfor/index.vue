@@ -226,7 +226,7 @@ export default {
 
   beforeMount () {
 		//console.log(this.$route.query.mallCode)
-		if (!this.$route.query.fileName) this.noId = true
+		if (!this.$route.query.mallCode) this.noId = true
 		else this.fileName = this.$route.query.fileName
 		this.mallCode = this.$route.query.mallCode
 		// this.title = this.$route.query.title
