@@ -251,7 +251,7 @@ export default {
           })
 
           setTimeout(() => {
-            // window.location.href = '';
+            window.location.href = '';
           }, 100)
           }).catch(error => {
               console.log(error);
