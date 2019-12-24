@@ -35,7 +35,7 @@
 															<div class="triangle"></div>
 															<div class="shelter-edge"></div>
 															<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
-																{{ downLoadFile.ossResource ? downLoadFile.ossResource.type.replace('image/', '') : 'DOC' }}
+																{{ getFileType(downLoadFile) }}
 														</div>
 														</div>
 													</div>
@@ -48,7 +48,7 @@
 															</span>
 															上传时间：
 															<span>
-																{{ $convertTime(downLoadFile.createTime) }}
+																{{ downLoadFile.createTime ? $convertTime(downLoadFile.createTime) : '' }}
 															</span>
 														</p>
 														<span style="margin-left: -85px; margin-right: 150px;">所需积分：{{ downLoadFile.point }}</span>
@@ -66,14 +66,14 @@
 																<div class="triangle"></div>
 																<div class="shelter-edge"></div>
 																<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
-																	{{ item.ossResource ? item.ossResource.type.replace('image/', '') : 'DOC' }}
+																	{{ getFileType(item) }}
 															</div>
 															</div>
 														</div>
 														<div class="question-item-right">
 															<a class="questionTitle">{{ item.title }}</a>
 															<p class="questionInf">{{ item.description || '' }}</p>
-															<p class="questionTime">资源大小：<span>{{ item.ossResource ? item.ossResource.size : 900 }}KB</span>上传时间：<span>{{ $convertTime(item.createTime) }}</span></p>
+															<p class="questionTime">资源大小：<span>{{ item.ossResource ? item.ossResource.size : 900 }}KB</span>上传时间：<span>{{ item.createTime ? $convertTime(item.createTime) : '' }}</span></p>
 															<el-button class="moreDownBtn" @click="downLoad">立即下载</el-button>
 														</div>
 													</div>
@@ -93,7 +93,7 @@
 																			<div class="triangle"></div>
 																			<div class="shelter-edge"></div>
 																			<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
-																				{{ item.ossResource ? item.ossResource.type.replace('image/', '') : 'DOC' }}
+																				{{ getFileType(item) }}
 																		</div>
 																		</div>
 																	</div>
@@ -103,7 +103,7 @@
 																		<el-button class="questionButton" size="mini" v-for="(tagItem, j) in item.tagList" :key="j">
 																			{{ tagItem.name }}
 																		</el-button>
-																		<p class="questionTime">上传时间：<span>{{ $convertTime(item.createTime) }}</span>所需积分：<span>5</span></p>
+																		<p class="questionTime">上传时间：<span>{{ item.createTime ? $convertTime(item.createTime) : '' }}</span>所需积分：<span>5</span></p>
 																	</div>
 																</div>
 																<div class="moreDownBtn">
@@ -122,7 +122,7 @@
 																	<div class="triangle"></div>
 																	<div class="shelter-edge"></div>
 																	<div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
-																		{{ item.ossResource ? item.ossResource.type.replace('image/', '') : 'DOC' }}
+																		{{ getFileType(item) }}
 																</div>
 																</div>
 															</div>
@@ -132,7 +132,7 @@
 																	<el-button class="questionButton" size="mini" v-for="(tagItem, j) in item.tagList" :key="j">
 																		{{ tagItem.name }}
 																	</el-button>
-																	<p class="questionTime">上传时间：<span>{{ $convertTime(item.createTime) }}</span>所需积分：<span>5</span></p>
+																	<p class="questionTime">上传时间：<span>{{ item.createTime ? $convertTime(item.createTime) : '' }}</span>所需积分：<span>5</span></p>
 															</div>
 															<el-link :underline="false" class="moreDownBtnUp">立即评价</el-link>
 														</div>
@@ -248,6 +248,9 @@ export default {
   },
 
   methods: {
+		getFileType (obj) {
+			return obj.ossResource ? obj.ossResource.type ? obj.ossResource.type.replace('image/', '') : 'DOC' : 'DOC'
+		},
 		getRecommendList (currentPage) {
 			// 获取推荐资源
 			axios({
