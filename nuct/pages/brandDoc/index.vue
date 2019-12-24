@@ -54,7 +54,7 @@
                       <div class="triangle"></div>
                       <div class="shelter-edge"></div>
                       <div style="position: absolute;bottom: 25%;color: white;left: 50%;transform: translateX(-50%);font-weight: bold;">
-                        {{ item.ossResource ? item.ossResource.type.replace('image/', '') : 'DOC' }}
+                        {{ item.ossResource ? item.ossResource.type ? item.ossResource.type.replace('image/', '') : 'DOC' : 'DOC' }}
                     </div>
                     </div>
                   </div>
