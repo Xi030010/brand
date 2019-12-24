@@ -478,6 +478,7 @@ hr {
 	& > span {
 		margin: 10px 5px;
 		font-size: 15px;
+		padding: 0 10px;
 	}
 }
 </style>

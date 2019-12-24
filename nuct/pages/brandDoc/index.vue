@@ -488,7 +488,7 @@ export default {
 
   & > span {
     margin: 10px 5px;
-    padding: 0 5px;
+    padding: 0 10px;
   }
 }
 </style>
