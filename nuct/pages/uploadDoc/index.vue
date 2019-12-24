@@ -49,15 +49,16 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="资源积分">
-                    <!-- <el-input-number v-model="form.point" :min="0"></el-input-number> -->
-										<el-select v-model="form.point" placeholder="请选择">
+										<el-checkbox v-model="needPoint" style="margin-right: 20px;">同意&nbsp;&nbsp;&nbsp;品牌研究资源共享规则</el-checkbox>
+                    <el-input-number v-if="needPoint" v-model="form.point" :min="0"></el-input-number>
+										<!-- <el-select v-model="form.point" placeholder="请选择">
 											<el-option
 												v-for="item in pointOptions"
 												:key="item.value"
 												:label="item.label"
 												:value="item.value">
 											</el-option>
-										</el-select>
+										</el-select> -->
                 </el-form-item>
                 <el-form-item label="资源标签">
                     <!-- <el-tag
@@ -141,12 +142,7 @@ export default {
 	middleware: 'auth',
   data () {
     return {
-			pointOptions: [
-				{
-					value: '0',
-					label: '不需积分'
-				}
-			],
+			needPoint: false,
 			checked: false,
 			isAbled: true,
 			dialogVisible: false,
@@ -175,13 +171,6 @@ export default {
   },
 
   mounted() {
-		for (var i = 1; i <= 50; i++) {
-			this.pointOptions.push({
-				value: i,
-				option: i
-			})
-		}
-		
 		axios({
 				url: 'portal/operation/categories',
 				method: 'get',
@@ -272,7 +261,7 @@ export default {
                 'recommend': true,
                 'createUserId': 7,
 								'tagList': this.form.label,
-								'point': this.form.point
+								'point': this.needPoint ? this.form.point : 0,
               }
             }).then(res => {
 							console.log(res.data);
