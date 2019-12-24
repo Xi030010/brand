@@ -6,7 +6,7 @@
         <login></login>
     </div>
     <img src="../../static/img/791571927556_.pic.jpg" alt="">
-    <search :keywords="input5" :type="mallCode"></search>
+    <search :keywords="input5" :mallCode="mallCode"></search>
     <div v-if="mallCode === '品牌'" class="showBrand">
         <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -34,11 +34,11 @@
         </el-pagination>
     </div>
     <div v-if="mallCode === '资料'" class="showBrand">
-        <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>资料查询</el-breadcrumb-item>
-        </el-breadcrumb>
-        <div class="information" v-if="showList.length">
+      <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
+          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+          <el-breadcrumb-item>资料查询</el-breadcrumb-item>
+      </el-breadcrumb>
+      <div class="information" v-if="showList.length">
           <div class="left">
             <div v-for = "(item, i) in showList" :key = "i" class="information-item">
                 <a class="questionTitle" @click="turnInfor(item.id)">{{ item.title }}</a>
@@ -59,6 +59,7 @@
             </el-pagination>
           </div>
       </div>
+      <div v-if="!showList.length" style="text-align: center;">没有找到“{{ input5 }}”相关的数据！</div>
     </div>
     <div v-if="mallCode === '话题'" class="showBrand">
       <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
@@ -66,43 +67,44 @@
           <el-breadcrumb-item>话题查询</el-breadcrumb-item>
       </el-breadcrumb>
       <div class="topic">
-            <div v-for = "(item, i) in showList" :key = "i" class="topic-item">
-                <div class="answerNamber">
-                    <p>{{ item.commentNum }}</p>
-                    <p>回答</p>
-                </div>
-                <p class="questionTime">
-									<span>{{ $convertTime(item.createTime) }} 来自 </span>
-									{{ item.createUser }}
-									<span v-if="item.reward" style="margin-left: 20px;font-size: 18px;">悬赏</span>
-									<span v-if="item.reward" style="margin-left: 5px;color: #ef8b3b">{{ item.point }}</span>
-									</p>
-                <a class="questionTitle" @click="$router.push({path: '../brandAnswer', query: {topicId: item.id, index: activeIndex}})">
-                  {{ item.title }}
-                </a>
-                <p class="questionInf">{{ item.description }}</p>
-                <div class="tags">
-									<el-tag v-for="(tag, j) in item.tagList" :key="j">
-										{{ tag.name }}
-									</el-tag>
-                </div>
-                <div class="showData">
-									<p>浏览<span>{{ item.readNum }}</span></p>
-									<p class="collect" @click="collect(item.id, i)">收藏<span>{{ item.likeNum }}</span></p>
-									<!-- <p>同问<span>0</span></p> -->
-                </div>
-                <hr>
+        <div v-for = "(item, i) in showList" :key = "i" class="topic-item">
+            <div class="answerNamber">
+                <p>{{ item.commentNum }}</p>
+                <p>回答</p>
             </div>
+            <p class="questionTime">
+              <span>{{ $convertTime(item.createTime) }} 来自 </span>
+              {{ item.createUser }}
+              <span v-if="item.reward" style="margin-left: 20px;font-size: 18px;">悬赏</span>
+              <span v-if="item.reward" style="margin-left: 5px;color: #ef8b3b">{{ item.point }}</span>
+              </p>
+            <a class="questionTitle" @click="$router.push({path: '../brandAnswer', query: {topicId: item.id, index: activeIndex}})">
+              {{ item.title }}
+            </a>
+            <p class="questionInf">{{ item.description }}</p>
+            <div class="tags">
+              <el-tag v-for="(tag, j) in item.tagList" :key="j">
+                {{ tag.name }}
+              </el-tag>
+            </div>
+            <div class="showData">
+              <p>浏览<span>{{ item.readNum }}</span></p>
+              <p class="collect" @click="collect(item.id, i)">收藏<span>{{ item.likeNum }}</span></p>
+              <!-- <p>同问<span>0</span></p> -->
+            </div>
+            <hr>
         </div>
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :total="pageNum"
-          :page-size="pageSize"
-          :current-page="currentPage"
-          :hide-on-single-page="true"
-          @current-change="consoleCurr">
-        </el-pagination>
+        <div v-if="!showList.length" style="text-align: center;">没有找到“{{ input5 }}”相关的数据！</div>
+      </div>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="pageNum"
+        :page-size="pageSize"
+        :current-page="currentPage"
+        :hide-on-single-page="true"
+        @current-change="consoleCurr">
+      </el-pagination>
     </div>
     <footerBar></footerBar>
 </div>
@@ -149,7 +151,7 @@ export default {
     }
   },
   mounted() {
-    this.mallCode = this.mallCode || this.$route.query.mallCode
+    this.mallCode = this.$route.query.mallCode
 
     this.setShowList()
     //   axios.get('/brands/search',{
@@ -193,54 +195,54 @@ export default {
         }).then(res => {
           console.log(res.data)
           this.showList = []
-          res.data.brandList = [
-              {
-                  "id": 1,
-                  "name": "歌莉娅",
-                  "nameAbbr": "歌莉娅",
-                  "nameEn": "GELIYA",
-                  "categoryId": "19",
-                  "introduction": "歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌",
-                  "cover": "http://pvt7whda9.bkt.clouddn.com/brand/20190806/bd374017900b46cb8e7d6ef9ea9cdabc.png",
-                  "founder": "歌德",
-                  "establishDate": 649868400000,
-                  "area": "上海",
-                  "createUserId": "7",
-                  "createTime": 1566267385000,
-                  "categoryListStr": null,
-                  "baseSummaryList": null,
-                  "tagList": [
-                      {
-                      "id": 13,
-                      "name": "百年传承",
-                      "type": 5
-                      }
-                  ],
-                  "brdMean": null,
-                  "brdQualityRatio": null,
-                  "brdStability": null
-              },
-              {
-                  "id": 2,
-                  "name": "耐克",
-                  "nameAbbr": "耐克",
-                  "nameEn": "NIKE",
-                  "categoryId": "19",
-                  "introduction": "耐克耐克耐克耐克",
-                  "cover": "http://pvt7whda9.bkt.clouddn.com/brand/20190806/bd374017900b46cb8e7d6ef9ea9cdabc.png",
-                  "founder": "艾克",
-                  "establishDate": 649868400000,
-                  "area": "上海",
-                  "createUserId": "7",
-                  "createTime": 1566267385000,
-                  "categoryListStr": null,
-                  "baseSummaryList": null,
-                  "tagList": [],
-                  "brdMean": null,
-                  "brdQualityRatio": null,
-                  "brdStability": null
-              }
-          ]
+          // res.data.brandList = [
+          //     {
+          //         "id": 1,
+          //         "name": "歌莉娅",
+          //         "nameAbbr": "歌莉娅",
+          //         "nameEn": "GELIYA",
+          //         "categoryId": "19",
+          //         "introduction": "歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌",
+          //         "cover": "http://pvt7whda9.bkt.clouddn.com/brand/20190806/bd374017900b46cb8e7d6ef9ea9cdabc.png",
+          //         "founder": "歌德",
+          //         "establishDate": 649868400000,
+          //         "area": "上海",
+          //         "createUserId": "7",
+          //         "createTime": 1566267385000,
+          //         "categoryListStr": null,
+          //         "baseSummaryList": null,
+          //         "tagList": [
+          //             {
+          //             "id": 13,
+          //             "name": "百年传承",
+          //             "type": 5
+          //             }
+          //         ],
+          //         "brdMean": null,
+          //         "brdQualityRatio": null,
+          //         "brdStability": null
+          //     },
+          //     {
+          //         "id": 2,
+          //         "name": "耐克",
+          //         "nameAbbr": "耐克",
+          //         "nameEn": "NIKE",
+          //         "categoryId": "19",
+          //         "introduction": "耐克耐克耐克耐克",
+          //         "cover": "http://pvt7whda9.bkt.clouddn.com/brand/20190806/bd374017900b46cb8e7d6ef9ea9cdabc.png",
+          //         "founder": "艾克",
+          //         "establishDate": 649868400000,
+          //         "area": "上海",
+          //         "createUserId": "7",
+          //         "createTime": 1566267385000,
+          //         "categoryListStr": null,
+          //         "baseSummaryList": null,
+          //         "tagList": [],
+          //         "brdMean": null,
+          //         "brdQualityRatio": null,
+          //         "brdStability": null
+          //     }
+          // ]
           var brandList = res.data.brandList
           this.pageNum = Math.ceil(res.data.brandList.length / this.pageSize) || 1
           for (let i = 0; i < this.pageNum; i++) {
@@ -557,7 +559,7 @@ export default {
   width: 950px;
   margin: 0 auto;
   padding-right: 20px;
-  padding-top: 20px;
+  // padding-top: 20px;
   padding-left: 20px;
   background: #fff;
 
