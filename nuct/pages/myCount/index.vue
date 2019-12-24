@@ -18,7 +18,7 @@
               </div>
               <div class="selfInfFlex2">
                   <p>ID：<span>{{ this.userId }}</span></p>
-                  <p style="margin-bottom: 50px">关注：<span>4</span>&nbsp;&nbsp;&nbsp;&nbsp;积分：<span>222</span></p>
+                  <p style="margin-bottom: 50px">关注：<span>4</span>&nbsp;&nbsp;&nbsp;&nbsp;积分：<span>{{ points }}</span></p>
                   <a>充值</a>
                   <p>昵称：<span>{{ this.nickname }}</span></p>
                   <p>实名：<span>{{ this.username }}</span></p>
@@ -41,6 +41,7 @@
           :total="myCount_total"
           :page-size="myCount_size"
           :current-page="myCount_currentPage"
+          :hide-on-single-page="true"
           @current-change="myCount_consoleCurr">
           </el-pagination>
       </el-tab-pane>
@@ -55,6 +56,7 @@
           :total="search_total"
           :page-size="search_size"
           :current-page="search_currentPage"
+          :hide-on-single-page="true"
           @current-change="search_consoleCurr">
           </el-pagination>
       </el-tab-pane>
@@ -110,6 +112,7 @@
           :total="total"
           :page-size="pageSize"
           :current-page="currentPage"
+          :hide-on-single-page="true"
           @current-change="consoleCurr">
           </el-pagination>
       </el-tab-pane>

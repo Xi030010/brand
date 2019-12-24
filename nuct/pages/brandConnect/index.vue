@@ -56,6 +56,7 @@
             :total="total"
             :page-size="pageSize"
             :current-page="currentPage"
+            :hide-on-single-page="true"
             @current-change="consoleCurr">
         </el-pagination>
         <div class="questionRightBar">

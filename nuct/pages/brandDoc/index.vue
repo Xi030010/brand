@@ -76,6 +76,7 @@
                 :total="total"
                 :page-size="pageSize"
                 :current-page="currentPage"
+                :hide-on-single-page="true"
                 @current-change="consoleCurr"
                 style="position: relative;transform: translateX(0);left: 0;bottom: 0;margin: 20px 0;text-align: center;">
               </el-pagination>

@@ -21,6 +21,10 @@ export default {
 		keywords: {
 			type: String,
 			default: '',
+		},
+		mallCode: {
+			type: String,
+			default: '品牌',
 		}
 	},
   data () {
@@ -80,6 +84,7 @@ export default {
 	
 	created () {
 		this.input5 = this.keywords
+		this.select = this.mallCode
 	},
 
   methods: {

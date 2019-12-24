@@ -6,7 +6,7 @@
         <login></login>
     </div>
     <img src="../../static/img/791571927556_.pic.jpg" alt="">
-    <search :keywords="input5"></search>
+    <search :keywords="input5" :type="mallCode"></search>
     <div v-if="mallCode === '品牌'" class="showBrand">
         <el-breadcrumb separator-class="el-icon-arrow-right" class="Breadcrumb">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -22,12 +22,14 @@
                 <p class="brandIntroduction"></p>
             </div> -->
         </div>
+        <div v-if="!showList.length" style="text-align: center;">没有找到“{{ input5 }}”相关的数据！</div>
         <el-pagination
         background
         layout="prev, pager, next"
         :total="pageNum"
         :page-size="pageSize"
         :current-page="currentPage"
+        :hide-on-single-page="true"
         @current-change="consoleCurr">
         </el-pagination>
     </div>
@@ -52,6 +54,7 @@
               :total="pageNum"
               :page-size="pageSize"
               :current-page="currentPage"
+              :hide-on-single-page="true"
               @current-change="consoleCurr">
             </el-pagination>
           </div>
@@ -97,6 +100,7 @@
           :total="pageNum"
           :page-size="pageSize"
           :current-page="currentPage"
+          :hide-on-single-page="true"
           @current-change="consoleCurr">
         </el-pagination>
     </div>
@@ -189,54 +193,54 @@ export default {
         }).then(res => {
           console.log(res.data)
           this.showList = []
-          // res.data.brandList = [
-          //     {
-          //         "id": 1,
-          //         "name": "歌莉娅",
-          //         "nameAbbr": "歌莉娅",
-          //         "nameEn": "GELIYA",
-          //         "categoryId": "19",
-          //         "introduction": "歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌",
-          //         "cover": "http://pvt7whda9.bkt.clouddn.com/brand/20190806/bd374017900b46cb8e7d6ef9ea9cdabc.png",
-          //         "founder": "歌德",
-          //         "establishDate": 649868400000,
-          //         "area": "上海",
-          //         "createUserId": "7",
-          //         "createTime": 1566267385000,
-          //         "categoryListStr": null,
-          //         "baseSummaryList": null,
-          //         "tagList": [
-          //             {
-          //             "id": 13,
-          //             "name": "百年传承",
-          //             "type": 5
-          //             }
-          //         ],
-          //         "brdMean": null,
-          //         "brdQualityRatio": null,
-          //         "brdStability": null
-          //     },
-          //     {
-          //         "id": 2,
-          //         "name": "耐克",
-          //         "nameAbbr": "耐克",
-          //         "nameEn": "NIKE",
-          //         "categoryId": "19",
-          //         "introduction": "耐克耐克耐克耐克",
-          //         "cover": "http://pvt7whda9.bkt.clouddn.com/brand/20190806/bd374017900b46cb8e7d6ef9ea9cdabc.png",
-          //         "founder": "艾克",
-          //         "establishDate": 649868400000,
-          //         "area": "上海",
-          //         "createUserId": "7",
-          //         "createTime": 1566267385000,
-          //         "categoryListStr": null,
-          //         "baseSummaryList": null,
-          //         "tagList": [],
-          //         "brdMean": null,
-          //         "brdQualityRatio": null,
-          //         "brdStability": null
-          //     }
-          // ]
+          res.data.brandList = [
+              {
+                  "id": 1,
+                  "name": "歌莉娅",
+                  "nameAbbr": "歌莉娅",
+                  "nameEn": "GELIYA",
+                  "categoryId": "19",
+                  "introduction": "歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌",
+                  "cover": "http://pvt7whda9.bkt.clouddn.com/brand/20190806/bd374017900b46cb8e7d6ef9ea9cdabc.png",
+                  "founder": "歌德",
+                  "establishDate": 649868400000,
+                  "area": "上海",
+                  "createUserId": "7",
+                  "createTime": 1566267385000,
+                  "categoryListStr": null,
+                  "baseSummaryList": null,
+                  "tagList": [
+                      {
+                      "id": 13,
+                      "name": "百年传承",
+                      "type": 5
+                      }
+                  ],
+                  "brdMean": null,
+                  "brdQualityRatio": null,
+                  "brdStability": null
+              },
+              {
+                  "id": 2,
+                  "name": "耐克",
+                  "nameAbbr": "耐克",
+                  "nameEn": "NIKE",
+                  "categoryId": "19",
+                  "introduction": "耐克耐克耐克耐克",
+                  "cover": "http://pvt7whda9.bkt.clouddn.com/brand/20190806/bd374017900b46cb8e7d6ef9ea9cdabc.png",
+                  "founder": "艾克",
+                  "establishDate": 649868400000,
+                  "area": "上海",
+                  "createUserId": "7",
+                  "createTime": 1566267385000,
+                  "categoryListStr": null,
+                  "baseSummaryList": null,
+                  "tagList": [],
+                  "brdMean": null,
+                  "brdQualityRatio": null,
+                  "brdStability": null
+              }
+          ]
           var brandList = res.data.brandList
           this.pageNum = Math.ceil(res.data.brandList.length / this.pageSize) || 1
           for (let i = 0; i < this.pageNum; i++) {
