@@ -362,6 +362,10 @@ export default {
     min-height: 500px;
     //margin-top: 100px;
     box-shadow: 0px 2px 10px 4px #ccc;
+
+    & > ul > li {
+			margin: 0 20px;
+		}
 }
 
 .brandNav {
@@ -397,6 +401,10 @@ export default {
     width: 300px;
     float: right;
     //background: #f5f5f5;
+
+    & > button {
+      height: 35px;
+    }
 }
 
 .questionTime {
@@ -620,6 +628,11 @@ hr {
 .right-button {
   text-align: right;
   margin-bottom: 0.5rem;
+
+  & > button {
+    width: 100px;
+    height: 35px;
+  }
 }
 
 .quill-editor {

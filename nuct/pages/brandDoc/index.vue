@@ -207,6 +207,7 @@ export default {
         // }
         // this.showList = this.totalPage[this.currentPage - 1];
         this.pageList[currentPage] = this.showList
+        document.body.scrollTop = document.documentElement.scrollTop = 0
       });
     },
     tran (e, cateId) {

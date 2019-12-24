@@ -266,6 +266,7 @@ export default {
 				this.showList = res.data.page.list;
 				this.pageSize = res.data.page.pageSize
 				this.pageNum = res.data.page.totalPage
+				document.body.scrollTop = document.documentElement.scrollTop = 0
 				// for (let i = 0; i < this.pageNum; i++) {
 				// 	this.totalPage[i] = list.slice(this.pageSize * i, this.pageSize * (i + 1))
 				// }

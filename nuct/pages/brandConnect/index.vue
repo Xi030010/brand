@@ -203,7 +203,8 @@ export default {
         this.pageSize = res.data.page.pageSize;
         this.showList = res.data.page.list;
         this.pageNum = Math.ceil(this.total / this.pageSize) || 1;
-        this.pageList[currentPage] = this.showList
+				this.pageList[currentPage] = this.showList
+				document.body.scrollTop = document.documentElement.scrollTop = 0
       })
     },
 
@@ -226,7 +227,7 @@ export default {
 }
 
 </script>
-<style lang='less'>
+<style lang='less' scoped>
 @import '~assets/less/main.less';
 .container {
 	position: relative;
@@ -237,7 +238,11 @@ export default {
     //background: #f5f5f5;
     min-height: 500px;
     //margin-top: 100px;
-    box-shadow: 0px 2px 10px 4px #ccc;
+		box-shadow: 0px 2px 10px 4px #ccc;
+		
+		& > ul > li {
+			margin: 0 20px;
+		}
 }
 
 .brandNav {
@@ -273,7 +278,11 @@ export default {
     min-height: 300px;
     width: 300px;
     float: right;
-    //background: #f5f5f5;
+		//background: #f5f5f5;
+		
+		& > button {
+      height: 35px;
+    }
 }
 
 .questionTime {
