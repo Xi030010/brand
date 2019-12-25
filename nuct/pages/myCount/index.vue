@@ -187,50 +187,73 @@ export default {
   },
 
   mounted() {
-    axios({
-        url: 'portal/user/operation/operations?type=2',
-        method: 'get',
-        params: {
-            'token': Cookies.get('token')
-        }
-    }).then(res => {
-        //console.log(res.data);
-        this.myCount_list = res.data.page.list;
-        this.myCount_total = res.data.page.totalCount;
-        this.myCount_size = res.data.page.pageSize;
-        this.myCount_pageNum = Math.ceil(this.myCount_total / this.myCount_size) || 1;
-        for (let i = 0; i < this.myCount_pageNum; i++) {
-            this.myCount_totalPage[i] = this.myCount_list.slice(this.myCount_size * i, this.myCount_size * (i + 1))
-        }
-        this.myCount_showList = this.myCount_totalPage[this.myCount_currentPage-1];
-    }).catch(error => {
-
-    });
+		// 我的计算
+		this.setCountList(1)
+		
 		//我的积分
     this.setShowList(1)
 
-    axios({
-        url: 'portal/user/operation/operations?type=1',
-        method: 'get',
-        params: {
-            'token': Cookies.get('token')
-        }
-    }).then(res => {
-        // console.log(res.data);
-        this.search_list = res.data.page.list;
-        this.search_total = res.data.page.totalCount;
-        this.search_size = res.data.page.pageSize;
-        this.search_pageNum = Math.ceil(this.search_total / this.search_size) || 1;
-        for (let i = 0; i < this.search_pageNum; i++) {
-            this.search_totalPage[i] = this.search_list.slice(this.search_size * i, this.search_size * (i + 1))
-        }
-        this.search_showList = this.search_totalPage[this.search_currentPage-1];
-    }).catch(error => {
-
-    });
+		// 我的查询
+    this.setSearchList(1)
 	},
 	
 	methods: {
+		setCountList (currentPage) {
+			axios({
+					url: 'portal/user/operation/operations?type=2',
+					method: 'get',
+					params: {
+							'token': Cookies.get('token'),
+							page: currentPage
+					}
+			}).then(res => {
+					//console.log(res.data);
+					this.myCount_showList = res.data.page.list
+					this.myCount_total = res.data.page.totalCount
+					this.myCount_size = res.data.page.pageSize
+					this.myCount_pageNum = Math.ceil(this.myCount_total / this.myCount_size) || 1
+					this.myCount_totalPage[currentPage] = this.myCount_showList
+
+					// this.myCount_list = res.data.page.list;
+					// this.myCount_total = res.data.page.totalCount;
+					// this.myCount_size = res.data.page.pageSize;
+					// this.myCount_pageNum = Math.ceil(this.myCount_total / this.myCount_size) || 1;
+					// for (let i = 0; i < this.myCount_pageNum; i++) {
+					// 		this.myCount_totalPage[i] = this.myCount_list.slice(this.myCount_size * i, this.myCount_size * (i + 1))
+					// }
+					// this.myCount_showList = this.myCount_totalPage[this.myCount_currentPage-1];
+			}).catch(error => {
+
+			});
+		},
+		setSearchList (currentPage) {
+			axios({
+					url: 'portal/user/operation/operations?type=1',
+					method: 'get',
+					params: {
+							'token': Cookies.get('token'),
+							page: currentPage
+					}
+			}).then(res => {
+					// console.log(res.data);
+					this.search_showList = res.data.page.list
+					this.search_total = res.data.page.totalCount
+					this.search_size = res.data.page.pageSize
+					this.search_pageNum = Math.ceil(this.search_total / this.search_size) || 1
+					this.search_totalPage[currentPage] = this.search_showList
+
+					// this.search_list = res.data.page.list;
+					// this.search_total = res.data.page.totalCount;
+					// this.search_size = res.data.page.pageSize;
+					// this.search_pageNum = Math.ceil(this.search_total / this.search_size) || 1;
+					// for (let i = 0; i < this.search_pageNum; i++) {
+					//     this.search_totalPage[i] = this.search_list.slice(this.search_size * i, this.search_size * (i + 1))
+					// }
+					// this.search_showList = this.search_totalPage[this.search_currentPage-1];
+			}).catch(error => {
+
+			});
+		},
 		setShowList (currentPage) {
 			axios({
         url: 'portal/user/point/points',
@@ -298,9 +321,16 @@ export default {
 			}
 		},
     myCount_consoleCurr (val) {
-        //console.log(`${val}`);
-        this.myCount_currentPage = val;
-        this.myCount_showList = this.myCount_totalPage[this.myCount_currentPage-1];
+				//console.log(`${val}`);
+				this.currentPage = currentPage;
+				if (!this.myCount_totalPage[currentPage]) {
+					this.setCountList(currentPage)
+				}
+				else {
+					this.myCount_showList = this.myCount_totalPage[currentPage]
+				}
+        // this.myCount_currentPage = val;
+        // this.myCount_showList = this.myCount_totalPage[this.myCount_currentPage-1];
         //console.log(this.currentPage);
     },
 
@@ -313,8 +343,15 @@ export default {
 
 		search_consoleCurr (val) {
 			//console.log(`${val}`);
-			this.search_currentPage = val;
-			this.search_showList = this.search_totalPage[this.search_currentPage-1];
+			this.currentPage = currentPage;
+			if (!this.search_totalPage[currentPage]) {
+				this.setSearchList(currentPage)
+			}
+			else {
+				this.search_list = this.search_totalPage[currentPage]
+			}
+			// this.search_currentPage = val;
+			// this.search_showList = this.search_totalPage[this.search_currentPage-1];
 			//console.log(this.currentPage);
     }
   },

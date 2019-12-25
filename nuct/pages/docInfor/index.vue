@@ -330,7 +330,6 @@ export default {
 			}
 		},
 		downLoad () {
-			this.points = 1
 			if (this.points > this.downLoadFile.point) {
 				this.$confirm('当前积分' + this.points + ', 需扣除积分' + this.downLoadFile.point + ', 是否确定下载?', '提示', {
 					confirmButtonText: '确定',
@@ -339,6 +338,7 @@ export default {
 				}).then(() => {
 					window.open(axios.defaults.baseURL + 'portal/file/downloadFile/' + this.mallCode + '/'
 											+ this.fileName + '?token=' + Cookies.get('token'), '_blank')
+					this.points -= this.downLoadFile.point
 				}).catch(() => {
 					this.$message({
 						type: 'info',

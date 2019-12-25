@@ -256,12 +256,13 @@ export default {
               data: {
                 'title': this.form.name,
                 'description': this.form.describe,
-                'categoryId': 3,
+                'categoryId': this.form.type,
                 'resourceId': this.sourceID,
                 'recommend': true,
-                'createUserId': 7,
+                'createUserId': Cookies.get('userId'),
 								'tagList': this.form.label,
 								'point': this.needPoint ? this.form.point : 0,
+								'isPoints': this.needPoint ? 1 : 0,
               }
             }).then(res => {
 							console.log(res.data);

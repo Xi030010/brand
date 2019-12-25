@@ -216,7 +216,7 @@ export default {
 							Cookies.set('answerNum', res.data.user.answerNum, {expires: this.toNextDay()})
 							Cookies.set('avatar', res.data.user.avatar, {expires: this.toNextDay()})
 							Cookies.set('phone', res.data.user.phone, {expires: this.toNextDay()})
-							Cookies.set('email', res.data.user.email, {expires: this.toNextDay()})
+              Cookies.set('email', res.data.user.email, {expires: this.toNextDay()})
 						})
 
 						setTimeout(() => {
