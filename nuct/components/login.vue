@@ -185,19 +185,6 @@ export default {
       },
 
       loginFormIn () {
-          /*console.log(Cookies.get('token'));
-          if (this.form.name == '123' && this.form.psw == '123') {
-          Cookies.set('name', this.form.name, {expires: this.toNextDay()});
-          Cookies.set('token', '4a10b399f668c23962f54118d0b0a8a1', {expires: this.toNextDay()});
-          this.$router.push('');
-
-          setTimeout(() => {
-              window.location.href = '';
-          }, 100) 
-        } else {
-          this.$message.error('账号密码不正确');
-        }
-        console.log(Cookies.get('token'));*/
         console.log(this.form.name);
         console.log(this.form.psw);
         console.log(typeof this.form.name);
@@ -206,56 +193,45 @@ export default {
                 "username": this.form.name,
                 "password": this.form.psw,
         }).then(res => {
-					console.log(res.data);
-          Cookies.set('loginMessageNum', 0, {expires: this.toNextDay()})
-          Cookies.set('userId', res.data.userId, {expires: this.toNextDay()})
-          Cookies.set('token', res.data.token, {expires: this.toNextDay()});
-          
-          // Cookies.set('userId', 7, {expires: this.toNextDay()})
-          // localStorage.setItem("token", JSON.stringify(res.data.token))
-          // console.log(JSON.parse(localStorage.getItem("token")));
-          // this.$store.dispatch("setToken", res.data.token)
-					//console.log(Cookies.get('token'));
-          // axios({
-          //     url: 'portal/user/info/7',
-          //     method: 'get',
-          //     params: {
-          //         'token': Cookies.get('token')
-          //     }
-          // }).then(res => {
-          //   console.log(res.data)
-          //   Cookies.set('username', res.data.user.nickname)
-          //   Cookies.set('points', res.data.user.points)
-          // }).catch(error => {
+          console.log(res.data);
+          if (res.data.code == 200) {
+						Cookies.set('loginMessageNum', 0, {expires: this.toNextDay()})
+						Cookies.set('userId', res.data.userId, {expires: this.toNextDay()})
+						Cookies.set('token', res.data.token, {expires: this.toNextDay()});
 
-          // });
+						axios({
+							method: 'get',
+							url: 'portal/user/optNum/' + Cookies.get('userId'),
+							params: {
+								token: Cookies.get('token')
+							}
+						}).then(res => {
+							console.log(res.data)
+							Cookies.set('nickname', res.data.user.nickname, {expires: this.toNextDay()})
+							Cookies.set('username', res.data.user.username, {expires: this.toNextDay()})
+							Cookies.set('points', res.data.user.points, {expires: this.toNextDay()})
+							Cookies.set('uploadNum', res.data.user.uploadNum, {expires: this.toNextDay()})
+							Cookies.set('downloadNum', res.data.user.downloadNum, {expires: this.toNextDay()})
+							Cookies.set('askNum', res.data.user.askNum, {expires: this.toNextDay()})
+							Cookies.set('answerNum', res.data.user.answerNum, {expires: this.toNextDay()})
+							Cookies.set('avatar', res.data.user.avatar, {expires: this.toNextDay()})
+							Cookies.set('phone', res.data.user.phone, {expires: this.toNextDay()})
+							Cookies.set('email', res.data.user.email, {expires: this.toNextDay()})
+						})
 
-          axios({
-            method: 'get',
-            url: 'portal/user/optNum/' + Cookies.get('userId'),
-            params: {
-              token: Cookies.get('token')
-            }
-          }).then(res => {
-            console.log(res.data)
-            Cookies.set('nickname', res.data.user.nickname, {expires: this.toNextDay()})
-            Cookies.set('username', res.data.user.username, {expires: this.toNextDay()})
-            Cookies.set('points', res.data.user.points, {expires: this.toNextDay()})
-            Cookies.set('uploadNum', res.data.user.uploadNum, {expires: this.toNextDay()})
-            Cookies.set('downloadNum', res.data.user.downloadNum, {expires: this.toNextDay()})
-            Cookies.set('askNum', res.data.user.askNum, {expires: this.toNextDay()})
-            Cookies.set('answerNum', res.data.user.answerNum, {expires: this.toNextDay()})
-            Cookies.set('avatar', res.data.user.avatar, {expires: this.toNextDay()})
-            Cookies.set('phone', res.data.user.phone, {expires: this.toNextDay()})
-			      Cookies.set('email', res.data.user.email, {expires: this.toNextDay()})
-          })
-
-          setTimeout(() => {
-            window.location.href = '';
-          }, 100)
-          }).catch(error => {
-              console.log(error);
-          })
+						setTimeout(() => {
+							window.location.href = '';
+						}, 100)
+					}
+					else {
+						this.$message({
+							message: '账号或密码错误',
+							type: 'warning'
+						})
+					}
+				}).catch(error => {
+						console.log(error);
+				})
       },
 
       toNextDay() {

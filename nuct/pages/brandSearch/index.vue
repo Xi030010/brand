@@ -36,7 +36,7 @@
         </div>
         <hr>
         <div class="brand">
-          <div v-for = "(item, i) in showList" :key="i" @click="turnDetails(1, item.name)" style="cursor: pointer;">
+          <div v-for = "(item, i) in showList" :key="i" @click="turnDetails(item.id, item.name)" style="cursor: pointer;">
             <p class="brandTitle">{{ item.name }}</p>
             <p class="brandIntroduction">{{ item.introduction }}</p>
           </div>
@@ -169,13 +169,13 @@ export default {
 
       });
     },
-    turnDetails (url, name) {
+    turnDetails (id, name) {
       this.$router.push({
         path: '../brandInformation',
         // name: 'mallList',
         query: {
-            mallCode: url,
-            name: name
+            mallCode: id,
+            name: name,
         }
       })
     },

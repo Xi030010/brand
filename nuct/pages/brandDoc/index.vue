@@ -20,7 +20,7 @@
             <div>
                 <span style="display: inline-block; width: 9px; height: 15px; background: #6b2049; margin-right: 5px;margin-top: -6px;vertical-align: middle;"></span>
                 分类：
-                <span @click="tran($event, '')">全部</span>
+                <!-- <span @click="tran($event, '')">全部</span> -->
                 <span @click="tran($event, item.id)" v-for="(item, i) in factor" :key="i">
                   {{ item.name }}
                 </span>
@@ -130,7 +130,7 @@ export default {
       downloadNum: Cookies.get('downloadNum'),
       input: '',
       factor: [],
-      brandCondition: [],
+      brandCondition: ['全部'],
       show: 'none',
       input3: '',
       nickname: Cookies.get('nickname'),
@@ -164,6 +164,7 @@ export default {
     }).then(res => {
       console.log(res.data)
       this.factor = res.data.categoryList
+      this.factor.unshift({name: '全部'})
     }).catch(error => {
       console.log(error)
     });
@@ -195,7 +196,7 @@ export default {
           token: Cookies.get('token'),
           limit: 10,
           page: currentPage,
-          categoryId: cateId,
+          categoryId: cateId ? cateId : '',
         }
       }).then(res => {
         console.log(res.data);
@@ -213,22 +214,18 @@ export default {
     },
     tran (e, cateId) {
       console.log(cateId)
-      let s = new Set();
-      if(e.target.innerText == '全部') {
-        this.brandCondition = []
-        for(let i = 0; i < this.factor.length; i++){
-          this.brandCondition.push(this.factor[i].name);
-        }
-      }else {
-        this.brandCondition.push(e.target.innerText);
+      // let s = new Set();
+      this.brandCondition = []
+      if(e.target.innerText !== '全部') {
+        this.brandCondition.push(e.target.innerText)
       }
       
-      this.brandCondition.forEach(element => s.add(element));
-      s = [...s];
-      this.brandCondition.splice(0, this.brandCondition.length);
-      for(let j = 0; j < s.length; j++){
-        this.brandCondition.push(s[j]);
-      }
+      // this.brandCondition.forEach(element => s.add(element));
+      // s = [...s];
+      // this.brandCondition.splice(0, this.brandCondition.length);
+      // for(let j = 0; j < s.length; j++){
+      //   this.brandCondition.push(s[j]);
+      // }
 
       this.setShowList(1, cateId)
     },
