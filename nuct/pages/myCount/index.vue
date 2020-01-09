@@ -203,8 +203,8 @@ export default {
 					url: 'portal/user/operation/operations?type=2',
 					method: 'get',
 					params: {
-							'token': Cookies.get('token'),
-							page: currentPage
+            token: Cookies.get('token'),
+            page: currentPage
 					}
 			}).then(res => {
 					//console.log(res.data);
@@ -296,7 +296,7 @@ export default {
 						this.showList.push(temp)
 					}
 					this.total = res.data.page.totalCount
-					this.pageSize = res.data.page.pageSize
+          this.pageSize = res.data.page.pageSize
 					this.pageNum = Math.ceil(this.total / this.pageSize) || 1
 					this.pageList[currentPage] = this.showList
 			}).catch(error => {
@@ -315,6 +315,7 @@ export default {
       //console.log(this.currentPage);
     },
 		handleClick (tab, e) {
+      this.currentPage = 1
 			if (tab.label === '我的资源') {
 				axios()
 				this.$router.push({path: './docInfor', query: {mallCode: 1, index: 2}})

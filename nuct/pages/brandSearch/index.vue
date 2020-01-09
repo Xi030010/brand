@@ -84,6 +84,7 @@ export default {
         totalPage: [],
         showList: [],
         pageList: [],
+        cateId: 0,
     };
   },
   components: {
@@ -166,7 +167,7 @@ export default {
         this.pageNum = Math.ceil(this.total / this.pageSize) || 1;
         this.pageList[currentPage] = this.showList
       }).catch(error => {
-
+        console.log(error)
       });
     },
     turnDetails (id, name) {
@@ -183,6 +184,7 @@ export default {
       location.href = "../onlySearch";
     },
     condition (e, id) {
+      this.cateId = id
 			this.setShowList(id, 1)
 			this.$refs.a.forEach(elem => {
 				if (elem.classList.contains('active')) {
@@ -195,7 +197,7 @@ export default {
       //console.log(`${val}`);
       this.currentPage = currentPage;
       if (!this.pageList[currentPage]) {
-        this.setShowList(currentPage)
+        this.setShowList(this.cateId, currentPage)
       }
       else {
         this.showList = this.pageList[currentPage]

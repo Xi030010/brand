@@ -241,14 +241,40 @@ export default {
           //         "brdMean": null,
           //         "brdQualityRatio": null,
           //         "brdStability": null
-          //     }
+          //     },
+          //     {
+          //         "id": 1,
+          //         "name": "歌莉娅",
+          //         "nameAbbr": "歌莉娅",
+          //         "nameEn": "GELIYA",
+          //         "categoryId": "19",
+          //         "introduction": "歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌莉娅歌",
+          //         "cover": "http://pvt7whda9.bkt.clouddn.com/brand/20190806/bd374017900b46cb8e7d6ef9ea9cdabc.png",
+          //         "founder": "歌德",
+          //         "establishDate": 649868400000,
+          //         "area": "上海",
+          //         "createUserId": "7",
+          //         "createTime": 1566267385000,
+          //         "categoryListStr": null,
+          //         "baseSummaryList": null,
+          //         "tagList": [
+          //             {
+          //             "id": 13,
+          //             "name": "百年传承",
+          //             "type": 5
+          //             }
+          //         ],
+          //         "brdMean": null,
+          //         "brdQualityRatio": null,
+          //         "brdStability": null
+          //     },
           // ]
           var brandList = res.data.brandList
           this.pageNum = Math.ceil(res.data.brandList.length / this.pageSize) || 1
           for (let i = 0; i < this.pageNum; i++) {
             this.totalPage[i] = brandList.slice(this.pageSize * i, this.pageSize * (i + 1))
           }
-          this.showList = this.totalPage[this.currentPage - 1];
+          this.showList = this.totalPage[this.currentPage - 1]
         }).catch(err => {
           console.log(err)
         })
@@ -451,7 +477,7 @@ export default {
     position: relative;
     //background: #f5f5f5;
     //margin-top: 50px;
-    height: 1000px;
+    min-height: 700px;
     padding-top: 30px;
 }
 

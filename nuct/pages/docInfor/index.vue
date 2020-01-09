@@ -52,7 +52,7 @@
 															</span>
 														</p>
 														<span style="margin-left: -85px; margin-right: 150px;">所需积分：{{ downLoadFile.point }}</span>
-														<el-button @click="downLoad" class="moreDownBtn">立即下载</el-button>
+														<el-button @click="downLoad(downLoadFile)" class="moreDownBtn">立即下载</el-button>
 													</div>
 												</div>
 											</div>
@@ -74,7 +74,7 @@
 															<a class="questionTitle">{{ item.title }}</a>
 															<p class="questionInf">{{ item.description || '' }}</p>
 															<p class="questionTime">资源大小：<span>{{ item.ossResource ? item.ossResource.size : 900 }}KB</span>上传时间：<span>{{ item.createTime ? $convertTime(item.createTime) : '' }}</span></p>
-															<el-button class="moreDownBtn" @click="downLoad">立即下载</el-button>
+															<el-button class="moreDownBtn" @click="downLoad(item)">立即下载</el-button>
 														</div>
 													</div>
 													<hr style="border: 1px dotted #ccc;margin-top: 0;">
@@ -326,19 +326,36 @@ export default {
 				this.getUploadList(1)
 			}
 			else if (tab.name === 'second') {
-				this.getDownList(2)
+				this.getDownList(1)
 			}
 		},
-		downLoad () {
-			if (this.points > this.downLoadFile.point) {
-				this.$confirm('当前积分' + this.points + ', 需扣除积分' + this.downLoadFile.point + ', 是否确定下载?', '提示', {
+		downLoad (downLoadFile) {
+			if (this.points > downLoadFile.point) {
+				this.$confirm('当前积分' + this.points + ', 需扣除积分' + downLoadFile.point + ', 是否确定下载?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
 					window.open(axios.defaults.baseURL + 'portal/file/downloadFile/' + this.mallCode + '/'
-											+ this.fileName + '?token=' + Cookies.get('token'), '_blank')
-					this.points -= this.downLoadFile.point
+											+ this.fileName + '?token=' + Cookies.get('token'), '_self')
+					// this.points -= downLoadFile.point
+					// Cookies.set('points', this.points, {expires: this.toNextDay()})
+					// location.reload()
+					axios({
+						method: 'get',
+						url: 'portal/user/optNum/' + Cookies.get('userId'),
+						params: {
+							token: Cookies.get('token')
+						}
+					}).then(res => {
+						console.log(res.data)
+						Cookies.set('points', res.data.user.points, {expires: this.toNextDay()})
+						Cookies.set('uploadNum', res.data.user.uploadNum, {expires: this.toNextDay()})
+						Cookies.set('downloadNum', res.data.user.downloadNum, {expires: this.toNextDay()})
+						this.uploadNum = Cookies.get('uploadNum')
+						this.downloadNum = Cookies.get('downloadNum')
+						this.points = Cookies.get('points')
+					})
 				}).catch(() => {
 					this.$message({
 						type: 'info',
@@ -352,6 +369,9 @@ export default {
 					type: 'warning'
         })
 			}
+		},
+		toNextDay() {
+			return new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(0, 0, 0, 0))
 		},
     consoleCurr (currentPage) {
 			//console.log(`${val}`)

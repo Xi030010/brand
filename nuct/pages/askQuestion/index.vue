@@ -35,11 +35,13 @@
                         >{{ tag.name }}</el-tag>  
                     <el-button type="text" @click="dialogVisible = true">点击新增标签（最多5个）</el-button>
                 </el-form-item>
-                <div>
-                    <p>我的积分：<span style="color: #ef8b3b">{{ userPoint }}</span></p>
-                    悬赏积分：
-                    <el-input-number v-model="num" size="mini" controls-position="right" :min="0" :max="max"></el-input-number>
-                </div>
+                <el-form-item>
+                    <!-- <p>我的积分：<span style="color: #ef8b3b">{{ userPoint }}</span></p> -->
+                    <!-- 悬赏积分： -->
+                    <!-- <el-input-number v-model="num" size="mini" controls-position="right" :min="0" :max="max"></el-input-number> -->
+										<el-checkbox v-model="needPoint" style="margin-right: 20px;">悬赏积分</el-checkbox>
+                    <el-input-number :disabled="!needPoint" v-model="num" size="mini" controls-position="right" :min="0" :max="max"></el-input-number>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="formSubmit">立即提交</el-button>
                 </el-form-item>
@@ -97,36 +99,37 @@ export default {
       middleware: 'auth',
   data () {
     return {
-        max: parseInt(Cookies.get('points')),
-        num: 0,
-        labelPosition: 'left',
-        dialogVisible: false,
-        form: {
-            name: '',
-            describe: '',
-            content: ``,
-            label: [],
-        },
-        hotTag: [],
-        userPoint: Cookies.get('points'),
-        labelValue: '',
-        editorOption: {
-          // 富文本中的一些属性
-          modules: {
-            toolbar: [
-                [{'size': ['small', false, 'large']}],
-                [{ 'font': [] }],     //字体
-                [{ 'color': [] }, { 'background': [] }],
-                ['bold', 'italic'],
-                [{'list': 'ordered'}, {'list': 'bullet'}],
-                ['link', 'image'],
-                ['blockquote'],
-                [{ 'align': [] }],    //对齐方式
+			needPoint: false,
+			max: parseInt(Cookies.get('points')),
+			num: 0,
+			labelPosition: 'left',
+			dialogVisible: false,
+			form: {
+					name: '',
+					describe: '',
+					content: ``,
+					label: [],
+			},
+			hotTag: [],
+			userPoint: Cookies.get('points'),
+			labelValue: '',
+			editorOption: {
+				// 富文本中的一些属性
+				modules: {
+					toolbar: [
+							[{'size': ['small', false, 'large']}],
+							[{ 'font': [] }],     //字体
+							[{ 'color': [] }, { 'background': [] }],
+							['bold', 'italic'],
+							[{'list': 'ordered'}, {'list': 'bullet'}],
+							['link', 'image'],
+							['blockquote'],
+							[{ 'align': [] }],    //对齐方式
 
-            ]
-          }
-        }
-    };
+					]
+				}
+			}
+    }
   },
 
   mounted() {
@@ -227,9 +230,9 @@ export default {
                   'title': this.form.name,
                   'description': this.form.describe,
                   'content': this.form.content,
-                  'reward': false,
+									'reward': this.needPoint ? 1 : 0,
                   'point': this.num,
-                   'status': true,
+                  'status': true,
                   'tagList': this.form.label,
                   'brdCommentList': null
               }

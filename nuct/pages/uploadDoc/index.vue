@@ -14,7 +14,7 @@
             <el-breadcrumb-item>上传资源</el-breadcrumb-item>
         </el-breadcrumb>
         <div class="uploadForm">
-            <el-form ref="form" :model="form" label-width="80px" style="width: 500px;margin: 0 auto;">
+            <el-form ref="form" :model="form" label-width="80px" style="width: 640px;margin: 0 auto;">
                 <el-upload
                     class="upload-demo"
                     
@@ -33,7 +33,8 @@
                     
                     :auto-upload="false">
                     <el-button size="small" type="primary">点击上传</el-button>
-                    <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+                    <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+                    <div slot="tip" class="el-upload__tip">上传格式不做限制, 大小不超过10Mb</div>
                 </el-upload>
                 <el-form-item label="资源名称">
                     <el-input v-model="form.name" name="fileName"></el-input>
@@ -49,8 +50,9 @@
                     </el-select>
                 </el-form-item>
                 <el-form-item label="资源积分">
-										<el-checkbox v-model="needPoint" style="margin-right: 20px;">同意&nbsp;&nbsp;&nbsp;品牌研究资源共享规则</el-checkbox>
-                    <el-input-number v-if="needPoint" v-model="form.point" :min="0"></el-input-number>
+										<el-checkbox v-model="needPoint" style="margin-right: 20px;">下载积分</el-checkbox>
+                    <el-input-number :disabled="!needPoint" v-model="form.point" :min="0" size="mini"></el-input-number>
+                    <span style="color: yellowgreen;margin-left: 15px;">选择该项用户下载资源时您可以赚取相应积分</span>
 										<!-- <el-select v-model="form.point" placeholder="请选择">
 											<el-option
 												v-for="item in pointOptions"
@@ -240,6 +242,16 @@ export default {
       beforeUpload(file) {
         //this.fileList.push(file)
         //console.log(this.fileList);
+        // 大小超过10M，提示
+        if (file.size > 10 * 1024 * 1024) {
+          this.$message({
+            message: '文件大小不能超过10MB',
+            type: 'warning'
+          })
+
+          return
+        }
+
         var params = new FormData();
         params.append('file', file);
         params.append('token',Cookies.get('token'));
@@ -258,9 +270,10 @@ export default {
                 'description': this.form.describe,
                 'categoryId': this.form.type,
                 'resourceId': this.sourceID,
-                'recommend': true,
-                'createUserId': Cookies.get('userId'),
-								'tagList': this.form.label,
+                // 'recommend': true,
+                // 'createUserId': Cookies.get('userId'),
+                'tagList': this.form.label,
+                'isPoints': this.needPoint ? 1 : 0,
 								'point': this.needPoint ? this.form.point : 0,
 								'isPoints': this.needPoint ? 1 : 0,
               }
