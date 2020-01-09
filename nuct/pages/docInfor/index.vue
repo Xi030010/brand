@@ -107,7 +107,7 @@
 																	</div>
 																</div>
 																<div class="moreDownBtn">
-																	<p class="moreDownBtnUp">已通过</p>
+																	<p class="moreDownBtnUp">{{ auditState === 0 ? '待审核' : auditState === 1 ? '审核通过' : '审核未通过' }}</p>
 																	<el-link :underline="false">编辑</el-link>
 																</div>
 														</div>
@@ -221,6 +221,7 @@ export default {
       currentPage: 1,
 			showList: [],
 			downLoadFile: {},
+			auditState: 0,
     };
   },
 
@@ -241,6 +242,7 @@ export default {
 			console.log(res.data.brdInformation)
 			this.downLoadFile = res.data.brdInformation
 			this.title = res.data.brdInformation.title
+			this.auditState = res.data.brdInformation.auditState
 		})
 
 		if (this.activeName1 == 'first') this.getRecommendList(1)
