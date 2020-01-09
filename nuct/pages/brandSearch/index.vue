@@ -84,7 +84,7 @@ export default {
         totalPage: [],
         showList: [],
         pageList: [],
-        cateId: 0,
+        cateId: '',
     };
   },
   components: {
@@ -153,7 +153,7 @@ export default {
         method: 'get',
         params: {
           token: Cookies.get('token'),
-          limit: 10,
+          limit: 12,
           page: currentPage,
           categoryId: cateId,
         }
@@ -184,6 +184,7 @@ export default {
       location.href = "../onlySearch";
     },
     condition (e, id) {
+      this.currentPage = 1
       this.cateId = id
 			this.setShowList(id, 1)
 			this.$refs.a.forEach(elem => {
@@ -202,6 +203,7 @@ export default {
       else {
         this.showList = this.pageList[currentPage]
       }
+      document.body.scrollTop=document.documentElement.scrollTop=0
       //console.log(this.currentPage);
     }
   }
@@ -246,10 +248,12 @@ export default {
 }
 
 .el-pagination {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 50px;
+    // position: absolute;
+    // left: 50%;
+    // transform: translateX(-50%);
+    // bottom: 50px;
+    text-align: center;
+    margin: 3rem 0;
 }
 
 .brandTitle {
