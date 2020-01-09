@@ -332,7 +332,8 @@ export default {
 			}
 		},
 		downLoad (downLoadFile) {
-			if (this.points > downLoadFile.point) {
+			console.log(downLoadFile.point)
+			if (this.points >= downLoadFile.point) {
 				this.$confirm('当前积分' + this.points + ', 需扣除积分' + downLoadFile.point + ', 是否确定下载?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',

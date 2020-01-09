@@ -506,4 +506,8 @@ export default {
 .point-tabs {
 	margin-bottom: 30px;
 }
+
+.el-tabs--left, .el-tabs--right {
+  overflow: auto;
+}
 </style>
