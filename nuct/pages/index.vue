@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-    <div class="container" v-show="isImgOk">
+    <div class="container" v-if="isImgOk">
         <login></login>
         <swiper></swiper>
         <navbar></navbar>
