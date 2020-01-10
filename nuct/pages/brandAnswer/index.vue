@@ -261,7 +261,7 @@ export default {
     // 富文本编辑器 内容改变事件
     onEditorChange ({editor, html, text}) {
       // console.log('editor change!', editor, html, text)
-      this.content = text
+      this.content = html
     },
     turnUrl(url) {
       location.href = url;

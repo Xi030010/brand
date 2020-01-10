@@ -134,7 +134,7 @@
 																	</el-button>
 																	<p class="questionTime">上传时间：<span>{{ item.createTime ? $convertTime(item.createTime) : '' }}</span>所需积分：<span>5</span></p>
 															</div>
-															<el-link :underline="false" class="moreDownBtnUp">立即评价</el-link>
+															<el-link :underline="false" class="moreDownBtnUp" style="margin-left: 20px;">立即评价</el-link>
 														</div>
 														<hr style="border: 1px dotted #ccc;">
 													</div>
@@ -657,7 +657,7 @@ hr {
 }
 
 .moreDownBtnUp {
-	margin: 0 0 10px 20px;
+	margin: 0 0 10px 0;
 	color: #6b2048;
 }
 </style>
