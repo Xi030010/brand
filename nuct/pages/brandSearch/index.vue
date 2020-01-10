@@ -55,7 +55,7 @@
         @current-change="consoleCurr">
         </el-pagination>
     </div>
-    <footerBar></footerBar>
+    <footerBar style="margin-top: 30px;"></footerBar>
 </div>
 </template>
 

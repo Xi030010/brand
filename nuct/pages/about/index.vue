@@ -1,6 +1,6 @@
 <!-- 关于我们 -->
 <template>
-    <div class="container">
+    <div class="container" v-show="isImgOk">
         <login></login>
         <swiper></swiper>
         <navbar></navbar>
@@ -30,19 +30,32 @@ import navbar from '~/components/nav';
 import footerBar from '~/components/footer';
 import logo from '~/components/logo';
 export default {
-      middleware: 'auth',
-    components: {
-        login,
-        swiper,
-        navbar,
-        footerBar,
-        logo,
-    },
-    methods: {
-        jumpUrl (url) {
-            location.href = url;
-        }
-    }
+	middleware: 'auth',
+	components: {
+		login,
+		swiper,
+		navbar,
+		footerBar,
+		logo,
+	},
+	data () {
+		return {
+			isImgOk: false
+		}
+	},
+	mounted () {
+		//图片加载完再显示页面
+		var img = new Image()
+		img.src = '/_nuxt/static/img/781571927539_.pic.jpg'
+		img.onload = () => {
+			this.isImgOk = true
+		}
+	},
+	methods: {
+		jumpUrl (url) {
+			location.href = url;
+		}
+	}
 }
 
 </script>

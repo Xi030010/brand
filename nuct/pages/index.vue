@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-    <div class="container">
+    <div class="container" v-show="isImgOk">
         <login></login>
         <swiper></swiper>
         <navbar></navbar>
@@ -87,9 +87,24 @@ export default {
         swiper,
         navbar,
         footerBar,
-        logo,
+				logo,
+		},
+		data () {
+			return {
+				isImgOk: false,
+			}
+		},
+		beforeMount () {
+			
 		},
 		mounted () {
+			//图片加载完再显示页面
+			var img = new Image()
+			img.src = '/_nuxt/static/img/781571927539_.pic.jpg'
+			img.onload = () => {
+				this.isImgOk = true
+			}
+
 			if(Cookies.get('token') && !parseInt(Cookies.get('loginMessageNum'))) {
 				this.$message({
 					message: '登陆成功',
@@ -116,7 +131,7 @@ export default {
 @EnglishTitle: 14px;
 @ChineseTitle: 18px;
 .container {
-    background: url("../static/img/781571927539_.pic.jpg") no-repeat bottom;
+		background: url("../static/img/781571927539_.pic.jpg") no-repeat bottom;
 }
 
 .brandName {
@@ -161,7 +176,7 @@ export default {
 
 .friend {
     position: relative;
-    top: 150px;
+		top: 150px;
 }
 
 .friend h1 {

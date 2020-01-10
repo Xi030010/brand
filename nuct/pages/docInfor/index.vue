@@ -110,8 +110,8 @@
 																	<p class="moreDownBtnUp">{{ auditState === 0 ? '待审核' : auditState === 1 ? '审核通过' : '审核未通过' }}</p>
 																	<el-link :underline="false">编辑</el-link>
 																</div>
+																<hr style="border: 1px dotted #ccc;">
 														</div>
-														<hr style="border: 1px dotted #ccc;">
 												</el-tab-pane>
 												<el-tab-pane label="下载明细" name="second">
 													<div v-for="(item, i) in showList" :key="i">
@@ -339,32 +339,50 @@ export default {
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					window.open(axios.defaults.baseURL + 'portal/file/downloadFile/' + this.mallCode + '/'
-											+ this.fileName + '?token=' + Cookies.get('token'), '_self')
+					// window.open(axios.defaults.baseURL + 'portal/file/downloadFile/' + this.mallCode + '/'
+					// 						+ this.fileName + '?token=' + Cookies.get('token'), '_self')
 					// this.points -= downLoadFile.point
 					// Cookies.set('points', this.points, {expires: this.toNextDay()})
 					// location.reload()
 					axios({
 						method: 'get',
-						url: 'portal/user/optNum/' + Cookies.get('userId'),
-						params: {
-							token: Cookies.get('token')
-						}
+						url: axios.defaults.baseURL + 'portal/file/downloadFile/' + this.mallCode + '/' + this.fileName + '?token=' + Cookies.get('token'),
+						responseType: 'blob'
 					}).then(res => {
-						console.log(res.data)
-						Cookies.set('points', res.data.user.points, {expires: this.toNextDay()})
-						Cookies.set('uploadNum', res.data.user.uploadNum, {expires: this.toNextDay()})
-						Cookies.set('downloadNum', res.data.user.downloadNum, {expires: this.toNextDay()})
-						this.uploadNum = Cookies.get('uploadNum')
-						this.downloadNum = Cookies.get('downloadNum')
-						this.points = Cookies.get('points')
+						console.log(res)
+						let url = window.URL.createObjectURL(new Blob([res.data]))
+						let link = document.createElement('a')
+						link.style.display = 'none'
+						link.href = url
+						link.setAttribute('download', this.fileName)
+						
+						document.body.appendChild(link)
+						link.click()
+
+						// 重新获取用户积分等信息
+						axios({
+								method: 'get',
+								url: 'portal/user/optNum/' + Cookies.get('userId'),
+								params: {
+									token: Cookies.get('token')
+								}
+						}).then(res => {
+							console.log(res.data)
+							Cookies.set('points', res.data.user.points, {expires: this.toNextDay()})
+							Cookies.set('uploadNum', res.data.user.uploadNum, {expires: this.toNextDay()})
+							Cookies.set('downloadNum', res.data.user.downloadNum, {expires: this.toNextDay()})
+							this.uploadNum = Cookies.get('uploadNum')
+							this.downloadNum = Cookies.get('downloadNum')
+							this.points = Cookies.get('points')
+						})
+						}).catch(() => {
+							this.$message({
+								type: 'info',
+								message: '已取消下载'
+							})
+						})
 					})
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消下载'
-					})
-				})
+					
 			}
 			else {
 				this.$alert('对不起，您的积分不足！', '提示', {
@@ -559,6 +577,7 @@ hr {
 
 .current-download {
 	// padding: 0 10px;
+	position: relative;
 }
 
 .moreDownload {
@@ -638,7 +657,7 @@ hr {
 }
 
 .moreDownBtnUp {
-	margin-bottom: 10px;
+	margin: 0 0 10px 20px;
 	color: #6b2048;
 }
 </style>

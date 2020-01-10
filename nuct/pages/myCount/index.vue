@@ -120,7 +120,7 @@
         <!-- <MyResource></MyResource> -->
       </el-tab-pane>
     </el-tabs>
-    <footerBar  style="width: 1080px;position: absolute; bottom: 0;"></footerBar>
+    <footerBar  style="width: 1080px; margin-top: 30px;"></footerBar>
 </div>
 </template>
 
@@ -321,7 +321,7 @@ export default {
 				this.$router.push({path: './docInfor', query: {mallCode: 1, index: 2}})
 			}
 		},
-    myCount_consoleCurr (val) {
+    myCount_consoleCurr (currentPage) {
 				//console.log(`${val}`);
 				this.currentPage = currentPage;
 				if (!this.myCount_totalPage[currentPage]) {
@@ -342,7 +342,7 @@ export default {
 			//console.log(this.currentPage);
     },
 
-		search_consoleCurr (val) {
+		search_consoleCurr (currentPage) {
 			//console.log(`${val}`);
 			this.currentPage = currentPage;
 			if (!this.search_totalPage[currentPage]) {
@@ -372,7 +372,7 @@ export default {
 }
 
 .container {
-    min-height: 1000px;
+    // min-height: 1000px;
 }
 
 .selfInfTitle {

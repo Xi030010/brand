@@ -8,7 +8,7 @@
           <li><a>教学课程</a></li>
           <li><a>项目合作</a></li>
           <li><a>成果推广</a></li>
-          <li><a>联系我们</a></li>
+          <li><a href="/about">联系我们</a></li>
       </ul>
 </template>
 
