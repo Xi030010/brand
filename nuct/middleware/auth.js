@@ -22,6 +22,7 @@ export default function ({route, req, res, redirect}) {
   }
   //需要进行权限判断的页面开头
   if (!token) {
-       redirect(redirectURL)
+    if (path.search('about') != -1) return
+    redirect(redirectURL)
   }
 }
