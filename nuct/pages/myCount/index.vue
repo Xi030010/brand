@@ -9,12 +9,13 @@
     <search></search>
     <el-tabs @tab-click="handleClick" type="border-card"  :tab-position="tabPosition" style="height: 580px; width: 750px; margin: 20px auto;border-radius: 55px;">
       <el-tab-pane label="个人资料">
+        <div v-if="!isChanging">
           <h1 class="selfInfTitle">个人资料</h1>
           <hr>
           <div id="selfInf">
               <div class="selfInfFlex1">
                   <img :src="this.avatar" class="selfInfImg">
-                  <a>修改头像</a>
+                  <!-- <a style="color: #6b2048">修改头像</a> -->
               </div>
               <div class="selfInfFlex2">
                   <p>ID：<span>{{ this.userId }}</span></p>
@@ -25,8 +26,44 @@
                   <p>手机号：<span>{{ this.phone }}</span></p>
                   <p>邮箱：<span>{{ this.email }}</span></p>
                   <p>积分：<span>{{ this.points }}</span></p>
+                  <el-button type="primary" style="margin-top: 3rem;" @click="changeState">修改个人信息</el-button>
               </div>
           </div>
+        </div>
+        <div v-else>
+          <h1 class="selfInfTitle">个人资料</h1>
+          <hr>
+          <div id="selfInf">
+              <div class="selfInfFlex1">
+                  <img :src="this.avatar" class="selfInfImg">
+                  <label for="file" style="position: absolute; top: 150px; left: 50px;" class="el-button el-button--primary">选择头像</label>
+                  <input type="file" id="file" style="display: none" @change="avatarChange">
+              </div>
+              <div class="selfInfFlex2">
+                  <p>ID：<span>{{ this.userId }}</span></p>
+                  <p style="margin-bottom: 30px">关注：<span>4</span>&nbsp;&nbsp;&nbsp;&nbsp;积分：<span>{{ points }}</span></p>
+                  <a>充值</a>
+                  <el-form status-icon label-position="left" label-width="70px">
+                    <el-form-item label="昵称：">
+                      <el-input v-model="this.nickname" clearable style="width: 200px;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="实名：">
+                      <el-input v-model="this.username" disabled clearable style="width: 200px;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机号：">
+                      <el-input v-model="this.phone" clearable style="width: 200px;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱：">
+                      <el-input v-model="this.email" clearable style="width: 200px;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="积分：">
+                      <el-input v-model="this.points" disabled clearable style="width: 200px;"></el-input>
+                    </el-form-item>
+                    <el-button type="primary" @click="changeState">修改个人信息</el-button>
+                  </el-form>
+              </div>
+          </div>
+        </div>
       </el-tab-pane>
       <el-tab-pane label="我的计算">
           <ul class="myCount_ul">
@@ -119,6 +156,25 @@
       <el-tab-pane label="我的资源">
         <!-- <MyResource></MyResource> -->
       </el-tab-pane>
+      <el-tab-pane label="修改密码">
+        <el-form status-icon label-position="right" label-width="80px" style="width: 70%; margin: 3rem auto 0;">
+          <el-form-item label="原密码">
+            <el-input v-model="oldP" autocomplete="off" clearable show-password style="width: 250px;"></el-input>
+          </el-form-item>
+          <el-form-item label="新密码">
+            <el-input v-model="newP" autocomplete="off" clearable show-password style="width: 250px;"></el-input>
+          </el-form-item>
+          <el-form-item label="确认密码">
+            <el-input v-model="confirmP" autocomplete="off" clearable show-password style="width: 250px;"></el-input>
+          </el-form-item>
+          <el-button
+              type="primary"
+              style="margin-left: 130px;"
+              @click="changePassword">
+              修改密码
+          </el-button>
+        </el-form>
+      </el-tab-pane>
     </el-tabs>
     <footerBar  style="width: 1080px; margin-top: 30px;"></footerBar>
 </div>
@@ -137,6 +193,10 @@ export default {
   middleware: 'auth',
   data () {
     return {
+      isChanging: false,
+      oldP: null,
+      newP: null,
+      confirmP: null,
 			total: 3,
       pageSize: 6,
       currentPage: 1,
@@ -148,7 +208,8 @@ export default {
 			username: Cookies.get('username'),
 			phone: Cookies.get('phone'),
 			email: Cookies.get('email'),
-			avatar: Cookies.get('avatar'),
+      avatar: Cookies.get('avatar'),
+      avatarFile: null,
 			points: Cookies.get('points'),
       // avatar: 'img/selfInfText.jpg',
 
@@ -198,6 +259,74 @@ export default {
 	},
 	
 	methods: {
+    avatarChange (e) {
+      var file = e.target.files[0]
+      this.avatarFile = file
+      var img = URL.createObjectURL(file)
+      this.avatar = img
+      console.log(img)
+    },
+    changeState () {
+      if (this.isChanging) {
+        axios({
+          method: 'post',
+          url: 'portal/user/update',
+          params: {
+            token: Cookies.get('token')
+          },
+          data: {
+            id: this.userId,
+            nickname: this.nickname,
+            phone: this.phone,
+            email: this.email,
+            avatar: this.avatarFile,
+          },
+        }).then(res => {
+          if (res.data.code == 200) {
+            this.$message({
+              message: '修改成功',
+              type: 'success',
+            })
+            this.isChanging = false
+          }
+          else {
+            this.$message({
+              message: res.data.msg,
+              type: 'warning',
+            })
+          }
+        })
+      }
+      else {
+        this.isChanging = true
+      }
+    },
+    changePassword () {
+      axios({
+        method: 'put',
+        url: 'portal/user/password',
+        params: {
+          token: Cookies.get('token')
+        },
+        data: {
+          password: this.oldP,
+          newPassword: this.newP
+        }
+      }).then(res => {
+        if (res.data.code == 200) {
+          this.$message({
+            message: '修改成功',
+            type: 'success',
+          })
+        }
+        else {
+          this.$message({
+            message: res.data.msg,
+            type: 'warning',
+          })
+        }
+      })
+    },
 		setCountList (currentPage) {
 			axios({
 					url: 'portal/user/operation/operations?type=2',
@@ -390,7 +519,7 @@ export default {
 .selfInfFlex1,
 .selfInfFlex2 {
     //border: 1px solid #000;
-    height: 400px;
+    height: 500px;
     position: relative;
 }
 
@@ -509,5 +638,9 @@ export default {
 
 .el-tabs--left, .el-tabs--right {
   overflow: auto;
+}
+
+.change-password-input {
+  margin: 1rem 0;
 }
 </style>

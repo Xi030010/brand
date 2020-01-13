@@ -57,6 +57,9 @@
 							<el-form-item label="密码">
 									<el-input v-model="regForm.password" show-password style="width: 250px;"></el-input>
 							</el-form-item>
+              <el-form-item label="再输一次">
+									<el-input v-model="regForm.passwordAgain" show-password style="width: 250px;"></el-input>
+							</el-form-item>
               <el-form-item label="电话">
 									<el-input v-model="regForm.phone" clearable style="width: 250px;"></el-input>
 							</el-form-item>
@@ -99,6 +102,7 @@ export default {
         email: '',
         nickname: '',
         password: '',
+        passwordAgain: '',
         phone: '',
         username: '',
       },
@@ -133,27 +137,71 @@ export default {
             type: 'warning'
           })
           checkSuccess = false
-          break
+          return
         }
       }
 
-      // 注册api
-      checkSuccess && axios({
-        method: 'post',
-        url: 'portal/user/register',
-        data: {
-          email: this.regForm.email,
-          nickname: this.regForm.nickname,
-          password: this.regForm.password,
-          phone: this.regForm.phone,
-          username: this.regForm.username,
-        },
-      }).then(res => {
+      // 邮箱格式校验
+      if (!(/^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/.test(this.regForm.email))) {
         this.$message({
-          message: '注册成功',
-          type: 'success'
+          message: '邮箱格式不正确',
+          type: 'warning',
         })
+        return
+      }
+
+      // 确认密码校验
+      if (this.regForm.password !== this.regForm.passwordAgain) {
+        this.$message({
+          message: '两次密码不相同，请重新确认!',
+          type: 'warning',
+        })
+        return
+      }
+
+      // 校验用户名
+      axios({
+        method: 'get',
+        url: 'portal/user/exist/' + this.regForm.username,
+        params: {
+          token: Cookies.get('token')
+        }
+      }).then(res => {
+        if (res.data.code != 200) {
+          this.$message({
+            message: '用户名已存在',
+            type: 'warning',
+          })
+        }
+        else {
+          // 注册api
+          checkSuccess && axios({
+            method: 'post',
+            url: 'portal/user/register',
+            data: {
+              email: this.regForm.email,
+              nickname: this.regForm.nickname,
+              password: this.regForm.password,
+              phone: this.regForm.phone,
+              username: this.regForm.username,
+            },
+          }).then(res => {
+            if (res.data.code == 200) {
+              this.$message({
+                message: '注册成功',
+                type: 'success'
+              })
+            }
+            else {
+              this.$message({
+                message: res.data.msg,
+                type: 'warning',
+              })
+            }
+          })
+        }
       })
+
     },
 		registerReg () {
 			if(this.hideRegDiv) {
