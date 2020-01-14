@@ -259,6 +259,9 @@ export default {
 	},
 	
 	methods: {
+    toNextDay() {
+      return new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(0, 0, 0, 0))
+    },
     avatarChange (e) {
       var file = e.target.files[0]
       this.avatarFile = file
@@ -287,7 +290,26 @@ export default {
               message: '修改成功',
               type: 'success',
             })
-            this.isChanging = false
+            axios({
+              method: 'get',
+              url: 'portal/user/optNum/' + this.userId,
+              params: {
+                token: Cookies.get('token')
+              }
+            }).then(res => {
+              console.log(res.data)
+              Cookies.set('nickname', res.data.user.nickname, {expires: this.toNextDay()})
+              Cookies.set('username', res.data.user.username, {expires: this.toNextDay()})
+              Cookies.set('points', res.data.user.points, {expires: this.toNextDay()})
+              Cookies.set('uploadNum', res.data.user.uploadNum, {expires: this.toNextDay()})
+              Cookies.set('downloadNum', res.data.user.downloadNum, {expires: this.toNextDay()})
+              Cookies.set('askNum', res.data.user.askNum, {expires: this.toNextDay()})
+              Cookies.set('answerNum', res.data.user.answerNum, {expires: this.toNextDay()})
+              Cookies.set('avatar', res.data.user.avatar, {expires: this.toNextDay()})
+              Cookies.set('phone', res.data.user.phone, {expires: this.toNextDay()})
+              Cookies.set('email', res.data.user.email, {expires: this.toNextDay()})
+              this.isChanging = false
+            })
           }
           else {
             this.$message({
@@ -302,6 +324,38 @@ export default {
       }
     },
     changePassword () {
+      if (!this.oldP) {
+        this.$message({
+          message: '原密码不能为空!',
+          type: 'warning',
+          duration: 1000,
+        })
+        return
+      }
+      if (!this.newP) {
+        this.$message({
+          message: '新密码不能为空!',
+          type: 'warning',
+          duration: 1000,
+        })
+        return
+      }
+      if (!this.confirmP) {
+        this.$message({
+          message: '确认密码不能为空!',
+          type: 'warning',
+          duration: 1000,
+        })
+        return
+      }
+      if (this.newP !== this.confirmP) {
+        this.$message({
+          message: '请重新确认密码!',
+          type: 'warning',
+        })
+        return
+      }
+
       axios({
         method: 'put',
         url: 'portal/user/password',
@@ -448,7 +502,8 @@ export default {
 			if (tab.label === '我的资源') {
 				axios()
 				this.$router.push({path: './docInfor', query: {mallCode: 1, index: 2}})
-			}
+      }
+      this.isChanging = false
 		},
     myCount_consoleCurr (currentPage) {
 				//console.log(`${val}`);

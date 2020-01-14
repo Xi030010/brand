@@ -130,10 +130,18 @@ export default {
     regFormIn () {
       // 校验
       var checkSuccess = true
+      var obj = {
+        email: '邮箱',
+        nickname: '昵称',
+        pasword: '密码',
+        passwordAgain: '确认密码',
+        phone: '电话',
+        username: '用户名'
+      }
       for (var key in this.regForm) {
         if (!this.regForm[key]) {
           this.$message({
-            message: key + '不能为空',
+            message: obj[key] + '不能为空',
             type: 'warning'
           })
           checkSuccess = false
