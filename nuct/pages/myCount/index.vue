@@ -45,19 +45,19 @@
                   <a>充值</a>
                   <el-form status-icon label-position="left" label-width="70px">
                     <el-form-item label="昵称：">
-                      <el-input v-model="this.nickname" clearable style="width: 200px;"></el-input>
+                      <el-input v-model="nickname" clearable style="width: 200px;"></el-input>
                     </el-form-item>
                     <el-form-item label="实名：">
-                      <el-input v-model="this.username" disabled clearable style="width: 200px;"></el-input>
+                      <el-input v-model="username" disabled clearable style="width: 200px;"></el-input>
                     </el-form-item>
                     <el-form-item label="手机号：">
-                      <el-input v-model="this.phone" clearable style="width: 200px;"></el-input>
+                      <el-input v-model="phone" clearable style="width: 200px;"></el-input>
                     </el-form-item>
                     <el-form-item label="邮箱：">
-                      <el-input v-model="this.email" clearable style="width: 200px;"></el-input>
+                      <el-input v-model="email" clearable style="width: 200px;"></el-input>
                     </el-form-item>
                     <el-form-item label="积分：">
-                      <el-input v-model="this.points" disabled clearable style="width: 200px;"></el-input>
+                      <el-input v-model="points" disabled clearable style="width: 200px;"></el-input>
                     </el-form-item>
                     <el-button type="primary" @click="changeState">修改个人信息</el-button>
                   </el-form>
